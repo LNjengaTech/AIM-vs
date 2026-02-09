@@ -53,7 +53,7 @@ A modern web platform designed to digitize and optimize the automotive market in
    
    Edit `.env` and add your credentials:
    - `DATABASE_URL` - Your PostgreSQL connection string
-   - `NEXTAUTH_SECRET` - Generate with: `openssl rand -base64 32`
+   - `NEXTAUTH_SECRET` - Generate with: `openssl rand -base64 32` Or my [Web App](https://jwt-secret-key.vercel.app/)
    - `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` - Your Cloudinary cloud name
    - `CLOUDINARY_API_KEY` - Your Cloudinary API key
    - `CLOUDINARY_API_SECRET` - Your Cloudinary API secret

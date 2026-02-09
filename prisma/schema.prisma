@@ -7,13 +7,13 @@
 //generators - specifies which  assets(tool used to write queries in the code) to create(in this case; prisma-client-js) based on the data model
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 
 //Data source - defines the db connected to and its connection url
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 

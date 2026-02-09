@@ -19,14 +19,14 @@
 - [x] Create root error.tsx (Error boundary)
 
 ### Stage 2: Authentication System
-- [ ] Setup NextAuth with Prisma adapter
-- [ ] Create dealer signup flow
-- [ ] Create buyer signup flow
-- [ ] Create login page
-- [ ] Implement middleware for route protection
-- [ ] Create admin approval page for dealer verification
-- [ ] Add dealer status badges (is_pioneer, is_verified)
-- [ ] Test authentication flows
+- [x] Setup NextAuth with Prisma adapter
+- [x] Create dealer signup flow
+- [x] Create buyer signup flow
+- [x] Create login page
+- [x] Implement middleware for route protection
+- [x] Create admin approval page for dealer verification
+- [x] Add dealer status badges (is_pioneer, is_verified)
+- [x] Test authentication flows
 
 ## Phase 2: Core Inventory & Marketplace
 

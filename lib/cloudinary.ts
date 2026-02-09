@@ -7,15 +7,19 @@
  * @returns Cloudinary URL
  */
 export async function uploadToCloudinary(file: File): Promise<string> {
+
+    //Create a new FormData object to structure the multipart/form-data request and add the file to the form data with the key "file"
     const formData = new FormData()
     formData.append("file", file)
-    formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "aim_mombasa")
+    formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "aim_vs")
 
+    //upload presets define Cloudinary upload settings(folder, transformations, etc.)
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
     if (!cloudName) {
         throw new Error("Cloudinary cloud name not configured")
     }
 
+    //Make a POST request to Cloudinary's upload API endpoint using the cloud name
     const response = await fetch(
         `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
         {
@@ -28,9 +32,12 @@ export async function uploadToCloudinary(file: File): Promise<string> {
         throw new Error("Failed to upload image to Cloudinary")
     }
 
+    //parse the JSON response from Cloudinary and Return the HTTPS URL of the uploaded image
     const data = await response.json()
     return data.secure_url
 }
+
+
 
 /**
  *get optimized Cloudinary URL

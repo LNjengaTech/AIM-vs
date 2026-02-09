@@ -1,45 +1,145 @@
-//app/page.tsx
-//home page - Landing page for AIM-Mombasa
+// app/page.tsx
+// Home page - Landing page for AIM-Mombasa
 
-export default function Home() {
+import { auth } from "@/lib/auth"
+import Link from "next/link"
+
+export default async function Home() {
+  const session = await auth()
+
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      {/* Navigation Header */}
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <Link href="/" className="text-xl font-bold text-foreground">
+            AIM-Mombasa
+          </Link>
+          
+          <nav className="flex items-center gap-4">
+            {session?.user ? (
+              <>
+                <span className="text-sm text-muted-foreground hidden sm:inline">
+                  {session.user.email}
+                </span>
+                <Link
+                  href={session.user.role === "DEALER" ? "/dashboard" : session.user.role === "BUYER" ? "/buyer" : "/admin/verifications"}
+                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-accent"
+                >
+                  {session.user.role === "DEALER" ? "Dashboard" : session.user.role === "BUYER" ? "Profile" : "Admin"}
+                </Link>
+                <form action={async () => {
+                  "use server"
+                  const { signOut } = await import("@/lib/auth")
+                  await signOut()
+                }}>
+                  <button className="rounded-lg bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/20">
+                    Sign Out
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-accent"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/auth/signup/buyer"
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </nav>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <main className="flex flex-1 flex-col items-center justify-center px-4 py-20 text-center">
         <div className="max-w-4xl space-y-8">
-          {/*Logo/Branding */}
+          {/* Logo/Branding */}
           <div className="space-y-4">
             <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl md:text-7xl">
-              <span className="bg-linear-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">AIM-Mombasa</span>
+              <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                AIM-Mombasa
+              </span>
             </h1>
-            <p className="text-xl text-muted-foreground sm:text-2xl">AI-Enhanced Automotive Inventory Management</p>
+            <p className="text-xl text-muted-foreground sm:text-2xl">
+              AI-Enhanced Automotive Inventory Management
+            </p>
           </div>
 
           {/* Main Tagline */}
           <div className="space-y-4">
-            <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">Find Your Perfect Car - Verified, Available, and Matched Just for You!</h2>
-            <p className="mx-auto max-w-2xl text-lg text-muted-foreground">No more wasted trips. Browse live inventory, set alerts, and connect with trusted dealers in Mombasa.</p>
+            <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">
+              Find Your Perfect Car – Verified, Available, and Matched Just for You!
+            </h2>
+            <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+              No more wasted trips. Browse live inventory, set alerts, and connect with trusted dealers in Mombasa.
+            </p>
           </div>
 
-          {/*Status Badge */}
+          {/* Status Badge */}
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-6 py-3 text-sm font-medium text-primary">
+            <div className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+            Phase 1, Stage 2: Authentication Complete ✓
           </div>
 
-          {/*Feature Grid */}
+          {/* CTA Buttons */}
+          {!session?.user && (
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+              <Link
+                href="/auth/signup/dealer"
+                className="rounded-lg bg-primary px-8 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Join as Dealer
+              </Link>
+              <Link
+                href="/auth/signup/buyer"
+                className="rounded-lg border-2 border-primary px-8 py-3 font-medium text-primary transition-colors hover:bg-primary/10"
+              >
+                Sign up as Buyer
+              </Link>
+            </div>
+          )}
+
+          {/* Feature Grid */}
           <div className="grid gap-6 pt-8 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-lg border bg-card p-6 text-left transition-shadow hover:shadow-lg">
               <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <svg className="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <svg
+                  className="h-6 w-6 text-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               </div>
               <h3 className="mb-2 font-semibold text-foreground">Real-Time Inventory</h3>
-              <p className="text-sm text-muted-foreground">Live stock updates from verified dealers</p>
+              <p className="text-sm text-muted-foreground">
+                Live stock updates from verified dealers
+              </p>
             </div>
 
             <div className="rounded-lg border bg-card p-6 text-left transition-shadow hover:shadow-lg">
               <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <svg className="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="h-6 w-6 text-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -49,42 +149,70 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="mb-2 font-semibold text-foreground">BOLO Alerts</h3>
-              <p className="text-sm text-muted-foreground">Get notified when your dream car arrives</p>
+              <p className="text-sm text-muted-foreground">
+                Get notified when your dream car arrives
+              </p>
             </div>
 
             <div className="rounded-lg border bg-card p-6 text-left transition-shadow hover:shadow-lg">
               <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <svg className="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <svg
+                  className="h-6 w-6 text-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
                 </svg>
               </div>
               <h3 className="mb-2 font-semibold text-foreground">360° Tours</h3>
-              <p className="text-sm text-muted-foreground">Virtual walkarounds from your phone</p>
+              <p className="text-sm text-muted-foreground">
+                Virtual walkarounds from your phone
+              </p>
             </div>
 
             <div className="rounded-lg border bg-card p-6 text-left transition-shadow hover:shadow-lg">
               <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <svg className="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="h-6 w-6 text-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
               <h3 className="mb-2 font-semibold text-foreground">AI Verified</h3>
-              <p className="text-sm text-muted-foreground">Smart verification for accuracy</p>
+              <p className="text-sm text-muted-foreground">
+                Smart verification for accuracy
+              </p>
             </div>
           </div>
 
-          {/*Tech Stack Info */}
+          {/* Tech Stack Info */}
           <div className="pt-8 text-sm text-muted-foreground">
             <p className="font-medium">Built with</p>
-            <p className="mt-2">Next.js • TypeScript • Tailwind CSS • Prisma • PostgreSQL • NextAuth • Cloudinary</p>
+            <p className="mt-2">
+              Next.js • TypeScript • Tailwind CSS • Prisma • PostgreSQL • NextAuth • Cloudinary
+            </p>
           </div>
         </div>
       </main>
 
-      {/*Footer */}
+      {/* Footer */}
       <footer className="border-t py-8 text-center text-sm text-muted-foreground">
-        <p>© 2026 AIM-Mombasa | Lonnex Njenga</p>
+        <p>© 2026 AIM-Mombasa | Technical University of Mombasa (TUM)</p>
       </footer>
     </div>
-  );
+  )
 }

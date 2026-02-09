@@ -3,7 +3,7 @@
 
 @import "tailwindcss";
 
-/* CSS Variables for Light and Dark Mode */
+/*CSS Variables for Light and Dark Mode */
 :root {
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;
