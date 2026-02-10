@@ -12,9 +12,9 @@ import { CheckCircle2 } from "lucide-react"
 import { ImageUpload } from "@/components/dashboard/image-upload"
 
 const steps = [
-  { id: 0, name: "Details", fields: ["make", "model", "year", "price", "mileage", "condition"] },
-  { id: 1, name: "Specs", fields: ["bodyType", "transmission", "fuelType", "color", "engineCapacity", "description"] },
-  { id: 2, name: "Media", fields: ["images", "negotiable"] },
+    { id: 0, name: "Details", fields: ["make", "model", "year", "price", "mileage", "condition"] },
+    { id: 1, name: "Specs", fields: ["bodyType", "transmission", "fuelType", "color", "engineCapacity", "description"] },
+    { id: 2, name: "Media", fields: ["images", "negotiable"] },
 ] as const
 
 export function AddCarForm() {
@@ -63,6 +63,11 @@ export function AddCarForm() {
     }
 
     const onSubmit = async (data: CarFormValues) => {
+        //fix 1(fix 2 at the bottom): If i am on the Media step (id: 2), don't submit!
+        if (currentStep !== steps.length - 1) {
+            return;
+        }
+
         setIsSubmitting(true)
         try {
             const response = await fetch("/api/cars", {
@@ -96,17 +101,17 @@ export function AddCarForm() {
                     const isCurrent = currentStep === index
                     return (
                         <div key={step.id} className="flex flex-col items-center gap-2">
-                             <div className={cn(
+                            <div className={cn(
                                 "flex h-8 w-8 items-center justify-center rounded-full border-2 transition-colors",
                                 isCompleted ? "border-primary bg-primary text-primary-foreground" :
-                                isCurrent ? "border-primary text-primary" : "border-muted-foreground text-muted-foreground"
-                             )}>
+                                    isCurrent ? "border-primary text-primary" : "border-muted-foreground text-muted-foreground"
+                            )}>
                                 {isCompleted ? <CheckCircle2 className="h-5 w-5" /> : <span>{index + 1}</span>}
-                             </div>
-                             <span className={cn(
-                                 "text-xs font-medium",
-                                 isCurrent ? "text-foreground" : "text-muted-foreground"
-                             )}>{step.name}</span>
+                            </div>
+                            <span className={cn(
+                                "text-xs font-medium",
+                                isCurrent ? "text-foreground" : "text-muted-foreground"
+                            )}>{step.name}</span>
                         </div>
                     )
                 })}
@@ -114,7 +119,7 @@ export function AddCarForm() {
 
             {/* Form Content */}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 rounded-lg border bg-card p-6 shadow-sm">
-                
+
                 {/* Step 1: Basic Details */}
                 {currentStep === 0 && (
                     <div className="grid gap-6 sm:grid-cols-2">
@@ -140,7 +145,7 @@ export function AddCarForm() {
                             required
                             {...register("year")}
                         />
-                         <FormInput
+                        <FormInput
                             label="Price (KES)"
                             type="number"
                             placeholder="0"
@@ -148,7 +153,7 @@ export function AddCarForm() {
                             required
                             {...register("price")}
                         />
-                         <FormInput
+                        <FormInput
                             label="Mileage (km)"
                             type="number"
                             placeholder="0"
@@ -158,7 +163,7 @@ export function AddCarForm() {
                         />
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Condition</label>
-                            <select 
+                            <select
                                 {...register("condition")}
                                 className="flex h-11 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                             >
@@ -175,7 +180,7 @@ export function AddCarForm() {
                     <div className="grid gap-6 sm:grid-cols-2">
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Body Type</label>
-                            <select 
+                            <select
                                 {...register("bodyType")}
                                 className="flex h-11 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                             >
@@ -190,9 +195,9 @@ export function AddCarForm() {
                             {errors.bodyType && <p className="text-sm text-destructive">{errors.bodyType.message}</p>}
                         </div>
 
-                         <div className="space-y-2">
+                        <div className="space-y-2">
                             <label className="text-sm font-medium">Transmission</label>
-                            <select 
+                            <select
                                 {...register("transmission")}
                                 className="flex h-11 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                             >
@@ -206,7 +211,7 @@ export function AddCarForm() {
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Fuel Type</label>
-                            <select 
+                            <select
                                 {...register("fuelType")}
                                 className="flex h-11 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                             >
@@ -216,7 +221,7 @@ export function AddCarForm() {
                                 <option value="hybrid">Hybrid</option>
                                 <option value="electric">Electric</option>
                             </select>
-                             {errors.fuelType && <p className="text-sm text-destructive">{errors.fuelType.message}</p>}
+                            {errors.fuelType && <p className="text-sm text-destructive">{errors.fuelType.message}</p>}
                         </div>
 
                         <FormInput
@@ -226,18 +231,18 @@ export function AddCarForm() {
                             required
                             {...register("color")}
                         />
-                         <FormInput
+                        <FormInput
                             label="Engine Capacity"
                             placeholder="e.g. 1500cc"
                             {...register("engineCapacity")}
                         />
                         <div className="col-span-2">
-                             <label className="text-sm font-medium">Description (Optional)</label>
-                             <textarea 
+                            <label className="text-sm font-medium">Description (Optional)</label>
+                            <textarea
                                 {...register("description")}
                                 className="flex min-h-25 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                 placeholder="Describe the car's condition, history, or key selling points..."
-                             />
+                            />
                         </div>
                     </div>
                 )}
@@ -250,7 +255,7 @@ export function AddCarForm() {
                             <p className="text-sm text-muted-foreground">
                                 Upload high-quality photos of the car. Add at least 5 photos for a better completeness score.
                             </p>
-                            
+
                             <Controller
                                 control={form.control}
                                 name="images"
@@ -265,9 +270,9 @@ export function AddCarForm() {
                         </div>
 
                         <div className="flex items-center space-x-2 pt-4">
-                            <input 
-                                type="checkbox" 
-                                id="negotiable" 
+                            <input
+                                type="checkbox"
+                                id="negotiable"
                                 {...register("negotiable")}
                                 className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                             />
@@ -278,21 +283,23 @@ export function AddCarForm() {
 
                 {/* Actions */}
                 <div className="flex items-center justify-between pt-4">
-                    <Button 
-                        type="button" 
-                        variant="outline" 
+                    <Button
+                        type="button"
+                        variant="outline"
                         onClick={prevStep}
                         disabled={currentStep === 0 || isSubmitting}
                     >
                         Back
                     </Button>
-                    
+
+
+                    {/*fix 2: using "key" to tell React these are completely different elements, preventing "event bleeding". */}
                     {currentStep < steps.length - 1 ? (
-                        <Button type="button" onClick={nextStep}>
+                        <Button type="button" key="next-button" onClick={nextStep}>
                             Next
                         </Button>
                     ) : (
-                        <Button type="submit" disabled={isSubmitting}>
+                        <Button type="submit" key="submit-button" disabled={isSubmitting}>
                             {isSubmitting ? "Creating..." : "Create Listing"}
                         </Button>
                     )}

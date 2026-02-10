@@ -1,9 +1,11 @@
+// components/dashboard/image-upload.tsx
 "use client"
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ImagePlus, X, Loader2 } from "lucide-react"
 import Image from "next/image"
+import { uploadToCloudinary } from "@/lib/cloudinary" // Import your helper!
 
 interface ImageUploadProps {
   value: string[]
@@ -19,55 +21,34 @@ export function ImageUpload({ value, onChange, onRemove }: ImageUploadProps) {
     if (!files || files.length === 0) return
 
     setIsUploading(true)
-    const newUrls: string[] = []
-
+    
     try {
-      // Upload each file
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i]
-        const formData = new FormData()
-        formData.append("file", file)
-        
-        // Use an unsigned upload preset (ensure this exists in your Cloudinary settings)
-        // If not, you might need to create one named 'aim_mombasa_unsigned' or similar
-        // Or route through a server API that signs the request.
-        // For verify/prototype, we'll try 'ml_default' or assuming the user has one.
-        // Ideally, we'd use a server route for security.
-        formData.append("upload_preset", "aim_mombasa_permits") // Reusing the one from auth for now?
-        // Or better, just ask user to make one.
-        
-        const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-        const response = await fetch(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        )
-        
-        const data = await response.json()
-        if (data.secure_url) {
-          newUrls.push(data.secure_url)
-        } else {
-            console.error("Upload failed", data)
-            alert("Upload failed: " + (data.error?.message || "Unknown error"))
-        }
-      }
-
-      onChange([...value, ...newUrls])
-    } catch (error) {
-      console.error("Upload error", error)
-      alert("Something went wrong with the upload.")
+      // Create an array of upload promises
+      const uploadPromises = Array.from(files).map(file => uploadToCloudinary(file))
+      
+      // Wait for all uploads to complete
+      const uploadedUrls = await Promise.all(uploadPromises)
+      
+      // Update form state with new URLs added to existing ones
+      onChange([...value, ...uploadedUrls])
+      
+    } catch (error: any) {
+      console.error("Upload error:", error)
+      alert(error.message || "Something went wrong with the upload.")
     } finally {
       setIsUploading(false)
+      // Reset input value so the same file can be selected again if needed
+      e.target.value = ""
     }
   }
+
+
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-4">
         {value.map((url) => (
-          <div key={url} className="relative h-[200px] w-[200px] overflow-hidden rounded-md border">
+          <div key={url} className="relative h-50 w-50 overflow-hidden rounded-md border">
             <div className="absolute right-2 top-2 z-10">
               <Button
                 type="button"
