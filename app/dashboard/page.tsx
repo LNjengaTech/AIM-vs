@@ -49,7 +49,7 @@ export default async function DashboardPage() {
             <span className="text-sm text-muted-foreground">/ Dashboard</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-foreground">{user.name}</span>
+            <span className="text-sm text-foreground">{user.name?.split(' ')[0]}</span>
             <form action={async () => {
               "use server"
               const { signOut } = await import("@/lib/auth")
@@ -65,11 +65,11 @@ export default async function DashboardPage() {
 
       <main className="container mx-auto px-4 py-8">
         {/*welcome Section */}
-        <div className="mb-8 rounded-lg border bg-card p-6 shadow-sm">
+        <div className="mb-8 rounded-lg border-2 bg-card p-6">
           <div className="flex items-start justify-between">
             <div>
               <h1 className="text-3xl font-bold text-foreground">
-                Welcome back, {user.name}!
+                Welcome back, {user.name?.split(' ')[0]}!
               </h1>
               <p className="mt-2 text-muted-foreground">
                 {dealerProfile.businessName}
@@ -78,7 +78,7 @@ export default async function DashboardPage() {
             <div className="flex flex-col gap-2">
               {dealerProfile.isPioneer && (
                 <Badge variant="success">
-                  ⭐ Pioneer Dealer
+                  Pioneer Dealer
                 </Badge>
               )}
               {dealerProfile.isVerified ? (
@@ -87,7 +87,7 @@ export default async function DashboardPage() {
                 </Badge>
               ) : (
                 <Badge variant="warning">
-                  ⏳ Pending Verification
+                  Pending Verification
                 </Badge>
               )}
             </div>
@@ -105,61 +105,49 @@ export default async function DashboardPage() {
 
         {/*stats - Views, leads, sales (placeholder)*/}
         <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="rounded-lg border-2 bg-card p-6 shadow-xl">
             <h3 className="text-sm font-medium text-muted-foreground">Total Views</h3>
             <p className="mt-2 text-3xl font-bold text-foreground">
               {dealerProfile.analytics?.totalViews || 0}
             </p>
           </div>
 
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="rounded-lg border-2 bg-card p-6 shadow-xl">
             <h3 className="text-sm font-medium text-muted-foreground">Total Leads</h3>
             <p className="mt-2 text-3xl font-bold text-foreground">
               {dealerProfile.analytics?.totalLeads || 0}
             </p>
           </div>
 
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="rounded-lg border-2 bg-card p-6 shadow-xl">
             <h3 className="text-sm font-medium text-muted-foreground">Total Sales</h3>
             <p className="mt-2 text-3xl font-bold text-foreground">
               {dealerProfile.analytics?.totalSales || 0}
             </p>
           </div>
 
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="rounded-lg border-2 bg-card p-6 shadow-xl">
             <h3 className="text-sm font-medium text-muted-foreground">Cars Listed</h3>
             <p className="mt-2 text-3xl font-bold text-foreground">0</p>
-            <p className="mt-1 text-xs text-muted-foreground">Coming in Phase 2</p>
+            <p className="mt-1 text-xs text-muted-foreground">Coming soon</p>
           </div>
         </div>
 
         {/*quick actions - Placeholders for Phase 2 features*/}
-        <div className="rounded-lg border bg-card p-6 shadow-sm">
+        <div className="rounded-lg border-2 bg-card p-6 shadow-xl">
           <h2 className="mb-4 text-xl font-semibold text-foreground">Quick Actions</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <button
-              disabled
-              className="rounded-lg border border-border bg-background p-4 text-left transition-colors hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+            <Link href="/dashboard/add-car" className="rounded-lg border border-border bg-background p-4 text-center transition-colors hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed">
               <h3 className="font-medium text-foreground">Add New Car</h3>
-              <p className="mt-1 text-sm text-muted-foreground">Coming in Phase 2</p>
-            </button>
+            </Link>
 
-            <button
-              disabled
-              className="rounded-lg border border-border bg-background p-4 text-left transition-colors hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+            <Link href="/dashboard/inventory" className="rounded-lg border border-border bg-background p-4 text-center transition-colors hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed">
               <h3 className="font-medium text-foreground">Manage Inventory</h3>
-              <p className="mt-1 text-sm text-muted-foreground">Coming in Phase 2</p>
-            </button>
+            </Link>
 
-            <button
-              disabled
-              className="rounded-lg border border-border bg-background p-4 text-left transition-colors hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+            <Link href="/dashboard/analytics" className="rounded-lg border border-border bg-background p-4 text-center transition-colors hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed">
               <h3 className="font-medium text-foreground">View Analytics</h3>
-              <p className="mt-1 text-sm text-muted-foreground">Coming in Phase 2</p>
-            </button>
+            </Link>
           </div>
         </div>
       </main>

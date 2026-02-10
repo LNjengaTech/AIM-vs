@@ -65,7 +65,7 @@ export default async function Home() {
           {/* Logo/Branding */}
           <div className="space-y-4">
             <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl md:text-7xl">
-              <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">
                 AIM-Mombasa
               </span>
             </h1>
