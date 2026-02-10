@@ -47,3 +47,15 @@ A sophisticated 3-step form using `react-hook-form` and `zod`:
     - `DELETE /api/cars/[id]`: deletes listing (requires ownership). - *for inventory management*
 
 
+### 3. Inventory Management (`/dashboard/inventory`)
+- **Data Table**: Lists all vehicles belonging to the dealer.
+- **Status Indicators**: "Available" (Green) vs "Sold" (Gray).
+- **Completeness Bar**: Visual indicator of listing quality. Auto-calculated metric to encourage better listings.
+- **Actions**:
+    - **Toggle Status**: Instantly mark cars as Sold/Available.
+    - **Delete**: Remove listings (with confirmation).
+
+- **files**
+    - app/dashboard/inventory/
+    - components/dashboard/inventory-actions.tsx
+
