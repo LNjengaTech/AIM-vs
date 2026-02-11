@@ -46,7 +46,7 @@ export default async function DashboardPage() {
             {user.name}
           </h1>
           
-          {/* Exact Twitter Style: Badge next to name */}
+          {/*Twitter-Style: Badge next to name */}
           <div className="flex gap-1">
             {dealerProfile.isPioneer && (
               <VerifiedBadge variant="pioneer" size={24} />
@@ -57,7 +57,7 @@ export default async function DashboardPage() {
           </div>
         </div>
         
-        {/* Keeping your original status badge for "Pending" status only */}
+        {/*keeping original status badge for "Pending" status only */}
         {!dealerProfile.isVerified && (
           <Badge variant="warning">⏳ Pending Verification</Badge>
         )}
