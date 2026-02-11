@@ -19,43 +19,48 @@ export function CarFilters({ className }: { className?: string }) {
     transmission: searchParams.get("transmission") || "",
   })
 
-  //debounce updates
+  //fixed
+  //problem: Circular Dependency
+  //fix: Idempotent Updates
   useEffect(() => {
     const timer = setTimeout(() => {
-      const params = new URLSearchParams(searchParams.toString())
-      
+      //1.create the new params based on current state
+      const newParams = new URLSearchParams()
       Object.entries(filters).forEach(([key, value]) => {
-        if (value) {
-            params.set(key, value)
-        } else {
-            params.delete(key)
-        }
+        if (value) newParams.set(key, value)
       })
-      
-      //reset page on filter change
-      params.delete("page")
 
-      router.push(`/cars?${params.toString()}`)
+      const newQueryString = newParams.toString()
+      const currentQueryString = searchParams.toString()
+
+      //2.only push if the query has actually changed
+      if (newQueryString !== currentQueryString) {
+        const path = newQueryString ? `/cars?${newQueryString}` : "/cars"
+
+        //3.use .replace + scroll: false for better UX in filters
+        router.replace(path, { scroll: false })
+      }
     }, 500)
 
     return () => clearTimeout(timer)
-  }, [filters, router, searchParams])
+  }, [filters, router, searchParams]) // searchParams is fine here if the check above exists
+
 
   const handleChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }))
   }
 
   const clearFilters = () => {
-      setFilters({
-        make: "",
-        minPrice: "",
-        maxPrice: "",
-        minYear: "",
-        maxYear: "",
-        transmission: "",
-      })
-      //we push strictly to /cars to clear query
-      router.push("/cars")
+    setFilters({
+      make: "",
+      minPrice: "",
+      maxPrice: "",
+      minYear: "",
+      maxYear: "",
+      transmission: "",
+    })
+    //we push strictly to /cars to clear query
+    router.push("/cars")
   }
 
   return (
@@ -63,80 +68,80 @@ export function CarFilters({ className }: { className?: string }) {
       <div className="flex items-center justify-between">
         <h3 className="font-semibold">Filters</h3>
         <Button variant="ghost" size="sm" onClick={clearFilters} className="h-auto px-2 text-xs">
-            Reset
+          Reset
         </Button>
       </div>
 
       <div className="space-y-4">
         {/*search */}
         <div className="space-y-2">
-            <label className="text-sm font-medium">Make/Model</label>
-            <input
-                type="text"
-                placeholder="Search..."
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                value={filters.make}
-                onChange={(e) => handleChange("make", e.target.value)}
-            />
+          <label className="text-sm font-medium">Make/Model</label>
+          <input
+            type="text"
+            placeholder="Search..."
+            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            value={filters.make}
+            onChange={(e) => handleChange("make", e.target.value)}
+          />
         </div>
 
         {/* Price Range */}
         <div className="space-y-2">
-            <label className="text-sm font-medium">Price (KES)</label>
-            <div className="flex items-center gap-2">
-                <input
-                    type="number"
-                    placeholder="Min"
-                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                    value={filters.minPrice}
-                    onChange={(e) => handleChange("minPrice", e.target.value)}
-                />
-                <span className="text-muted-foreground">-</span>
-                 <input
-                    type="number"
-                    placeholder="Max"
-                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                    value={filters.maxPrice}
-                    onChange={(e) => handleChange("maxPrice", e.target.value)}
-                />
-            </div>
+          <label className="text-sm font-medium">Price (KES)</label>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              placeholder="Min"
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              value={filters.minPrice}
+              onChange={(e) => handleChange("minPrice", e.target.value)}
+            />
+            <span className="text-muted-foreground">-</span>
+            <input
+              type="number"
+              placeholder="Max"
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              value={filters.maxPrice}
+              onChange={(e) => handleChange("maxPrice", e.target.value)}
+            />
+          </div>
         </div>
 
         {/* Year Range */}
-         <div className="space-y-2">
-            <label className="text-sm font-medium">Year</label>
-            <div className="flex items-center gap-2">
-                <input
-                    type="number"
-                    placeholder="Min"
-                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                    value={filters.minYear}
-                    onChange={(e) => handleChange("minYear", e.target.value)}
-                />
-                <span className="text-muted-foreground">-</span>
-                 <input
-                    type="number"
-                    placeholder="Max"
-                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                    value={filters.maxYear}
-                    onChange={(e) => handleChange("maxYear", e.target.value)}
-                />
-            </div>
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Year</label>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              placeholder="Min"
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              value={filters.minYear}
+              onChange={(e) => handleChange("minYear", e.target.value)}
+            />
+            <span className="text-muted-foreground">-</span>
+            <input
+              type="number"
+              placeholder="Max"
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              value={filters.maxYear}
+              onChange={(e) => handleChange("maxYear", e.target.value)}
+            />
+          </div>
         </div>
 
-         {/*Transmission (Quick Filter) */}
-         <div className="space-y-2">
-            <label className="text-sm font-medium">Transmission</label>
-            <select
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                value={filters.transmission}
-                onChange={(e) => handleChange("transmission", e.target.value)}
-            >
-                <option value="">Any</option>
-                <option value="automatic">Automatic</option>
-                <option value="manual">Manual</option>
-                <option value="cvt">CVT</option>
-            </select>
+        {/*Transmission (Quick Filter) */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Transmission</label>
+          <select
+            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            value={filters.transmission}
+            onChange={(e) => handleChange("transmission", e.target.value)}
+          >
+            <option value="">Any</option>
+            <option value="automatic">Automatic</option>
+            <option value="manual">Manual</option>
+            <option value="cvt">CVT</option>
+          </select>
         </div>
       </div>
     </div>
