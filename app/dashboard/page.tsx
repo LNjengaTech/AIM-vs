@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
+import { VerifiedBadge } from "@/components/ui/verified-badge"
 import Link from "next/link"
 
 export default async function DashboardPage() {
@@ -40,28 +41,26 @@ export default async function DashboardPage() {
     <div className="space-y-6">
       {/* Welcome Section */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Overview</h1>
-          <p className="text-muted-foreground">
-            Welcome back, {user.name}!
-          </p>
-        </div>
         <div className="flex items-center gap-2">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            {user.name}
+          </h1>
+          
+          {/* Exact Twitter Style: Badge next to name */}
+          <div className="flex gap-1">
             {dealerProfile.isPioneer && (
-            <Badge variant="success">
-                ⭐ Pioneer Dealer
-            </Badge>
+              <VerifiedBadge variant="pioneer" size={24} />
             )}
-            {dealerProfile.isVerified ? (
-            <Badge variant="success">
-                ✓ Verified
-            </Badge>
-            ) : (
-            <Badge variant="warning">
-                ⏳ Pending Verification
-            </Badge>
+            {dealerProfile.isVerified && (
+              <VerifiedBadge variant="verified" size={24} />
             )}
+          </div>
         </div>
+        
+        {/* Keeping your original status badge for "Pending" status only */}
+        {!dealerProfile.isVerified && (
+          <Badge variant="warning">⏳ Pending Verification</Badge>
+        )}
       </div>
 
       {!dealerProfile.isVerified && (
