@@ -102,54 +102,6 @@ NOTE
 
 I will use Server Components for the gallery for SEO and performance. Filtering will use URL search params to ensure shareable links (e.g., /cars?make=Toyota&priceMax=2000000).
 
-Proposed Changes
-1. Reusable Components
-[NEW] 
-components/cars/car-card.tsx
-Displays thumbnail, price, year, make, model.
-Badges for "Verified Dealer" or "Pioneer".
-"Heart" icon for favorites (requires auth check).
-[NEW] 
-components/cars/car-filters.tsx
-Sidebar or top bar filters.
-Use useSearchParams and useRouter to update URL.
-Debounced text search.
-[NEW] 
-components/cars/car-sort.tsx
-Dropdown for sorting (Price Low/High, Newest, Completeness).
-2. Gallery Page
-[NEW] 
-app/cars/page.tsx
-Server Component.
-Fetches cars from Prisma based on searchParams.
-Implements pagination or load more button.
-[NEW] 
-app/cars/loading.tsx
-Skeleton loader grid for better UX.
-3. Detail Page
-[NEW] 
-app/cars/[id]/page.tsx
-Full details view.
-Image gallery (main image + thumbnails).
-"Contact Dealer" button (opens modal or mailto).
-"Save to Favorites" button.
-360 View placeholder (for Phase 3).
-4. Database & Logic
-[MODIFY] 
-lib/actions/cars.ts
-Create server actions for secure data fetching if needed, or stick to direct Prisma calls in Server Components.
-Verification Plan
-Automated Tests
-Verify filter logic returns correct subset of cars.
-Manual Verification
-Gallery:
-Visit /cars. Ensure all "Available" cars are shown.
-Test filters: Select "Toyota" -> Only Toyotas shown.
-Test sorting: Price Low to High.
-Detail Page:
-Click a card. Verify correct car details load.
-Check "Contact Dealer" button displays dealer info.
-Responsive: Check grid layout on mobile vs desktop.
 
 
 
@@ -157,7 +109,12 @@ Responsive: Check grid layout on mobile vs desktop.
 
 *Target Users: Public Buyers*
 
+### goal
+Building the public-facing marketplace where buyers can browse, filter, and view details of available vehicles. This involves creating the main gallery page, individual car detail pages, and the search/filtering infrastructure.
+
+
 ### Key Features
+
 - **Gallery Grid**: Responsive grid displaying available vehicles.
 - **Smart Filtering**:
     - **Sidebar**: Filter by Make, Price Range, Year, Transmission.
@@ -168,7 +125,62 @@ Responsive: Check grid layout on mobile vs desktop.
     - **Specs & Features**: Comprehensive breakdown.
     - **Dealer Info**: Contact details and location of the seller.
 
+### files
+
+1. Reusable Components
+    * components/cars/car-card.tsx
+        - Displays thumbnail, price, year, make, model.
+        - Badges for "Verified Dealer" or "Pioneer".
+        - "Heart" icon for favorites (requires auth check).
+
+    *Filtering uses URL search params to ensure shareable links ( /cars?make=Toyota&priceMax=2000000).*
+    * components/cars/car-filters.tsx
+        - Sidebar or top bar filters.
+        - Use useSearchParams and useRouter to update URL.
+        - Debounced text search.
+
+    * components/cars/car-sort.tsx
+        - Dropdown for sorting (Price Low/High, Newest, Completeness).
+
+    * components/cars/car-sort.tsx
+        - Dropdown for sorting (Price Low/High, Newest, Completeness).
+
+    * components/cars/image-gallery.tsx
+        - Interactive main view + thumbnails.
+
+    * components/ui/skeleton.tsx
+
+*gallery uses srver components for SEO and performance*
+2. Gallery Page
+    * app/cars/page.tsx
+        - Server Component.
+        - Fetches cars from Prisma based on searchParams.
+        - Implements pagination or load more button.
+
+    * app/cars/loading.tsx
+        - Skeleton loader grid for better UX.
+
+3. Detail Page
+    * app/cars/[id]/page.tsx
+        - Full details view.
+        - Image gallery (main image + thumbnails).
+        - "Contact Dealer" button (opens modal or mailto).
+        - "Save to Favorites" button.
+        - 360 View placeholder (for Phase 3).
+
+4. Database & Logic (not done yet)
+    [MODIFY] 
+    * lib/actions/cars.ts
+        - Create server actions for secure data fetching if needed, or stick to direct Prisma calls in Server Components.
+
+
+5. extra files for other fixes**
+    * components/ui/verified-badge.tsx
+    * components/Header.tsx
+
+
 ### Verification Steps
+
 1.  Go to Home Page (`/`).
 2.  Click **"Browse Inventory"**.
 3.  **Test Filters**: Enter "Toyota" in search. Verify non-Toyotas disappear.

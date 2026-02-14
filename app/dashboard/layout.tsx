@@ -24,7 +24,7 @@ export default async function DashboardLayout({
             <span>AIM-Mombasa</span>
           </Link>
         </div>
-        
+
         <div className="flex-1 overflow-y-auto">
           <DashboardNav />
         </div>
@@ -54,18 +54,21 @@ export default async function DashboardLayout({
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/*Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Mobile Header (visible only on small screens) */}
+        {/*mobile heade*/}
         <header className="flex h-16 items-center justify-between border-b bg-card px-4 md:hidden">
           <Link href="/" className="font-bold">AIM-Mombasa</Link>
-          {/* Mobile menu toggle would go here - skipping for MVP complexity, using simple layout */}
+          {/* mobile menu toggle here*/}
           <span className="text-sm font-medium">Dashboard</span>
         </header>
 
         <main className="flex-1 overflow-y-auto p-4 md:p-8">
           {children}
         </main>
+        <footer className="border-t py-8 text-center text-sm text-muted-foreground">
+          <p>© 2026 AIM-Mombasa | Technical University of Mombasa (TUM)</p>
+        </footer>
       </div>
     </div>
   )

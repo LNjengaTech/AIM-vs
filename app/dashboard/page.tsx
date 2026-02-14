@@ -1,3 +1,5 @@
+
+
 // app/dashboard/page.tsx
 // Dealer dashboard - Protected route (dealers only)
 
@@ -126,6 +128,7 @@ export default async function DashboardPage() {
             </div>
         </div>
       </div>
+      
     </div>
   )
 }

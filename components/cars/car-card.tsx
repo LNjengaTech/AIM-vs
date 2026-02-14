@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Badge } from "@/components/ui/badge"
 import { VerifiedBadge } from "@/components/ui/verified-badge"
 import { Heart, Fuel, Gauge, Settings2 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -64,10 +63,6 @@ export function CarCard({
                     </div>
                 )}
 
-                {/*Badge*/}
-                <div className="absolute left-2 top-2 flex flex-col gap-1">
-                    {condition === "new" && <Badge className="bg-purple-600/90 hover:bg-purple-600">Brand New</Badge>}
-                </div>
 
                 {/*favorite button-Placeholder*/}
                 <button
@@ -107,13 +102,13 @@ export function CarCard({
                         <span>{fuelType}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                        <span className="capitalize">{condition}</span>
+                        <span className="capitalize font-bold">{condition}</span>
                     </div>
                 </div>
 
                 {dealerName && (
                     <div className="flex items-center gap-1 mt-4 border-t pt-3 text-xs text-muted-foreground">
-                        <span className="text-gray-300 text-xs font-md">Sold by: {dealerName}</span>
+                        <span className="text-gray-300 text-xs font-md">{dealerName}</span>
                         <div className="flex flex-row">
                             {/*Priority logic: Show Pioneer if true, else show Verified if true instead of showing two badges*/}
                             {isPioneer ? (

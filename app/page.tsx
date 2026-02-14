@@ -3,6 +3,7 @@
 
 import { auth } from "@/lib/auth"
 import Link from "next/link"
+import { Header } from "@/components/Header"
 
 export default async function Home() {
   const session = await auth()
@@ -10,54 +11,7 @@ export default async function Home() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      {/* Navigation Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/" className="text-xl font-bold text-foreground">
-            AIM-Mombasa
-          </Link>
-          
-          <nav className="flex items-center gap-4">
-            {session?.user ? (
-              <>
-                <span className="text-sm text-muted-foreground hidden sm:inline">
-                  {session.user.email}
-                </span>
-                <Link
-                  href={session.user.role === "DEALER" ? "/dashboard" : session.user.role === "BUYER" ? "/buyer" : "/admin/verifications"}
-                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-accent"
-                >
-                  {session.user.role === "DEALER" ? "Dashboard" : session.user.role === "BUYER" ? "Profile" : "Admin"}
-                </Link>
-                <form action={async () => {
-                  "use server"
-                  const { signOut } = await import("@/lib/auth")
-                  await signOut()
-                }}>
-                  <button className="rounded-lg bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/20">
-                    Sign Out
-                  </button>
-                </form>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/auth/login"
-                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-accent"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/auth/signup/buyer"
-                  className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-                >
-                  Sign Up
-                </Link>
-              </>
-            )}
-          </nav>
-        </div>
-      </header>
+      <Header/>
 
       {/* Hero Section */}
       <main className="flex flex-1 flex-col items-center justify-center px-4 py-20 text-center">
@@ -65,7 +19,7 @@ export default async function Home() {
           {/* Logo/Branding */}
           <div className="space-y-4">
             <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl md:text-7xl">
-              <span className="bg-linear-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">
+              <span className="text-primary">
                 AIM-Mombasa
               </span>
             </h1>
@@ -77,7 +31,7 @@ export default async function Home() {
           {/* Main Tagline */}
           <div className="space-y-4">
             <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">
-              Find Your Perfect Car – Verified, Available, and Matched Just for You!
+              Find Your Perfect Car - Verified, Available, and Matched Just for You!
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
               No more wasted trips. Browse live inventory, set alerts, and connect with trusted dealers in Mombasa.
@@ -87,10 +41,20 @@ export default async function Home() {
           {/* Status Badge */}
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-6 py-3 text-sm font-medium text-primary">
             <div className="h-2 w-2 animate-pulse rounded-full bg-primary" />
-            Phase 1, Stage 2: Authentication Complete ✓
+            Phase 2, Stage 2: Marketplace Complete ✓
           </div>
 
           {/* CTA Buttons */}
+          {/* Main CTA */}
+          <div className="flex justify-center py-4">
+             <Link
+                href="/cars"
+                className="rounded-full bg-primary px-8 py-3 text-lg font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90"
+              >
+                Browse Inventory
+              </Link>
+          </div>
+
           {!session?.user && (
             <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
               <Link
