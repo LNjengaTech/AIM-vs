@@ -3,7 +3,6 @@
 
 import { auth } from "@/lib/auth"
 import Link from "next/link"
-import { Header } from "@/components/Header"
 
 export default async function Home() {
   const session = await auth()
@@ -11,7 +10,7 @@ export default async function Home() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Header/>
+      
 
       {/* Hero Section */}
       <main className="flex flex-1 flex-col items-center justify-center px-4 py-20 text-center">

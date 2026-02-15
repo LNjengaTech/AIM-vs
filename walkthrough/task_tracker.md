@@ -31,20 +31,20 @@
 ## Phase 2: Core Inventory & Marketplace
 
 ### Stage 1: Dealer Dashboard
-- [ ] Create dealer dashboard layout
-- [ ] Build multi-step car upload form
-- [ ] Implement Cloudinary image upload
-- [ ] Create inventory management table
-- [ ] Add toggle sold/available functionality
-- [ ] Implement completeness score calculation
+- [x] Create dealer dashboard layout
+- [x] Build multi-step car upload form
+- [x] Implement Cloudinary image upload
+- [x] Create inventory management table
+- [x] Add toggle sold/available functionality
+- [x] Implement completeness score calculation
 
 ### Stage 2: Marketplace
-- [ ] Create marketplace gallery page
-- [ ] Build car card components
-- [ ] Implement filtering and search
-- [ ] Create car detail page
-- [ ] Add favorites functionality
-- [ ] Implement basic ranking algorithm
+- [x] Create marketplace gallery page
+- [x] Build car card components
+- [x] Implement filtering and search
+- [x] Create car detail page
+- [x] Add favorites functionality
+- [x] Implement basic ranking algorithm
 
 ## Phase 3: Top-Shelf Features
 

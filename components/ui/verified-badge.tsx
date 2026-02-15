@@ -18,11 +18,7 @@ export function VerifiedBadge({ variant, size = 20, className }: VerifiedBadgePr
     <div className={cn("inline-flex items-center justify-center", className)}>
       <BadgeCheck 
         size={size} 
-        //fill-current sets the seal color
-        //className={cn("fill-current", styles[variant])}
-        //stroke matches the background to create a "cutout" effect for the check
-        //"stroke-white" to match theme's background hex
-        className={cn("fill-current", styles[variant], "stroke-white dark:stroke-slate-950")} 
+        className={cn("fill-current", styles[variant], "stroke-gray-100! dark:stroke-slate-950!")} 
         strokeWidth={2}
       />
     </div>

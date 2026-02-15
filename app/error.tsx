@@ -1,5 +1,5 @@
-// app/error.tsx
-// Global error boundary - Catches render errors when something crashes
+//app/error.tsx
+//global error boundary - Catches render errors when something crashes
 
 "use client"
 
@@ -13,7 +13,7 @@ export default function Error({
   reset: () => void
 }) {
   useEffect(() => {
-    // Log the error to error reporting service
+    //log the error to error reporting service
     console.error("Application error:", error)
   }, [error])
 

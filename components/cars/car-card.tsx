@@ -108,7 +108,7 @@ export function CarCard({
 
                 {dealerName && (
                     <div className="flex items-center gap-1 mt-4 border-t pt-3 text-xs text-muted-foreground">
-                        <span className="text-gray-300 text-xs font-md">{dealerName}</span>
+                        <span className="text-gray-500 text-xs font-md">{dealerName}</span>
                         <div className="flex flex-row">
                             {/*Priority logic: Show Pioneer if true, else show Verified if true instead of showing two badges*/}
                             {isPioneer ? (

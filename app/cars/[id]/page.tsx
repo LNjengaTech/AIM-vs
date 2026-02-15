@@ -23,7 +23,7 @@ export default async function CarPage({ params }: { params: Promise<{ id: string
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <div className="grid gap-8 lg:grid-cols-3">
+            <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
                 {/* Gallery & Specs */}
                 <div className="lg:col-span-2 space-y-8 ">
                     <ImageGallery images={car.images} title={`${car.make} ${car.model}`} />
