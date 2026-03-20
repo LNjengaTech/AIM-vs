@@ -1,38 +1,44 @@
 ## Must-Do work
 
 ### Necessary for MVP
-- [ ] navbar: Cars, blog, bolo, home, Contact (depending on the page you are on) - Toggleable for mobile screens
-- [ ] homepage banner area - full-screen image 
-- [ ] Landing/homepage sections
-- [ ] car details, specifications area
-- [ ] Implement favorite(requires auth check) - currently the like button does nothing
-- [ ] Dealer Dashboard:
-    - make the sidenav
-    - Analytics; Total Views, Total Leads, Total Sales, Inventory
+-  navbar: There should be links for home, listings, blog, bolo, about, Contact, etc - be Toggleable for mobile screens
+-  homepage hero section - full-screen overlayed background image/video with responsiveness - managed by admin
+-  finish implementing on car details, specifications area
+-  Implement favorite(requires auth check) - currently the like button does nothing
+
+-  Dealer Dashboard:
+    - view inventory
+    - make the sidenav toggleble on mobile screens
+    - finish on Total Views, Total Leads, Total Sales, Inventory
     - recent activity
-    - add edit actions on inventory management
-- [ ] Admin dashboard (with a header + toggleable sidebar on all screens):
-    - verifying dealers
+    - add edit and view actions on inventory management to make it even better
+    -  Dealer searching the inventory.
+    -  Dealer Analytics
+
+-  buyers/user profile:
+    - They can write their reviews/suggestions to the admin. The admin can remove/republish the review
+    - Finish working on Favourites, BOLO requests, Recent Activities
+
+-  Admin dashboard (with a header + toggleable sidebar on all screens):
+    Implement:
+    - Admin notifications for activities.
+    - verifying dealers so that their inventory could show up in the marketplace
     - search functionality
-    - manage banner section background and tags
+    - manage Hero section - check schema.prisma file, model HeroSection, to understand what I mean.
     - Manage reviews
     - Analytics on dealers, users, total inventory, etc
-- [ ] buyers can can write their reviews on sellers but admin can remove/republish the review
-- [ ] Users profile:
-    - Favourites/liked, BOLO requests, Recent Activities
-- [ ] header in marketplace & car details
-- [ ] using slug instead of car ID
+
+-  header in marketplace & car details
+-  using slug instead of car ID on the URL for on Car details
 
 
 
 ### Additional Features
 - [ ] View 360-degree button in car-details page
 - [ ] Reviews:
-    - Admin creates Reviews/insights on cars
+    - Admin creates Reviews/insights on cars then publishes it
 - [ ] Dealer recieving email notification when verified.
 - [ ] Reason for rejecting application.
-- [ ] Dealer searching the inventory.
-- [ ] Dealer Analytics
 - [ ] Add DMs, Chatbot, public chat, features (if i could intergrate chat feature from a seperate project)
 
 
