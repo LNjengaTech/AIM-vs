@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma"
+import { auth } from "@/lib/auth"
 import { CarFilters } from "@/components/cars/car-filters"
 import { CarCard } from "@/components/cars/car-card"
 import { CarSort } from "@/components/cars/car-sort"
+import { Navbar } from "@/components/ui/navbar"
 import { Prisma } from "@prisma/client"
 import { Metadata } from "next"
 
@@ -25,6 +27,7 @@ interface PageProps {
 
 export default async function CarsPage(props: PageProps) {
   const searchParams = await props.searchParams
+  const session = await auth()
   
   // Parse Filters
   const make = searchParams.make
@@ -73,8 +76,25 @@ export default async function CarsPage(props: PageProps) {
     take: 20,
   })
 
+  // Get favorite status for logged-in buyers
+  let favoritedCarIds: string[] = []
+  if (session?.user && session.user.role === "BUYER") {
+    const buyerProfile = await prisma.buyerProfile.findUnique({
+      where: { userId: session.user.id },
+      include: {
+        favorites: {
+          select: { carId: true }
+        }
+      }
+    })
+    favoritedCarIds = buyerProfile?.favorites.map(f => f.carId) || []
+  }
+
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-background">
+      <Navbar user={session?.user} />
+      
+      <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-8">
         <aside className="w-full md:w-64 flex-none"><CarFilters /></aside>
 
@@ -93,11 +113,12 @@ export default async function CarsPage(props: PageProps) {
                     <p className="text-muted-foreground">Try adjusting your filters</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {cars.map((car) => (
                         <CarCard
                             key={car.id}
                             id={car.id}
+                            slug={car.slug}
                             make={car.make}
                             model={car.model}
                             year={car.year}
@@ -110,12 +131,14 @@ export default async function CarsPage(props: PageProps) {
                             dealerName={car.dealer.businessName}
                             isVerified={car.dealer.isVerified}
                             isPioneer={car.dealer.isPioneer}
+                            isFavorited={favoritedCarIds.includes(car.id)}
                         />
                     ))}
                 </div>
             )}
         </main>
       </div>
+    </div>
     </div>
   )
 }
