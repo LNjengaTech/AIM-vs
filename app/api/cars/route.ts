@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { carSchema } from "@/lib/validations/car"
+import { generateUniqueCarSlug } from "@/lib/utils/slug"
 
 export async function POST(req: Request) {
     try {
@@ -43,10 +44,14 @@ export async function POST(req: Request) {
         if (data.features.length >= 3) score += 10
         if (score > 100) score = 100
 
+        // Generate unique slug
+        const slug = await generateUniqueCarSlug(data.make, data.model, data.year, prisma)
+
         //create car
         const car = await prisma.car.create({
             data: {
                 dealerId: dealerProfile.id,
+                slug: slug,
                 make: data.make,
                 model: data.model,
                 year: data.year,

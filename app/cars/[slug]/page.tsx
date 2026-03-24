@@ -121,7 +121,7 @@ export default async function CarPage({ params }: { params: Promise<{ slug: stri
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {car.features.map((f, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
+                      <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
                       <span>{f}</span>
                     </li>
                   ))}
@@ -171,11 +171,11 @@ export default async function CarPage({ params }: { params: Promise<{ slug: stri
                   </Badge>
                 )}
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                  <MapPin className="h-4 w-4 shrink-0" /> 
+                  <MapPin className="h-4 w-4 flex-shrink-0" /> 
                   <span>{car.dealer.location}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Phone className="h-4 w-4 shrink-0" /> 
+                  <Phone className="h-4 w-4 flex-shrink-0" /> 
                   <span>{car.dealer.businessPhone}</span>
                 </div>
               </div>

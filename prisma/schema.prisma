@@ -180,7 +180,7 @@ model Car {
   completenessScore Int @default(0)
 
   // SEO
-  slug String @unique
+  slug String? @unique
 
   // Metadata
   createdAt DateTime  @default(now())
