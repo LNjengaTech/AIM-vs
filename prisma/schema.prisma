@@ -180,7 +180,7 @@ model Car {
   completenessScore Int @default(0)
 
   // SEO
-  slug String? @unique
+  slug String @unique
 
   // Metadata
   createdAt DateTime  @default(now())
@@ -194,6 +194,8 @@ model Car {
   dealer      DealerProfile @relation(fields: [dealerId], references: [id], onDelete: Cascade)
   favorites   Favorite[]
   engagements Engagement[]
+
+  boloMatches BOLOMatch[]
 
   @@index([dealerId])
   @@index([make])
@@ -261,6 +263,8 @@ model BOLOMatch {
   createdAt     DateTime @default(now())
 
   boloRequest BOLORequest @relation(fields: [boloRequestId], references: [id], onDelete: Cascade)
+
+  car         Car         @relation(fields: [carId], references: [id], onDelete: Cascade)
 
   @@unique([boloRequestId, carId])
   @@index([boloRequestId])
