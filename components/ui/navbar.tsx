@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { signOutAction } from "@/app/actions/auth"
+import { ThemeToggle } from "@/components/theme-toggle"
+
 
 interface NavItem {
   title: string
@@ -49,12 +51,13 @@ export function Navbar({ user, className }: NavbarProps) {
   const roleLink = getRoleLink()
 
   return (
-    <header className={cn("border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50", className)}>
+    <header className={cn("border-b p-4 bg-card/50 backdrop-blur-sm sticky top-0 z-50", className)}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-foreground">
+        <Link href="/" className="text-xl font-bold bg-linear-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">
           AIM-Mombasa
         </Link>
+
 
         {/* Desktop Navigation */}
         <nav className="hidden items-center gap-6 md:flex">
@@ -77,6 +80,8 @@ export function Navbar({ user, className }: NavbarProps) {
 
         {/* Desktop Auth Buttons */}
         <div className="hidden items-center gap-4 md:flex">
+          <ThemeToggle />
+
           {user ? (
             <>
               <span className="text-sm text-muted-foreground hidden lg:inline">
