@@ -73,15 +73,10 @@ export function CarCard({
   }
 
   return (
-    <Link 
-        href={`/cars/${slug}`}
-        className={cn(
-            "group relative flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-all hover:shadow-md hover:border-primary/50",
-            className
-        )}
-    >
+    <Link href={`/cars/${slug}`} className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-card  p-3 transition-all shadow-lg">
+      
       {/* Image Section */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted">
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.5rem]">
         {image ? (
             <Image
                 src={image}
@@ -97,11 +92,11 @@ export function CarCard({
         )}
         
         {/* Badges Overlay */}
-        <div className="absolute left-2 top-2 flex flex-col gap-1">
+        {/* <div className="absolute left-2 top-2 flex flex-col gap-1">
             {isVerified && <Badge variant="success" className="bg-green-600/90 hover:bg-green-600">Verified Dealer</Badge>}
             {isPioneer && <Badge variant="secondary" className="bg-blue-600/90 text-white hover:bg-blue-600">Pioneer</Badge>}
             {condition === "new" && <Badge className="bg-purple-600/90 hover:bg-purple-600">Brand New</Badge>}
-        </div>
+        </div> */}
 
         {/* Favorite Button */}
         <button 
@@ -129,7 +124,7 @@ export function CarCard({
         </div>
 
         {/* Specs Grid */}
-        <div className="mt-auto grid grid-cols-2 gap-y-2 gap-x-4 text-xs text-muted-foreground">
+        {/* <div className="mt-auto grid grid-cols-2 gap-y-2 gap-x-4 text-xs text-muted-foreground">
             <div className="flex items-center gap-1">
                 <Gauge className="h-3.5 w-3.5" />
                 <span>{mileage.toLocaleString()} km</span>
@@ -145,10 +140,10 @@ export function CarCard({
              <div className="flex items-center gap-1">
                 <span className="capitalize">{condition}</span>
             </div>
-        </div>
+        </div> */}
         
         {dealerName && (
-             <div className="mt-4 border-t pt-3 text-xs text-muted-foreground">
+             <div className="mt-2 border-t pt-3 text-xs text-muted-foreground">
                 <span className="font-medium">Sold by:</span> {dealerName}
              </div>
         )}

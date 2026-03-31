@@ -322,16 +322,21 @@ enum EngagementType {
 model HeroSection {
   id          String  @id @default(cuid())
   isActive    Boolean @default(true)
-  headline    String  @default("Find Your Perfect Car – Verified, Available, and Matched Just for You!")
-  subheadline String  @default("No more wasted trips. Browse live inventory, set alerts, and connect with trusted dealers.")
+  headline    String? @default("Find Your Perfect Car – Verified, Available, and Matched Just for You!")
+  subheadline String? @default("No more wasted trips. Browse live inventory, set alerts, and connect with trusted dealers.")
+  tagline     String?
 
   // Featured Car or Background Image
   hasFeaturedCar     Boolean @default(false)
   featuredCarId      String?
   backgroundImageUrl String? // Cloudinary URL for default background
+  foregroundImageUrl String? // Cloudinary URL for cutout car image
+  
+  // Specs for showcase, stored as json (e.g. [{label: "0-100", value: "3.5s"}, ...])
+  specs              Json?
 
   // Color selector for background image
-  selectedColor String? // Hex color code
+  selectedColor      String? // Hex color code
 
   updatedAt DateTime @updatedAt
 

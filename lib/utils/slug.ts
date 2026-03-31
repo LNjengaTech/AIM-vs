@@ -6,9 +6,9 @@
  * Format: make-model-year-randomid
  * Example: toyota-corolla-2020-x8z2p
  */
-export function generateCarSlug(make: string, model: string, year: number): string {
+export function generateCarSlug(make: string, model: string, year: number, dealerName: string): string {
     const cleanText = (text: string) => {
-        return text
+        return (text || '') //(text || '') to handle undefined/null values safely
             .toLowerCase()
             .trim()
             .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
@@ -18,6 +18,7 @@ export function generateCarSlug(make: string, model: string, year: number): stri
 
     const makeSlug = cleanText(make)
     const modelSlug = cleanText(model)
+    const dealerSlug = cleanText(dealerName).substring(0, 15);
 
     // Add random suffix to ensure uniqueness
     const randomId = generateRandomId(5)

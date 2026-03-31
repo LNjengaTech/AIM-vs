@@ -37,17 +37,19 @@ export async function PUT(req: NextRequest) {
     const body = await req.json()
     const { 
       headline, 
-      subheadline, 
-      backgroundImageUrl, 
+      subheadline,
+      tagline,
+      backgroundImageUrl,
+      foregroundImageUrl,
       selectedColor,
       hasFeaturedCar,
       featuredCarId,
+      specs,
       isActive 
     } = body
 
-    if (!headline || !subheadline) {
-      return new NextResponse("Missing required fields", { status: 400 })
-    }
+    // Ensure we parse specs properly or default to null
+    const parsedSpecs = specs ? (typeof specs === 'string' ? JSON.parse(specs) : specs) : null;
 
     // Upsert the active hero section
     const hero = await prisma.heroSection.findFirst({
@@ -59,24 +61,30 @@ export async function PUT(req: NextRequest) {
       updatedHero = await prisma.heroSection.update({
         where: { id: hero.id },
         data: {
-          headline,
-          subheadline,
-          backgroundImageUrl,
+          headline: headline || null,
+          subheadline: subheadline || null,
+          tagline: tagline || null,
+          backgroundImageUrl: backgroundImageUrl || null,
+          foregroundImageUrl: foregroundImageUrl || null,
           selectedColor,
           hasFeaturedCar,
           featuredCarId,
+          specs: parsedSpecs,
           isActive
         }
       })
     } else {
       updatedHero = await prisma.heroSection.create({
         data: {
-          headline,
-          subheadline,
-          backgroundImageUrl,
+          headline: headline || null,
+          subheadline: subheadline || null,
+          tagline: tagline || null,
+          backgroundImageUrl: backgroundImageUrl || null,
+          foregroundImageUrl: foregroundImageUrl || null,
           selectedColor,
           hasFeaturedCar,
           featuredCarId,
+          specs: parsedSpecs,
           isActive: true
         }
       })

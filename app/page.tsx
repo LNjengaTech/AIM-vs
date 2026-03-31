@@ -4,7 +4,6 @@ import { Navbar } from "@/components/ui/navbar"
 import { HeroSection } from "@/components/home/hero-section"
 import Link from "next/link"
 
-
 export default async function Home() {
   const session = await auth()
 
@@ -15,12 +14,15 @@ export default async function Home() {
 
   // Default values if no hero section exists in DB
   const hero = {
-    headline: heroData?.headline || "Find Your Perfect Car - Verified, Available, and Matched Just for You!",
-    subheadline: heroData?.subheadline || "No more wasted trips. Browse live inventory, set alerts, and connect with trusted dealers.",
+    headline: heroData?.headline ?? "LIMITLESS",
+    subheadline: heroData?.subheadline ?? "No more wasted trips. Browse live inventory, set alerts, and connect with trusted dealers.",
+    tagline: heroData?.tagline ?? "PERFORMANCE",
     backgroundImageUrl: heroData?.backgroundImageUrl,
+    foregroundImageUrl: heroData?.foregroundImageUrl,
     selectedColor: heroData?.selectedColor,
     hasFeaturedCar: heroData?.hasFeaturedCar,
-    featuredCarId: heroData?.featuredCarId
+    featuredCarId: heroData?.featuredCarId,
+    specs: (heroData?.specs as { label: string; value: string }[]) || null
   }
 
   return (
@@ -32,10 +34,13 @@ export default async function Home() {
         <HeroSection
           headline={hero.headline}
           subheadline={hero.subheadline}
+          tagline={hero.tagline}
           backgroundImageUrl={hero.backgroundImageUrl}
+          foregroundImageUrl={hero.foregroundImageUrl}
           selectedColor={hero.selectedColor}
           hasFeaturedCar={hero.hasFeaturedCar}
           featuredCarId={hero.featuredCarId}
+          specs={hero.specs}
         />
 
         {/* Status Badge & Features (Keeping from original design but refined) */}
