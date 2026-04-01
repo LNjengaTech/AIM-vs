@@ -32,7 +32,7 @@ export default async function DashboardLayout({
         </div>
 
         <div className="border-t p-4">
-          <div className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm">
+          <div className="flex items-center gap-3 rounded-4xl px-3 py-2 text-sm">
             <div className="flex flex-col">
               <span className="font-medium text-foreground">{session.user.name}</span>
               <span className="text-xs text-muted-foreground truncate max-w-[150px]">
@@ -41,7 +41,7 @@ export default async function DashboardLayout({
             </div>
           </div>
           <form action={signOutAction} className="mt-2">
-            <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+            <button className="flex w-full items-center gap-3 rounded-4xl px-3 py-2.5 text-sm font-medium text-red-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
               <LogOut className="h-5 w-5" />
               Sign Out
             </button>

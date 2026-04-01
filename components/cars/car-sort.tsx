@@ -15,7 +15,7 @@ export function CarSort() {
   return (
     <div className="flex items-center gap-2">
       <span className="text-sm font-medium">Sort:</span>
-      <select value={current} onChange={onChange} className="h-9 rounded border bg-background px-2 text-sm">
+      <select value={current} onChange={onChange} className="h-9 rounded-3xl border bg-background px-2 text-sm">
         <option value="newest">Newest</option>
         <option value="price_asc">Price: Low-High</option>
         <option value="price_desc">Price: High-Low</option>

@@ -79,7 +79,7 @@ export function InventoryActions({ carId, carSlug, currentStatus }: InventoryAct
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground h-8 w-8">
+          <button className="inline-flex items-center justify-center rounded-3xl text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground h-8 w-8">
             <MoreVertical className="h-4 w-4" />
             <span className="sr-only">Actions</span>
           </button>

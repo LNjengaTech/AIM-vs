@@ -48,7 +48,7 @@ export function InventoryListClient({ cars }: InventoryListClientProps) {
         <h1 className="text-3xl font-bold tracking-tight">Inventory</h1>
         <Link 
           href="/dashboard/add-car" 
-          className="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          className="flex items-center justify-center gap-2 rounded-4xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
         >
           <PlusCircle className="h-4 w-4" />
           Add Car
@@ -65,7 +65,7 @@ export function InventoryListClient({ cars }: InventoryListClientProps) {
         </p>
       )}
 
-      <div className="rounded-lg border bg-card shadow-sm">
+      <div className="rounded-4xl bg-card shadow-2xl border">
         <div className="relative w-full overflow-auto">
           <table className="w-full caption-bottom text-sm">
             <thead className="[&_tr]:border-b">

@@ -136,7 +136,7 @@ export default function DealerSignupPage() {
         </div>
 
         {/*Signup Form */}
-        <div className="rounded-lg border bg-card p-8 shadow-sm">
+        <div className="rounded-4xl border bg-card p-8 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
             {step === 1 && (
               <>
@@ -246,7 +246,7 @@ export default function DealerSignupPage() {
                     accept="image/*,.pdf"
                     onChange={handleFileUpload}
                     disabled={isLoading || isUploading}
-                    className="flex h-11 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium"
+                    className="flex h-11 w-full rounded-4xl border border-input bg-background px-4 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium"
                   />
                   {isUploading && (
                     <p className="text-sm text-muted-foreground">Uploading...</p>
@@ -256,7 +256,7 @@ export default function DealerSignupPage() {
                   )}
                 </div>
 
-                <div className="rounded-lg bg-blue-500/10 p-4 text-sm text-blue-600 dark:text-blue-400">
+                <div className="rounded-4xl bg-blue-500/10 p-4 text-sm text-blue-600 dark:text-blue-400">
                   <p className="font-medium">Note:</p>
                   <p className="mt-1">Your account will be pending verification by an admin. You'll be notified once approved.</p>
                 </div>
@@ -264,7 +264,7 @@ export default function DealerSignupPage() {
             )}
 
             {error && (
-              <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+              <div className="rounded-4xl bg-destructive/10 p-3 text-sm text-destructive">
                 {error}
               </div>
             )}
@@ -275,7 +275,7 @@ export default function DealerSignupPage() {
                   type="button"
                   onClick={() => setStep(1)}
                   disabled={isLoading}
-                  className="flex-1 rounded-lg border border-border bg-background px-4 py-3 font-medium transition-colors hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 rounded-4xl border border-border bg-background px-4 py-3 font-medium transition-colors hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Back
                 </button>
@@ -283,7 +283,7 @@ export default function DealerSignupPage() {
               <button
                 type="submit"
                 disabled={isLoading || isUploading}
-                className="flex-1 rounded-lg bg-primary px-4 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 rounded-4xl bg-primary px-4 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? "Processing..." : step === 1 ? "Continue" : "Create Dealer Account"}
               </button>
@@ -305,7 +305,7 @@ export default function DealerSignupPage() {
           {/* Login Link */}
           <Link
             href="/auth/login"
-            className="block rounded-lg border border-border bg-background px-4 py-3 text-center text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            className="block rounded-4xl border border-border bg-background px-4 py-3 text-center text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
           >
             Sign In
           </Link>

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { signOutAction } from "@/app/actions/auth"
+import { MobileNav } from "@/components/buyer/mobile-nav"
 
 export default async function BuyerLayout({
   children,
@@ -39,6 +40,9 @@ export default async function BuyerLayout({
       <header className="border-b bg-card sticky top-0 z-10">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-4">
+
+          <MobileNav/>
+
             <Link href="/" className="text-xl font-bold text-foreground">
               AIM-Mombasa
             </Link>
@@ -53,7 +57,7 @@ export default async function BuyerLayout({
           <div className="flex items-center gap-3">
             <span className="text-sm text-foreground hidden sm:inline-block">{user.name}</span>
             <form action={signOutAction}>
-              <button className="rounded-lg border border-border px-4 py-2 text-sm transition-colors hover:bg-accent/50 hover:text-red-600">
+              <button className="rounded-4xl border border-border px-4 py-2 text-sm transition-colors hover:bg-accent/50 hover:text-red-600">
                 Sign Out
               </button>
             </form>
@@ -62,7 +66,7 @@ export default async function BuyerLayout({
         {/* Mobile Nav - optional, keeping simple for now */}
       </header>
       
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-2 md:px-4 py-8">
         {children}
       </main>
     </div>

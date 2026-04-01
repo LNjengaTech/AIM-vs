@@ -118,7 +118,7 @@ export function AddCarForm() {
             </div>
 
             {/* Form Content */}
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 rounded-lg border bg-card p-6 shadow-sm">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 rounded-4xl border bg-card p-6 shadow-sm">
 
                 {/* Step 1: Basic Details */}
                 {currentStep === 0 && (
@@ -165,7 +165,7 @@ export function AddCarForm() {
                             <label className="text-sm font-medium">Condition</label>
                             <select
                                 {...register("condition")}
-                                className="flex h-11 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                className="flex h-11 w-full rounded-4xl border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                             >
                                 <option value="used">Used / Second Hand</option>
                                 <option value="new">Brand New</option>
@@ -182,7 +182,7 @@ export function AddCarForm() {
                             <label className="text-sm font-medium">Body Type</label>
                             <select
                                 {...register("bodyType")}
-                                className="flex h-11 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                className="flex h-11 w-full rounded-4xl border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                             >
                                 <option value="">Select Body Type</option>
                                 <option value="suv">SUV</option>
@@ -199,7 +199,7 @@ export function AddCarForm() {
                             <label className="text-sm font-medium">Transmission</label>
                             <select
                                 {...register("transmission")}
-                                className="flex h-11 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                className="flex h-11 w-full rounded-4xl border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                             >
                                 <option value="">Select Transmission</option>
                                 <option value="automatic">Automatic</option>
@@ -213,7 +213,7 @@ export function AddCarForm() {
                             <label className="text-sm font-medium">Fuel Type</label>
                             <select
                                 {...register("fuelType")}
-                                className="flex h-11 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                className="flex h-11 w-full rounded-4xl border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                             >
                                 <option value="">Select Fuel</option>
                                 <option value="petrol">Petrol</option>
@@ -240,7 +240,7 @@ export function AddCarForm() {
                             <label className="text-sm font-medium">Description (Optional)</label>
                             <textarea
                                 {...register("description")}
-                                className="flex min-h-25 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                className="flex min-h-25 w-full rounded-4xl border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                 placeholder="Describe the car's condition, history, or key selling points..."
                             />
                         </div>

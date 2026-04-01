@@ -113,7 +113,7 @@ export default function AdminVerificationsPage() {
         <div className="grid gap-6">
           {[1, 2, 3].map(i => (
             <Card key={i} className="animate-pulse">
-              <div className="h-48 bg-muted rounded-lg" />
+              <div className="h-48 bg-muted rounded-4xl" />
             </Card>
           ))}
         </div>

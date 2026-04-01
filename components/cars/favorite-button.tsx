@@ -53,7 +53,7 @@ export function FavoriteButton({ carId, initialIsFavorited = false, requiresAuth
       onClick={handleToggle}
       disabled={isLoading}
       className={cn(
-        "flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition-colors",
+        "flex w-full items-center justify-center gap-2 rounded-4xl border px-4 py-3 text-sm font-medium transition-colors",
         isFavorited
           ? "border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:border-red-900/50 dark:bg-red-900/10 dark:text-red-400 dark:hover:bg-red-900/20"
           : "border-border bg-background text-foreground hover:bg-accent",

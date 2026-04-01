@@ -1,29 +1,9 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription 
-} from "@/components/ui/card"
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  LineChart, 
-  Line, 
-  Legend,
-  PieChart,
-  Pie,
-  Cell
-} from "recharts"
-import { Users, Store, Car, Activity, Loader2, ArrowUpRight, TrendingUp } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend, PieChart, Pie, Cell} from "recharts"
+import { Users, Store, Car, Activity, Loader2, TrendingUp } from "lucide-react"
 
 export default function AdminAnalyticsPage() {
   const [data, setData] = useState<any>(null)
@@ -69,7 +49,7 @@ export default function AdminAnalyticsPage() {
       </div>
 
       {/* Top Stats */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {[
           { label: "Total Users", value: data?.counts.totalUsers, icon: Users, color: "text-blue-500" },
           { label: "Total Dealers", value: data?.counts.totalDealers, icon: Store, color: "text-purple-500" },
@@ -95,7 +75,7 @@ export default function AdminAnalyticsPage() {
             <CardTitle>Engagement Trends</CardTitle>
             <CardDescription>Views vs Interactivity over last 7 days</CardDescription>
           </CardHeader>
-          <CardContent className="h-[300px]">
+          <CardContent className="h-75">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data?.trafficData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -122,7 +102,7 @@ export default function AdminAnalyticsPage() {
             <CardTitle>Inventory Distribution</CardTitle>
             <CardDescription>Breakdown of cars by listing status</CardDescription>
           </CardHeader>
-          <CardContent className="h-[300px] flex items-center justify-center">
+          <CardContent className="h-75 flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie

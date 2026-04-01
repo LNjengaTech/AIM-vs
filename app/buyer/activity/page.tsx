@@ -18,7 +18,7 @@ export default async function ActivityPage() {
   const engagements = await prisma.engagement.findMany({
     where: { buyerId: buyer.id },
     orderBy: { createdAt: 'desc' },
-    take: 50,
+    take: 10,
     include: {
         car: {
             select: {
@@ -41,12 +41,12 @@ export default async function ActivityPage() {
          </Link>
          <h1 className="text-3xl font-bold tracking-tight">Recent Activity</h1>
          <p className="text-muted-foreground mt-1">
-           Your history of interactions on the platform.
+           Your last 10 interactions on the platform.
          </p>
       </div>
 
       {engagements.length === 0 ? (
-        <div className="text-center py-12 border rounded-lg bg-card">
+        <div className="text-center py-12 border rounded-4xl bg-card">
            <p className="text-muted-foreground">No recent activity found.</p>
            <Link href="/cars" className="text-primary hover:underline mt-2 inline-block">
               Start browsing
@@ -75,12 +75,12 @@ export default async function ActivityPage() {
 
                 return (
                     <div key={item.id} className="relative pl-8">
-                        <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full border bg-background flex items-center justify-center ring-4 ring-background">
+                        <div className="absolute -left-2.25 top-1 h-4 w-4 rounded-full border bg-background flex items-center justify-center ring-4 ring-background">
                             {/* Dot indicator */}
                              <div className="h-2 w-2 rounded-full bg-muted-foreground/30" />
                         </div>
                         
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-lg border bg-card/50 hover:bg-card transition-colors">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-4xl border bg-card/50 hover:bg-card transition-colors">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 rounded-full bg-muted">
                                    {getIcon()}

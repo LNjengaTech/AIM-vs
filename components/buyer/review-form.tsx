@@ -47,7 +47,7 @@ export function ReviewForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6 max-w-lg mx-auto bg-card p-6 rounded-lg border shadow-sm">
+    <form onSubmit={onSubmit} className="space-y-6 max-w-lg mx-auto bg-card p-6 rounded-4xl border shadow-sm">
       <div className="space-y-2">
         <Label>Rating</Label>
         <div className="flex items-center gap-1">
@@ -80,7 +80,7 @@ export function ReviewForm() {
           id="content" 
           name="content" 
           placeholder="Share your experience with AIM-Mombasa..." 
-          className="min-h-[120px]"
+          className="min-h-30"
           required
         />
       </div>

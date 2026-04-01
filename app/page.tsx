@@ -44,7 +44,7 @@ export default async function Home() {
         />
 
         {/* Status Badge & Features (Keeping from original design but refined) */}
-        <div className="container mx-auto px-4 py-16">
+        <div className="container mx-auto px-2 sm:p-4 py-16">
           <div className="flex flex-col items-center text-center space-y-12">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-6 py-3 text-sm font-medium text-primary animate-pulse">
               <div className="h-2 w-2 rounded-full bg-primary" />
@@ -52,7 +52,7 @@ export default async function Home() {
             </div>
 
             {/* Feature Grid */}
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 w-full">
+            <div className="grid gap-2 md:gap-6 grid-cols-2 lg:grid-cols-4 w-full">
               {[
                 {
                   title: "Real-Time Inventory",
@@ -91,8 +91,8 @@ export default async function Home() {
                   )
                 }
               ].map((feature, idx) => (
-                <div key={idx} className="group rounded-2xl border bg-card p-8 text-left transition-all hover:shadow-xl hover:-translate-y-1">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                <div key={idx} className="group rounded-3xl bg-card p-2 md:p-4 text-left transition-all shadow-xl hover:-translate-y-1">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                     {feature.icon}
                   </div>
                   <h3 className="mb-2 font-bold text-lg text-foreground">{feature.title}</h3>

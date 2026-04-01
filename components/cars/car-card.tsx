@@ -4,8 +4,10 @@ import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
-import { Heart, Fuel, Gauge, Settings2 } from "lucide-react" // Importing icons to represent Fuel, Mileage, Transmission
+import { Heart, Gauge, Settings2 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { VerifiedBadge } from "@/components/ui/verified-badge"
+
 
 interface CarCardProps {
   id: string
@@ -33,7 +35,7 @@ export function CarCard({
   model,
   year,
   price,
-  image,
+  image, isFavorited = false,
   mileage,
   fuelType,
   transmission,
@@ -41,15 +43,13 @@ export function CarCard({
   dealerName,
   isVerified,
   isPioneer,
-  isFavorited = false,
-  className,
 }: CarCardProps) {
   const [isFav, setIsFav] = React.useState(isFavorited)
 
   const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    
+
     try {
       const response = await fetch("/api/favorites", {
         method: "POST",
@@ -73,58 +73,56 @@ export function CarCard({
   }
 
   return (
-    <Link href={`/cars/${slug}`} className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-card  p-3 transition-all shadow-lg">
-      
+    <Link href={`/cars/${slug}`} className="group relative flex flex-col overflow-hidden rounded-4xl bg-card  p-3 transition-all shadow-2xl">
+
       {/* Image Section */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.5rem]">
+      <div className="relative aspect-4/3 w-full overflow-hidden rounded-3xl">
         {image ? (
-            <Image
-                src={image}
-                alt={`${year} ${make} ${model}`}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
+          <Image
+            src={image}
+            alt={`${year} ${make} ${model}`}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         ) : (
-            <div className="flex h-full items-center justify-center text-muted-foreground">
-                No Image
-            </div>
+          <div className="flex h-full items-center justify-center text-muted-foreground">
+            No Image
+          </div>
         )}
-        
+
         {/* Badges Overlay */}
-        {/* <div className="absolute left-2 top-2 flex flex-col gap-1">
-            {isVerified && <Badge variant="success" className="bg-green-600/90 hover:bg-green-600">Verified Dealer</Badge>}
-            {isPioneer && <Badge variant="secondary" className="bg-blue-600/90 text-white hover:bg-blue-600">Pioneer</Badge>}
-            {condition === "new" && <Badge className="bg-purple-600/90 hover:bg-purple-600">Brand New</Badge>}
-        </div> */}
+        <div className="absolute left-1 top-1 flex flex-col gap-1">
+            {condition === "new" && <Badge className="bg-blue-600">New</Badge>}
+        </div>
 
         {/* Favorite Button */}
-        <button 
-            onClick={handleFavoriteClick}
-            className={cn(
-              "absolute right-2 top-2 rounded-full p-2 backdrop-blur-sm transition-all",
-              isFav 
-                ? "bg-red-500/90 text-white hover:bg-red-600" 
-                : "bg-white/80 text-gray-700 hover:bg-white hover:text-red-500"
-            )}
+        <button
+          onClick={handleFavoriteClick}
+          className={cn(
+            "absolute right-1 top-1 rounded-full p-2 backdrop-blur-sm transition-all",
+            isFav
+              ? "bg-red-500/90 text-white hover:bg-red-600"
+              : "bg-white/80 text-gray-700 hover:bg-white hover:text-red-500"
+          )}
         >
-            <Heart className={cn("h-4 w-4", isFav && "fill-current")} />
+          <Heart className={cn("h-4 w-4", isFav && "fill-current")} />
         </button>
       </div>
 
       {/* Content Section */}
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex flex-1 flex-col pt-4">
         <div className="mb-2">
-            <h3 className="font-semibold text-foreground line-clamp-1">
-                {year} {make} {model}
-            </h3>
-            <p className="text-lg font-bold text-primary">
-                KES {Number(price).toLocaleString()}
-            </p>
+          <h3 className="font-semibold text-sm text-foreground line-clamp-1">
+            {year} {make} {model}
+          </h3>
+          <p className="text-md font-bold text-foreground">
+            KES {Number(price).toLocaleString()}
+          </p>
         </div>
 
         {/* Specs Grid */}
-        {/* <div className="mt-auto grid grid-cols-2 gap-y-2 gap-x-4 text-xs text-muted-foreground">
+        <div className="mt-auto grid grid-cols-2 gap-y-2 gap-x-4 text-xs text-muted-foreground">
             <div className="flex items-center gap-1">
                 <Gauge className="h-3.5 w-3.5" />
                 <span>{mileage.toLocaleString()} km</span>
@@ -133,19 +131,24 @@ export function CarCard({
                 <Settings2 className="h-3.5 w-3.5" />
                 <span>{transmission}</span>
             </div>
-            <div className="flex items-center gap-1">
-                <Fuel className="h-3.5 w-3.5" />
-                <span>{fuelType}</span>
-            </div>
-             <div className="flex items-center gap-1">
-                <span className="capitalize">{condition}</span>
-            </div>
-        </div> */}
-        
+            
+             
+        </div>
+
         {dealerName && (
-             <div className="mt-2 border-t pt-3 text-xs text-muted-foreground">
-                <span className="font-medium">Sold by:</span> {dealerName}
-             </div>
+          <div className="flex items-center gap-1 mt-4 border-t pt-3 text-xs text-muted-foreground">
+            <span className="text-gray-500 text-xs font-md">{dealerName}</span>
+            <div className="flex flex-row">
+              {/*Priority logic: Show Pioneer if true, else show Verified if true instead of showing two badges*/}
+              {isPioneer ? (
+                <VerifiedBadge variant="pioneer" size={20} />
+              ) : isVerified ? (
+                <VerifiedBadge variant="verified" size={20} />
+              ) : null}
+
+              
+            </div>
+          </div>
         )}
       </div>
     </Link>

@@ -65,7 +65,7 @@ export default function LoginPage() {
         </div>
 
         {/*Login Form */}
-        <div className="rounded-lg border bg-card p-8 shadow-sm">
+        <div className="rounded-4xl border bg-card p-8 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             <FormInput
               label="Email"
@@ -90,7 +90,7 @@ export default function LoginPage() {
             />
 
             {error && (
-              <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+              <div className="rounded-4xl bg-destructive/10 p-3 text-sm text-destructive">
                 {error}
               </div>
             )}
@@ -98,7 +98,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full rounded-lg bg-primary px-4 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-4xl bg-primary px-4 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Signing in..." : "Sign In"}
             </button>
@@ -120,13 +120,13 @@ export default function LoginPage() {
           <div className="grid gap-3">
             <Link
               href="/auth/signup/buyer"
-              className="rounded-lg border border-border bg-background px-4 py-3 text-center text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="rounded-4xl border border-border bg-background px-4 py-3 text-center text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               Sign up as Buyer
             </Link>
             <Link
               href="/auth/signup/dealer"
-              className="rounded-lg border border-border bg-background px-4 py-3 text-center text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="rounded-4xl border border-border bg-background px-4 py-3 text-center text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               Sign up as Dealer
             </Link>

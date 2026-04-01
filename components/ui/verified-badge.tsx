@@ -18,7 +18,7 @@ export function VerifiedBadge({ variant, size = 20, className }: VerifiedBadgePr
     <div className={cn("inline-flex items-center justify-center", className)}>
       <BadgeCheck 
         size={size} 
-        className={cn("fill-current", styles[variant], "stroke-gray-100! dark:stroke-slate-950!")} 
+        className={cn("fill-current", styles[variant], "stroke-card!")} 
         strokeWidth={2}
       />
     </div>

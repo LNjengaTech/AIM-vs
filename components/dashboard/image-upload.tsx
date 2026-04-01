@@ -48,7 +48,7 @@ export function ImageUpload({ value, onChange, onRemove }: ImageUploadProps) {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-4">
         {value.map((url) => (
-          <div key={url} className="relative h-50 w-50 overflow-hidden rounded-md border">
+          <div key={url} className="relative h-50 w-50 overflow-hidden rounded-3xl border">
             <div className="absolute right-2 top-2 z-10">
               <Button
                 type="button"
@@ -71,7 +71,7 @@ export function ImageUpload({ value, onChange, onRemove }: ImageUploadProps) {
       </div>
       
       <div className="flex items-center gap-4">
-        <label className="relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 text-center transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+        <label className="relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-4xl border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 text-center transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
            <div className="text-gray-600 dark:text-gray-400">
              {isUploading ? (
                <Loader2 className="h-10 w-10 animate-spin" />

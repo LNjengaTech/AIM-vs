@@ -94,7 +94,7 @@ export default async function CarsPage(props: PageProps) {
     <div className="min-h-screen bg-background">
       <Navbar user={session?.user} />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-1 md:p-4 py-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-8">
         <aside className="w-full md:w-64 flex-none"><CarFilters /></aside>
 
@@ -108,12 +108,12 @@ export default async function CarsPage(props: PageProps) {
             </div>
 
             {cars.length === 0 ? (
-                <div className="flex h-64 flex-col items-center justify-center rounded-lg border border-dashed text-center">
+                <div className="flex h-64 flex-col items-center justify-center rounded-4xl border border-dashed text-center">
                     <p className="text-lg font-medium">No cars found</p>
                     <p className="text-muted-foreground">Try adjusting your filters</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-2 gap-2 md:gap-6 sm:grid-cols-2 md:grid-cols-3">
                     {cars.map((car) => (
                         <CarCard
                             key={car.id}

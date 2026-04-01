@@ -147,7 +147,7 @@ export default function AdminReviewsPage() {
         <div className="space-y-4">
           {[1, 2, 3].map(i => (
              <Card key={i} className="animate-pulse">
-               <div className="h-32 bg-muted rounded-lg" />
+               <div className="h-32 bg-muted rounded-4xl" />
              </Card>
           ))}
         </div>
@@ -197,7 +197,7 @@ export default function AdminReviewsPage() {
                        </div>
                     </div>
 
-                    <div className="bg-muted/30 rounded-lg p-4 mb-4 italic text-sm text-foreground">
+                    <div className="bg-muted/30 rounded-4xl p-4 mb-4 italic text-sm text-foreground">
                        "{review.content}"
                     </div>
 

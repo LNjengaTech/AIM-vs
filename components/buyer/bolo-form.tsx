@@ -50,7 +50,7 @@ export function BOLOForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6 max-w-2xl bg-card p-6 rounded-lg border shadow-sm">
+    <form onSubmit={onSubmit} className="space-y-6 max-w-2xl bg-card p-6 rounded-4xl border shadow-sm">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="make">Make</Label>
@@ -120,7 +120,7 @@ export function BOLOForm() {
             id="description" 
             name="description" 
             placeholder="e.g. Prefer white color, sunroof is a plus..." 
-            className="min-h-[100px]"
+            className="min-h-25"
         />
       </div>
 

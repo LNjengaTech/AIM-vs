@@ -80,12 +80,12 @@ export default async function AdminDashboardPage() {
         <p className="text-muted-foreground">Platform-wide overview and management</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 4xl:grid-cols-4">
         {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <Card key={stat.title} className="p-0 ">
+            <CardHeader className=" flex flex-row items-center justify-between space-y-0 pb-1">
               <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <div className={`${stat.bg} ${stat.color} rounded-md p-2`}>
+              <div className={` ${stat.bg} ${stat.color} rounded-3xl p-1`}>
                 <stat.icon className="h-4 w-4" />
               </div>
             </CardHeader>
@@ -105,7 +105,7 @@ export default async function AdminDashboardPage() {
         ))}
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 4xl:grid-cols-3">
         <Card className="col-span-1 md:col-span-2">
           <CardHeader>
             <CardTitle>Recent Platform Activity</CardTitle>
@@ -114,7 +114,7 @@ export default async function AdminDashboardPage() {
             <div className="space-y-4">
                {/* Quick stats grid for secondary metrics */}
                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3 rounded-lg border p-4">
+                  <div className="flex items-center gap-3 rounded-4xl p-2 bg-background shadow-xl">
                      <div className="rounded-full bg-yellow-500/10 p-2 text-yellow-500">
                         <MessageSquare className="h-5 w-5" />
                      </div>
@@ -123,7 +123,7 @@ export default async function AdminDashboardPage() {
                         <p className="text-2xl font-bold">{totalReviews}</p>
                      </div>
                   </div>
-                  <div className="flex items-center gap-3 rounded-lg border p-4">
+                  <div className="flex items-center gap-3 rounded-4xl p-2 bg-background shadow-xl">
                      <div className="rounded-full bg-pink-500/10 p-2 text-pink-500">
                         <TrendingUp className="h-5 w-5" />
                      </div>
@@ -134,7 +134,7 @@ export default async function AdminDashboardPage() {
                   </div>
                </div>
                
-               <div className="rounded-lg border bg-muted/50 p-6 text-center">
+               <div className="rounded-4xl border p-6 text-center bg-background shadow-xl">
                   <p className="text-sm text-muted-foreground">
                     Detailed graphs and traffic analysis available on the 
                     <Link href="/admin/analytics" className="mx-1 text-primary hover:underline">Analytics Page</Link>.
@@ -150,19 +150,19 @@ export default async function AdminDashboardPage() {
           </CardHeader>
           <CardContent className="grid gap-2">
             <Link href="/admin/verifications">
-              <div className="flex items-center justify-between rounded-lg border px-4 py-3 hover:bg-accent transition-colors">
+              <div className="flex items-center justify-between rounded-4xl border px-4 py-3 hover:bg-accent transition-colors">
                 <span className="text-sm font-medium">Verify Dealers</span>
                 <CheckCircle className="h-4 w-4 text-muted-foreground" />
               </div>
             </Link>
             <Link href="/admin/hero">
-              <div className="flex items-center justify-between rounded-lg border px-4 py-3 hover:bg-accent transition-colors">
+              <div className="flex items-center justify-between rounded-4xl border px-4 py-3 hover:bg-accent transition-colors">
                 <span className="text-sm font-medium">Manage Hero Section</span>
-                {/* <ImageIcon className="h-4 w-4 text-muted-foreground" /> */}
+                <ImageIcon className="h-4 w-4 text-muted-foreground" />
               </div>
             </Link>
             <Link href="/admin/reviews">
-              <div className="flex items-center justify-between rounded-lg border px-4 py-3 hover:bg-accent transition-colors">
+              <div className="flex items-center justify-between rounded-4xl border px-4 py-3 hover:bg-accent transition-colors">
                 <span className="text-sm font-medium">Moderate Reviews</span>
                 <MessageSquare className="h-4 w-4 text-muted-foreground" />
               </div>

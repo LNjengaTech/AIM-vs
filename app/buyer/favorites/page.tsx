@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { CarCard } from "@/components/cars/car-card" // Reusing the car card component
+import { CarCard } from "@/components/cars/car-card" //Reusing the car card component
 import { Heart } from "lucide-react"
 
 export default async function FavoritesPage() {
@@ -46,23 +46,23 @@ export default async function FavoritesPage() {
       </div>
 
       {favoritedCars.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center animate-in fade-in-50">
+        <div className="flex flex-col items-center justify-center rounded-4xl border border-dashed p-12 text-center animate-in fade-in-50">
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 mb-4">
             <Heart className="h-10 w-10 text-primary" />
           </div>
           <h3 className="text-lg font-semibold">No favorites yet</h3>
           <p className="text-muted-foreground mt-1 max-w-sm">
-            Start browsing our inventory and click the heart icon to save cars you're interested in.
+            Start browsing our inventory and click the heart icon to save cars you are interested in.
           </p>
           <Link 
             href="/cars" 
-            className="mt-6 inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
+            className="mt-6 inline-flex h-10 items-center justify-center rounded-3xl bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
           >
             Browse Inventory
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 md:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {favoritedCars.map((car) => (
             <CarCard
               key={car.id}

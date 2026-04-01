@@ -78,8 +78,8 @@ export function AnalyticsDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-3">
+        <Card className="border-0 shadow-xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Views</CardTitle>
             <Eye className="h-4 w-4 text-muted-foreground" />
@@ -90,7 +90,7 @@ export function AnalyticsDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 shadow-xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Favorites</CardTitle>
             <Heart className="h-4 w-4 text-muted-foreground" />
@@ -101,7 +101,7 @@ export function AnalyticsDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 shadow-xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Leads</CardTitle>
             <Phone className="h-4 w-4 text-muted-foreground" />
@@ -112,7 +112,7 @@ export function AnalyticsDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 shadow-xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Sales</CardTitle>
             <ShoppingCart className="h-4 w-4 text-muted-foreground" />
@@ -123,7 +123,7 @@ export function AnalyticsDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 shadow-xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Inventory</CardTitle>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
@@ -134,7 +134,7 @@ export function AnalyticsDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 shadow-xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Inventory</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -148,7 +148,7 @@ export function AnalyticsDashboard() {
 
       {/* Top Performing Cars */}
       {performanceData.length > 0 && (
-        <Card>
+        <Card className="border-0 shadow-xl">
           <CardHeader>
             <CardTitle>Top Performing Cars</CardTitle>
             <p className="text-sm text-muted-foreground">Cars with the most views</p>
@@ -174,7 +174,7 @@ export function AnalyticsDashboard() {
       )}
 
       {/* Recent Activity */}
-      <Card>
+      <Card className="border-0 shadow-xl">
         <CardHeader>
           <CardTitle>Recent Activity</CardTitle>
           <p className="text-sm text-muted-foreground">Latest buyer interactions</p>

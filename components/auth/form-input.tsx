@@ -26,7 +26,7 @@ export function FormInput({
       </label>
       <input
         className={cn(
-          "flex h-11 w-full rounded-lg border border-input bg-background px-4 py-2 text-sm",
+          "flex h-11 w-full rounded-4xl border border-input bg-background px-4 py-2 text-sm",
           "ring-offset-background transition-colors",
           "placeholder:text-muted-foreground",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",

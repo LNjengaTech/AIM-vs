@@ -42,22 +42,28 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="flex flex-row gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center gap-2">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+      <div className="flex flex-row gap-4 md:flex-row md:items-center justify-between">
+        <div className=" inline-flex items-baseline-last gap-1">
+          <h1 className="text-3xl  font-bold tracking-tight text-foreground">
             {user.name}
           </h1>
+          {dealerProfile.isPioneer && (
+            <div className=" inline-flex font-medium transition-colors">
+              <VerifiedBadge variant="pioneer" size={20} />
+            </div>
+
+          )}
         </div>
 
         {/*Twitter-Style*/}
         <div className="flex flex-col gap-1">
-          {dealerProfile.isPioneer && (
+          {/* {dealerProfile.isPioneer && (
             <div className="border inline-flex items-center gap-1 rounded-full px-4 py-1 text-xs font-medium transition-colors">
               Pioneer dealer
               <VerifiedBadge variant="pioneer" size={20} />
             </div>
 
-          )}
+          )} */}
           {dealerProfile.isVerified && (
             <div className="border inline-flex items-center gap-1 rounded-full px-4 py-1 text-xs font-medium transition-colors">
             Verified dealer
@@ -74,7 +80,7 @@ export default async function DashboardPage() {
 
 
       {!dealerProfile.isVerified && (
-        <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800 dark:border-yellow-900/50 dark:bg-yellow-900/10 dark:text-yellow-400">
+        <div className="rounded-4xl border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800 dark:border-yellow-900/50 dark:bg-yellow-900/10 dark:text-yellow-400">
           <h3 className="font-semibold">Account Pending Verification</h3>
           <p className="mt-1">
             Your account is currently under review. Listings you create will not be public until verified.
@@ -83,29 +89,29 @@ export default async function DashboardPage() {
       )}
 
       {/* Stats */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border bg-card p-6 shadow-sm">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+        <div className="rounded-4xl bg-card p-6 border-0 shadow-xl">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
             <h3 className="text-sm font-medium text-muted-foreground">Total Views</h3>
           </div>
           <div className="text-2xl font-bold">{dealerProfile.analytics?.totalViews || 0}</div>
         </div>
 
-        <div className="rounded-xl border bg-card p-6 shadow-sm">
+        <div className="rounded-4xl bg-card p-6 border-0 shadow-xl">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
             <h3 className="text-sm font-medium text-muted-foreground">Total Leads</h3>
           </div>
           <div className="text-2xl font-bold">{dealerProfile.analytics?.totalLeads || 0}</div>
         </div>
 
-        <div className="rounded-xl border bg-card p-6 shadow-sm">
+        <div className="rounded-4xl bg-card p-6 border-0 shadow-xl">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
             <h3 className="text-sm font-medium text-muted-foreground">Total Sales</h3>
           </div>
           <div className="text-2xl font-bold">{dealerProfile.analytics?.totalSales || 0}</div>
         </div>
 
-        <div className="rounded-xl border bg-card p-6 shadow-sm">
+        <div className="rounded-4xl bg-card p-6 border-0 shadow-xl">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
             <h3 className="text-sm font-medium text-muted-foreground">Inventory</h3>
           </div>
@@ -116,20 +122,20 @@ export default async function DashboardPage() {
 
       {/* Recent Activity / Placeholder */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <div className="col-span-4 rounded-xl border bg-card p-6 shadow-sm">
+        <div className="col-span-4 rounded-4xl bg-card p-6 border-0 shadow-xl">
           <h3 className="font-semibold text-foreground">Recent Activity</h3>
-          <div className="mt-4 flex h-50 items-center justify-center rounded-lg border border-dashed text-muted-foreground">
+          <div className="mt-4 flex h-50 items-center justify-center rounded-4xl border border-dashed text-muted-foreground">
             No recent activity
           </div>
         </div>
-        <div className="col-span-3 rounded-xl border bg-card p-6 shadow-sm">
+        <div className="col-span-4 md:col-span-3 rounded-4xl bg-card p-6 border-0 shadow-xl">
           <h3 className="font-semibold text-foreground">Quick Actions</h3>
           <div className="mt-4 space-y-2">
-            <Link href="/dashboard/add-car" className="flex w-full items-center justify-between rounded-lg border p-3 hover:bg-accent transition-colors">
+            <Link href="/dashboard/add-car" className="flex w-full items-center justify-between rounded-4xl border p-3 hover:bg-accent transition-colors">
               <span className="text-sm font-medium">Add New Car</span>
               <span className="text-muted-foreground">→</span>
             </Link>
-            <Link href="/dashboard/inventory" className="flex w-full items-center justify-between rounded-lg border p-3 hover:bg-accent transition-colors">
+            <Link href="/dashboard/inventory" className="flex w-full items-center justify-between rounded-4xl border p-3 hover:bg-accent transition-colors">
               <span className="text-sm font-medium">Manage Inventory</span>
               <span className="text-muted-foreground">→</span>
             </Link>

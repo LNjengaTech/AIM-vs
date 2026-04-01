@@ -6,7 +6,7 @@ export default function Loading() {
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-8">
         {/* Sidebar Skeleton */}
         <div className="w-full md:w-64 flex-none space-y-4">
-            <Skeleton className="h-[400px] w-full rounded-lg" />
+            <Skeleton className="h-[400px] w-full rounded-4xl" />
         </div>
 
         {/* Grid Skeleton */}

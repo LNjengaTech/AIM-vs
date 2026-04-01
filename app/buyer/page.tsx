@@ -1,6 +1,5 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Heart, Search, Clock, MessageSquarePlus } from "lucide-react"
 
@@ -23,7 +22,7 @@ export default async function BuyerPage() {
   return (
     <div className="space-y-8">
         {/* Welcome Section */}
-        <div className="rounded-lg border bg-card p-6 shadow-sm">
+        <div className="rounded-4xl border bg-card p-6 shadow-sm">
           <h1 className="text-3xl font-bold text-foreground">
             Welcome back, {user?.name?.split(' ')[0] || 'Buyer'}!
           </h1>
@@ -33,10 +32,10 @@ export default async function BuyerPage() {
         </div>
 
         {/* Quick Actions Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-2 md:gap-6 grid-cols-2 lg:grid-cols-4">
           <Link
             href="/cars"
-            className="group flex flex-col items-start justify-between rounded-lg border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
+            className="group flex flex-col items-start justify-between rounded-4xl border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
           >
             <div className="mb-4 rounded-full bg-primary/10 p-3 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
               <Search className="h-6 w-6" />
@@ -51,7 +50,7 @@ export default async function BuyerPage() {
 
           <Link
             href="/buyer/favorites"
-            className="group flex flex-col items-start justify-between rounded-lg border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
+            className="group flex flex-col items-start justify-between rounded-4xl border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
           >
             <div className="mb-4 rounded-full bg-red-100 p-3 text-red-600 group-hover:bg-red-600 group-hover:text-white transition-colors">
               <Heart className="h-6 w-6" />
@@ -66,7 +65,7 @@ export default async function BuyerPage() {
 
           <Link
             href="/buyer/bolo"
-            className="group flex flex-col items-start justify-between rounded-lg border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
+            className="group flex flex-col items-start justify-between rounded-4xl border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
           >
             <div className="mb-4 rounded-full bg-blue-100 p-3 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
               <Search className="h-6 w-6" />
@@ -74,14 +73,14 @@ export default async function BuyerPage() {
             <div>
                 <h3 className="font-semibold text-foreground">BOLO Requests</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
-                "Be On Look Out" - let us find a car for you
+                &quot;Be On Look Out&quot; - let us find a car for you
                 </p>
             </div>
           </Link>
 
           <Link
             href="/buyer/activity"
-            className="group flex flex-col items-start justify-between rounded-lg border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
+            className="group flex flex-col items-start justify-between rounded-4xl border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
           >
              <div className="mb-4 rounded-full bg-orange-100 p-3 text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-colors">
               <Clock className="h-6 w-6" />
@@ -96,7 +95,7 @@ export default async function BuyerPage() {
 
           <Link
             href="/buyer/reviews/new"
-            className="group flex flex-col items-start justify-between rounded-lg border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
+            className="group flex flex-col items-start justify-between rounded-4xl border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
           >
              <div className="mb-4 rounded-full bg-purple-100 p-3 text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors">
               <MessageSquarePlus className="h-6 w-6" />

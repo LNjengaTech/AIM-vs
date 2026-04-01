@@ -33,16 +33,16 @@ export default async function AdminLayout({
         </div>
 
         <div className="border-t p-4">
-          <div className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm">
+          <div className="flex items-center gap-3 rounded-4xl px-3 py-2 text-sm">
             <div className="flex flex-col">
               <span className="font-medium text-foreground">{session.user.name}</span>
-              <span className="text-xs text-muted-foreground truncate max-w-[150px]">
+              <span className="text-xs text-muted-foreground truncate max-w-37.5">
                 {session.user.email}
               </span>
             </div>
           </div>
           <form action={signOutAction} className="mt-2">
-            <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+            <button className="flex w-full items-center gap-3 rounded-4xl px-3 py-2.5 text-sm font-medium text-red-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
               <LogOut className="h-5 w-5" />
               Sign Out
             </button>
@@ -73,15 +73,16 @@ export default async function AdminLayout({
                 <input 
                   type="search" 
                   placeholder="Search globally..." 
-                  className="h-9 w-40 lg:w-64 rounded-md border border-input bg-background pl-9 pr-3 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="h-9 w-40 lg:w-64 rounded-3xl border border-input bg-background pl-9 pr-3 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 />
              </div>
 
              <AdminNotifications />
+             <div className="h-10 w-10"></div>
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+        <main className="flex-1 overflow-y-auto p-2 md:p-8">
           {children}
         </main>
       </div>
