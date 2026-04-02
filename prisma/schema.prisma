@@ -2,12 +2,12 @@
 // Database schema for AIM-Mombasa - Automotive Inventory Management & Matchmaking System
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  provider   = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // ============================================
@@ -189,6 +189,7 @@ model Car {
 
   // AI Verification
   aiVerified         Boolean @default(false)
+  isVerified         Boolean @default(false)
   aiVerificationData Json? // Store AI analysis results
 
   dealer      DealerProfile @relation(fields: [dealerId], references: [id], onDelete: Cascade)
@@ -337,6 +338,11 @@ model HeroSection {
 
   // Color selector for background image
   selectedColor      String? // Hex color code
+
+  // Positioning for foreground image (percentages/scale)
+  foregroundImageX     Float? @default(0)
+  foregroundImageY     Float? @default(0)
+  foregroundImageScale Float? @default(1)
 
   updatedAt DateTime @updatedAt
 
