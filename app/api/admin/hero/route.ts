@@ -45,6 +45,9 @@ export async function PUT(req: NextRequest) {
       hasFeaturedCar,
       featuredCarId,
       specs,
+      foregroundImageX,
+      foregroundImageY,
+      foregroundImageScale,
       isActive 
     } = body
 
@@ -70,6 +73,9 @@ export async function PUT(req: NextRequest) {
           hasFeaturedCar,
           featuredCarId,
           specs: parsedSpecs,
+          foregroundImageX: parseFloat(foregroundImageX) || 0,
+          foregroundImageY: parseFloat(foregroundImageY) || 0,
+          foregroundImageScale: parseFloat(foregroundImageScale) || 1,
           isActive
         }
       })
@@ -85,6 +91,9 @@ export async function PUT(req: NextRequest) {
           hasFeaturedCar,
           featuredCarId,
           specs: parsedSpecs,
+          foregroundImageX: parseFloat(foregroundImageX) || 0,
+          foregroundImageY: parseFloat(foregroundImageY) || 0,
+          foregroundImageScale: parseFloat(foregroundImageScale) || 1,
           isActive: true
         }
       })
