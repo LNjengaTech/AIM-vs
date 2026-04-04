@@ -41,6 +41,10 @@ export default async function CarsPage(props: PageProps) {
   // Build Where Clause
   const where: Prisma.CarWhereInput = {
     status: "AVAILABLE",
+    OR: [
+      { isVerified: true }, // Manually verified car
+      { dealer: { isVerified: true } } // Car from a verified dealer
+    ]
   }
 
   if (make) {

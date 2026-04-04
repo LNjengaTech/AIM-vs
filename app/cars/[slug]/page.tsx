@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { notFound } from "next/navigation"
 import { ImageGallery } from "@/components/cars/image-gallery"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { MapPin, Phone, Calendar, Gauge, Fuel, Settings2, CheckCircle2, Settings } from "lucide-react"
 import { Navbar } from "@/components/ui/navbar"
@@ -27,6 +26,11 @@ export default async function CarPage({ params }: { params: Promise<{ slug: stri
   })
 
   if (!car) notFound()
+  
+  // Public visibility check: Car must be verified OR its dealer must be verified
+  // Admins can always view any listing
+  const isVisible = car.isVerified || car.dealer.isVerified || (session?.user?.role === "ADMIN")
+  if (!isVisible) notFound()
 
   // Check if car is favorited by current user
   let isFavorited = false
@@ -86,7 +90,7 @@ export default async function CarPage({ params }: { params: Promise<{ slug: stri
 
       <div className="container mx-auto px-4 pb-8">
         <div className="grid gap-8 lg:grid-cols-3">
-          {/* Gallery &amp; Specs */}
+          {/* Gallery & Specs */}
           <div className="lg:col-span-2 space-y-8 min-w-0">
             <ImageGallery images={car.images} title={`${car.make} ${car.model}`} />
 
@@ -157,21 +161,18 @@ export default async function CarPage({ params }: { params: Promise<{ slug: stri
                   initialIsFavorited={isFavorited}
                   requiresAuth={!session?.user || session.user.role !== "BUYER"}
                 />
-
-                
               </div>
-
 
               {/* Dealer Info */}
               <div className="mt-6 pt-6 border-t">
-                <p className="font-semibold mb-2 inline-flex">Sold By: {car.dealer.businessName}
+                <div className="font-semibold mb-2 inline-flex">Sold By: {car.dealer.businessName}
                   {car.dealer.isVerified && (
-                  <VerifiedBadge variant="pioneer" size={20} />
+                  <VerifiedBadge variant="verified" size={20} />
                 )}
                 {car.dealer.isPioneer && (
                   <VerifiedBadge variant="pioneer" size={20} />
                 )}
-                </p>
+                </div>
                 
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                   <MapPin className="h-4 w-4 shrink-0" />
@@ -190,7 +191,7 @@ export default async function CarPage({ params }: { params: Promise<{ slug: stri
   )
 }
 
-function SpecItem({ icon, label, value }: { icon: any, label: string, value: any }) {
+function SpecItem({ icon, label, value }: { icon: React.ReactNode, label: string, value: string | number }) {
   return (
     <div className="space-y-1">
       <span className="flex items-center gap-2 text-xs text-muted-foreground capitalize">

@@ -12,6 +12,9 @@ export interface HeroSectionProps {
   hasFeaturedCar?: boolean
   featuredCarId?: string | null
   specs?: { label: string; value: string }[] | null
+  foregroundImageX?: number | null
+  foregroundImageY?: number | null
+  foregroundImageScale?: number | null
   className?: string
 }
 
@@ -25,131 +28,157 @@ export function HeroSection({
   hasFeaturedCar,
   featuredCarId,
   specs,
+  foregroundImageX = 0,
+  foregroundImageY = 0,
+  foregroundImageScale = 1,
   className
 }: HeroSectionProps) {
   return (
     <section className={cn("relative min-h-[90vh] md:min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-background", className)}>
 
-      {/*;ayer Z-0: Environment / Background */}
+      {/* Layer Z-0: Environment / Background */}
       <div className="absolute inset-0 z-0">
         {backgroundImageUrl && backgroundImageUrl.startsWith('http') ? (
           <Image
-            src={backgroundImageUrl || "/images/showroom_bg4.avif"}
+            src={backgroundImageUrl}
             alt="Hero Environment"
             fill
             priority
-            className="object-cover opacity-80"
+            className="object-cover opacity-90 transition-opacity duration-1000"
             sizes="100vw"
-            quality={85}
+            quality={90}
           />
         ) : (
-          <div className="">
+          <div className="absolute inset-0 bg-linear-to-br from-background via-muted/20 to-background">
              <Image
-            src="/images/AI_showroom1.png"
-            alt="Hero Environment"
-            fill
-            priority
-            className="object-cover opacity-80"
-          />
-
+              src="/images/AI_showroom1.png"
+              alt="Hero Environment"
+              fill
+              priority
+              className="object-cover opacity-80"
+            />
           </div>
-          // <div
-          //   className="absolute inset-0 bg-linear-to-b from-primary/30 to-background"
-          //   style={{ backgroundColor: selectedColor || undefined }}
-          // />
         )}
 
-        {/* Optional: Darken background slightly to pop the car */}
-        {/* <div className="absolute inset-0 bg-black/20" /> */}
+        {/* Dynamic backdrop color overlay */}
+        {selectedColor && (
+          <div 
+            className="absolute inset-0 mix-blend-multiply opacity-20" 
+            style={{ backgroundColor: selectedColor }}
+          />
+        )}
 
-        {/*overlay - text readability*/}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-background via-background/60 to-transparent z-0" />
+        {/* Smooth gradient overlay for text readability */}
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-background via-background/40 to-transparent z-10" />
       </div>
 
-      {/*sandwiched tagline*/}
-      <div className="relative z-10 top-30 flex h-full items-center justify-center pointer-events-none">
+      {/* Layer Z-10: Sandwiched tagline (Behind the car) */}
+      <div className="relative z-10 w-full flex items-center justify-center pointer-events-none select-none">
         {tagline && (
-          <span className="text-[10vw] font-black tracking-tighter text-white uppercase leading-none">
+          <span 
+            className="text-[clamp(4rem,20vw,24rem)] font-black tracking-tighter text-foreground/5 uppercase leading-none text-center px-4"
+            style={{ 
+              WebkitTextStroke: '1px rgba(255,255,255,0.05)',
+              textShadow: '0 0 40px rgba(0,0,0,0.1)' 
+            }}
+          >
             {tagline}
           </span>
         )}
       </div>
 
-      <div className="z-30 absolute inset-10 flex flex-col items-center justify-center pt-28 pointer-events-none select-none">
+      {/* Layer Z-30: Content (Headlines) */}
+      <div className="z-30 absolute inset-0 flex flex-col items-center justify-center pt-20 pointer-events-none">
         {headline && (
-          <h1 className="text-xl md:text-3xl lg:text-5xl font-bold tracking-[0.2em] uppercase text-foreground/90 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <h1 className="text-[clamp(1.25rem,4vw,3.5rem)] font-bold tracking-[0.3em] uppercase text-foreground/90 text-center px-6 animate-in fade-in slide-in-from-bottom-8 duration-1000">
             {headline}
           </h1>
         )}
         {subheadline && (
-          <p className="text-sm md:text-xl lg:text-2xl text-muted-foreground max-w-xl text-center mx-auto mt-4 px-4 font-medium animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
+          <p className="text-[clamp(0.875rem,2vw,1.25rem)] text-muted-foreground max-w-[min(90vw,600px)] text-center mx-auto mt-6 px-4 font-medium animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 leading-relaxed">
             {subheadline}
           </p>
         )}
       </div>
 
-      {/*foreground cutout image */}
-      <div className="absolute inset-0 z-20 flex items-end justify-center pb-[15vh] md:pb-[20vh] pointer-events-none shadow-2xl">
+      {/* Layer Z-20: Foreground cutout image */}
+      <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
         {foregroundImageUrl && foregroundImageUrl.startsWith('http') && (
-          <div className="relative w-full max-w-300 aspect-2/1 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300">
+          <div 
+            className="relative w-full max-w-350 aspect-21/9 animate-in fade-in zoom-in-95 duration-1000 delay-300"
+            style={{
+              transform: `translate(${foregroundImageX}%, ${foregroundImageY}%) scale(${foregroundImageScale})`,
+              filter: 'drop-shadow(0 25px 50px rgba(0,0,0,0.5))'
+            }}
+          >
             <Image
               src={foregroundImageUrl}
               alt="Featured Car Focus"
               fill
               priority
-              className="object-contain object-bottom scale-110 drop-shadow-2xl"
+              className="object-contain"
+              sizes="(max-width: 1400px) 100vw, 1400px"
             />
           </div>
         )}
-
-        {/* Optional: Darken foreground slightly to pop the car */}
-        <div className="absolute inset-0 bg-black/20" />
       </div>
 
-      {/*Interactivity and Specs */}
-      <div className="relative z-30 mt-auto pb-10 w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500">
+      {/* Layer Z-40: Interactivity and Specs (Always on top) */}
+      <div className="relative z-40 mt-auto pb-12 w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+        
+        {/* Featured Car Indicator - Debugged and refined */}
+        {hasFeaturedCar && featuredCarId && (
+          <div className="mb-8 transform hover:scale-105 transition-transform duration-300">
+            <Link 
+              href={`/cars/${featuredCarId}`}
+              className="group inline-flex items-center gap-3 rounded-full border border-primary/30 bg-background/50 backdrop-blur-xl px-6 py-2.5 text-[clamp(10px,1.2vw,14px)] tracking-widest uppercase font-bold text-primary shadow-2xl hover:bg-primary hover:text-primary-foreground transition-all"
+            >
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-primary group-hover:bg-primary-foreground transition-colors"></span>
+              </span>
+              Featured Model Available
+              <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        )}
+
         {specs && specs.length > 0 && (
-          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-16 mb-10 px-4">
+          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-12 mb-12 px-6">
             {specs.map((spec, idx) => (
               <div key={idx} className="flex items-center">
-                {/*Separator*/}
                 {idx !== 0 && (
-                  <div className="hidden md:block h-12 w-px bg-white/50 mr-6 md:mr-16" />
+                  <div className="hidden md:block h-10 w-px bg-foreground/10 mr-4 md:mr-12" />
                 )}
 
-                <div className="flex flex-col items-center backdrop-blur-md lg:w-60 rounded-3xl p-4 border border-white/10 shadow-xl">
-                  <span className="text-xl md:text-3xl font-bold text-foreground uppercase">{spec.value}</span>
-                  <span className="text-[10px] md:text-xs tracking-widest uppercase text-muted-foreground mt-1">{spec.label}</span>
+                <div className="flex flex-col items-center backdrop-blur-xl bg-card/30 border border-white/5 shadow-2xl rounded-2xl p-4 md:px-8 md:py-5 group hover:bg-card/50 transition-all duration-300">
+                  <span className="text-[clamp(1.1rem,2.5vw,2.2rem)] font-bold text-foreground uppercase tracking-tight group-hover:scale-110 transition-transform">{spec.value}</span>
+                  <span className="text-[clamp(8px,1vw,11px)] tracking-[0.2em] uppercase text-muted-foreground mt-1.5 font-semibold">{spec.label}</span>
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        <div className="flex flex-wrap items-center justify-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-5 px-6">
           <Link
             href="/cars"
-            className="rounded-none bg-primary hover:bg-primary/90 px-10 py-4 text-sm tracking-wider uppercase font-bold text-primary-foreground shadow-[0_0_40px_rgba(var(--primary),0.3)] transition-all hover:scale-105"
+            className="group relative overflow-hidden rounded-full bg-primary px-12 py-5 text-[clamp(12px,1.5vw,14px)] tracking-widest uppercase font-black text-primary-foreground shadow-[0_20px_40px_-15px_rgba(var(--primary),0.5)] transition-all hover:scale-105 hover:shadow-primary/40 active:scale-95"
           >
-            Explore Inventory
+            <span className="relative z-10 flex items-center gap-2">
+              Explore Inventory
+            </span>
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
           </Link>
           <Link
             href="/auth/signup/dealer"
-            className="rounded-none border border-foreground/20 bg-background/20 backdrop-blur-md px-10 py-4 text-sm tracking-wider uppercase font-bold text-foreground transition-all hover:bg-foreground hover:text-background"
+            className="rounded-full border border-foreground/10 bg-background/10 backdrop-blur-xl px-12 py-5 text-[clamp(12px,1.5vw,14px)] tracking-widest uppercase font-black text-foreground transition-all hover:bg-foreground hover:text-background active:scale-95"
           >
             Sell With Us
           </Link>
         </div>
-
-        {/* Featured Car Indicator */}
-        {hasFeaturedCar && featuredCarId && (
-          <div className="mt-8 animate-in fade-in duration-1000 delay-700">
-            <span className="inline-flex items-center gap-2 rounded-none border border-primary/20 bg-primary/10 px-4 py-2 text-xs tracking-widest uppercase font-bold text-primary">
-              <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-              Featured Model Available
-            </span>
-          </div>
-        )}
       </div>
     </section>
   )

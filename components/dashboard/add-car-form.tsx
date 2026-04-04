@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { CheckCircle2 } from "lucide-react"
 import { ImageUpload } from "@/components/dashboard/image-upload"
+import { Input } from "@/components/ui/input"
 
 const steps = [
     { id: 0, name: "Details", fields: ["make", "model", "year", "price", "mileage", "condition"] },
@@ -50,7 +51,7 @@ export function AddCarForm() {
     const nextStep = async () => {
         //safe access to fields
         const currentFields = steps[currentStep].fields as readonly (keyof CarFormValues)[]
-        const isValid = await trigger(currentFields as any) // Cast to any to avoid complex TS mapping issues for trigger
+        const isValid = await trigger(currentFields as (keyof CarFormValues)[])
         if (isValid) {
             setCurrentStep((prev) => prev + 1)
         }
@@ -63,7 +64,7 @@ export function AddCarForm() {
     }
 
     const onSubmit = async (data: CarFormValues) => {
-        //fix 1(fix 2 at the bottom): If i am on the Media step (id: 2), don't submit!
+        // Only submit on the final step
         if (currentStep !== steps.length - 1) {
             return;
         }
@@ -84,9 +85,10 @@ export function AddCarForm() {
             // Success
             router.refresh()
             router.push("/dashboard/inventory")
-        } catch (error: any) {
-            console.error(error)
-            alert(error.message || "Something went wrong. Please try again.")
+        } catch (error) {
+            const err = error as Error
+            console.error(err)
+            alert(err.message || "Something went wrong. Please try again.")
         } finally {
             setIsSubmitting(false)
         }
@@ -236,6 +238,85 @@ export function AddCarForm() {
                             placeholder="e.g. 1500cc"
                             {...register("engineCapacity")}
                         />
+                        
+                        {/* Features Input */}
+                        <div className="col-span-2 space-y-4">
+                            <label className="text-sm font-medium">Features</label>
+                            <div className="flex flex-wrap gap-2 mb-2">
+                                {form.watch("features")?.map((feature, index) => (
+                                    <div key={index} className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold">
+                                        <span>{feature}</span>
+                                        <button 
+                                            type="button" 
+                                            onClick={() => {
+                                                const current = form.getValues("features");
+                                                form.setValue("features", current.filter((_, i) => i !== index));
+                                            }}
+                                            className="hover:text-destructive transition-colors"
+                                        >
+                                            ×
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="flex gap-2">
+                                <Input 
+                                    id="new-feature"
+                                    placeholder="Add a feature (e.g. Sunroof, Leather Seats)..."
+                                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                        if (e.key === "Enter") {
+                                            e.preventDefault();
+                                            const input = e.currentTarget;
+                                            const val = input.value.trim();
+                                            if (val) {
+                                                const current = form.getValues("features") || [];
+                                                if (!current.includes(val)) {
+                                                    form.setValue("features", [...current, val]);
+                                                }
+                                                input.value = "";
+                                            }
+                                        }
+                                    }}
+                                    className="rounded-4xl"
+                                />
+                                <Button 
+                                    type="button" 
+                                    variant="outline"
+                                    onClick={() => {
+                                        const input = document.getElementById("new-feature") as HTMLInputElement;
+                                        const val = input.value.trim();
+                                        if (val) {
+                                            const current = form.getValues("features") || [];
+                                            if (!current.includes(val)) {
+                                                form.setValue("features", [...current, val]);
+                                            }
+                                            input.value = "";
+                                        }
+                                    }}
+                                >
+                                    Add
+                                </Button>
+                            </div>
+                            <div className="flex flex-wrap gap-2 mt-2">
+                                <p className="text-[10px] text-muted-foreground w-full">Quick Add:</p>
+                                {["Sunroof", "Leather Seats", "Android Auto", "Apple CarPlay", "Rear Camera", "Turbo", "Hybrid"].map((f) => (
+                                    <button
+                                        key={f}
+                                        type="button"
+                                        onClick={() => {
+                                            const current = form.getValues("features") || [];
+                                            if (!current.includes(f)) {
+                                                form.setValue("features", [...current, f]);
+                                            }
+                                        }}
+                                        className="text-[10px] bg-muted hover:bg-muted/80 px-2 py-1 rounded-md transition-colors"
+                                    >
+                                        + {f}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
                         <div className="col-span-2">
                             <label className="text-sm font-medium">Description (Optional)</label>
                             <textarea
@@ -292,8 +373,6 @@ export function AddCarForm() {
                         Back
                     </Button>
 
-
-                    {/*fix 2: using "key" to tell React these are completely different elements, preventing "event bleeding". */}
                     {currentStep < steps.length - 1 ? (
                         <Button type="button" key="next-button" onClick={nextStep}>
                             Next
