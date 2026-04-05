@@ -10,6 +10,12 @@ export async function GET() {
     }
 
     const notifications = await prisma.notification.findMany({
+      where: {
+        OR: [
+          { targetRole: "ADMIN" },
+          { targetRole: null }
+        ]
+      },
       orderBy: { createdAt: "desc" },
       take: 20
     })

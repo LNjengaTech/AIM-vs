@@ -1,13 +1,20 @@
+// app/api/cars/route.ts
+// API route for car listing management (Creation, Fetching)
+
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { carSchema } from "@/lib/validations/car"
 import { generateUniqueCarSlug } from "@/lib/utils/slug"
 
+/**
+ * POST handler to create a new car listing
+ */
 export async function POST(req: Request) {
     try {
         const session = await auth()
 
+        // Dealer only authorization
         if (!session?.user || session.user.role !== "DEALER") {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
@@ -24,7 +31,7 @@ export async function POST(req: Request) {
 
         const data = validation.data
 
-        //get dealer profile
+        // Get dealer profile
         const dealerProfile = await prisma.dealerProfile.findUnique({
             where: { userId: session.user.id },
         })
@@ -36,22 +43,22 @@ export async function POST(req: Request) {
             )
         }
 
-        //calculate completeness score (Basic logic)
+        // Calculate completeness score (Senior Logic)
         let score = 50 // Base score for required fields
         if (data.description && data.description.length > 50) score += 10
-        if (data.images.length > 0) score += 10
-        if (data.images.length >= 5) score += 10
-        if (data.features.length >= 3) score += 10
+        if (data.images && data.images.length > 0) score += 10
+        if (data.images && data.images.length >= 5) score += 10
+        if (data.features && data.features.length >= 3) score += 10
         if (score > 100) score = 100
 
-        // Generate unique slug
+        // Generate robust unique slug from make, model, year
         const slug = await generateUniqueCarSlug(data.make, data.model, data.year, prisma)
 
-        //create car
+        // Create car in database
         const car = await prisma.car.create({
             data: {
                 dealerId: dealerProfile.id,
-                slug: slug,
+                slug: slug, // Enforced non-null and unique
                 make: data.make,
                 model: data.model,
                 year: data.year,
@@ -70,15 +77,15 @@ export async function POST(req: Request) {
                 negotiable: data.negotiable,
                 completenessScore: score,
                 status: "AVAILABLE",
-                // Default values
+                isVerified: false, // New cars must be verified by admin
                 has360View: false,
                 aiVerified: false,
             },
         })
 
         return NextResponse.json({ success: true, car }, { status: 201 })
-    } catch (error) {
-        console.error("Create car error:", error)
+    } catch (error: unknown) {
+        console.error("[CAR_POST_ERROR]", error instanceof Error ? error.message : "Unknown error")
         return NextResponse.json(
             { error: "Internal Server Error" },
             { status: 500 }

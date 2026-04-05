@@ -22,22 +22,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { HeroSectionData, HeroSpec } from "@/lib/types/hero"
 
 export default function AdminHeroPage() {
-  const [formData, setFormData] = useState<{
-    headline: string
-    subheadline: string
-    tagline: string
-    backgroundImageUrl: string
-    foregroundImageUrl: string
-    selectedColor: string
-    hasFeaturedCar: boolean
-    featuredCarId: string
-    foregroundImageX: number
-    foregroundImageY: number
-    foregroundImageScale: number
-    specs: { label: string; value: string }[]
-  }>({
+  const [formData, setFormData] = useState<Omit<HeroSectionData, 'id' | 'updatedAt'>>({
+    isActive: true,
     headline: "",
     subheadline: "",
     tagline: "",
@@ -77,6 +66,7 @@ export default function AdminHeroPage() {
       if (heroRes.ok) {
         const data = await heroRes.json()
         setFormData({
+          isActive: data.isActive ?? true,
           headline: data.headline || "",
           subheadline: data.subheadline || "",
           tagline: data.tagline || "",
@@ -168,7 +158,7 @@ export default function AdminHeroPage() {
              foregroundImageX={formData.foregroundImageX}
              foregroundImageY={formData.foregroundImageY}
              foregroundImageScale={formData.foregroundImageScale}
-             specs={formData.specs.filter(s => s.label || s.value)}
+             specs={(formData.specs || []).filter(s => s.label || s.value)}
              className="min-h-[500px]"
            />
         </div>
@@ -192,7 +182,7 @@ export default function AdminHeroPage() {
                   <Label htmlFor="tagline" className="text-[10px] font-black uppercase tracking-widest opacity-50">Backdrop Tagline (Massive)</Label>
                   <Input 
                     id="tagline" 
-                    value={formData.tagline}
+                    value={formData.tagline || ""}
                     onChange={(e) => setFormData({...formData, tagline: e.target.value})}
                     placeholder="e.g. PERFORMANCE"
                     className="h-12 text-lg font-black italic rounded-2xl bg-muted/30"
@@ -202,7 +192,7 @@ export default function AdminHeroPage() {
                   <Label htmlFor="headline" className="text-[10px] font-black uppercase tracking-widest opacity-50">Main Headline</Label>
                   <Input 
                     id="headline" 
-                    value={formData.headline}
+                    value={formData.headline || ""}
                     onChange={(e) => setFormData({...formData, headline: e.target.value})}
                     placeholder="e.g. LIMITLESS"
                     className="h-12 text-lg font-bold rounded-2xl"
@@ -212,7 +202,7 @@ export default function AdminHeroPage() {
                   <Label htmlFor="subheadline" className="text-[10px] font-black uppercase tracking-widest opacity-50">Sub-headline Description</Label>
                   <Textarea 
                     id="subheadline" 
-                    value={formData.subheadline}
+                    value={formData.subheadline || ""}
                     onChange={(e) => setFormData({...formData, subheadline: e.target.value})}
                     placeholder="Enter a compelling description..."
                     className="min-h-[120px] rounded-2xl resize-none"
@@ -222,13 +212,13 @@ export default function AdminHeroPage() {
                <div className="pt-6 border-t border-dashed space-y-4">
                  <Label className="text-xs font-black uppercase tracking-widest opacity-50">Featured Specifications</Label>
                  <div className="grid grid-cols-2 gap-3">
-                   {formData.specs.map((spec, index) => (
+                   {(formData.specs || []).map((spec, index) => (
                      <div key={index} className="flex gap-2">
                        <Input 
                          placeholder="Label" 
                          value={spec.label}
                          onChange={(e) => {
-                           const newSpecs = [...formData.specs];
+                           const newSpecs = [...(formData.specs || [])];
                            newSpecs[index].label = e.target.value;
                            setFormData({...formData, specs: newSpecs});
                          }}
@@ -238,7 +228,7 @@ export default function AdminHeroPage() {
                          placeholder="Value" 
                          value={spec.value}
                          onChange={(e) => {
-                           const newSpecs = [...formData.specs];
+                           const newSpecs = [...(formData.specs || [])];
                            newSpecs[index].value = e.target.value;
                            setFormData({...formData, specs: newSpecs});
                          }}
@@ -267,7 +257,7 @@ export default function AdminHeroPage() {
                   <Label htmlFor="bgImage" className="text-[10px] font-black uppercase tracking-widest opacity-50">Background URL (Z-0)</Label>
                   <Input 
                     id="bgImage" 
-                    value={formData.backgroundImageUrl}
+                    value={formData.backgroundImageUrl || ""}
                     onChange={(e) => setFormData({...formData, backgroundImageUrl: e.target.value})}
                     placeholder="Scenery backdrop URL"
                     className="h-10 rounded-xl"
@@ -278,7 +268,7 @@ export default function AdminHeroPage() {
                   <Label htmlFor="fgImage" className="text-[10px] font-black uppercase tracking-widest opacity-50">Foreground Car URL (Z-20)</Label>
                   <Input 
                     id="fgImage" 
-                    value={formData.foregroundImageUrl}
+                    value={formData.foregroundImageUrl || ""}
                     onChange={(e) => setFormData({...formData, foregroundImageUrl: e.target.value})}
                     placeholder="Transparent PNG cutout URL"
                     className="h-10 rounded-xl"
@@ -291,7 +281,7 @@ export default function AdminHeroPage() {
                     <div className="flex gap-3 items-center bg-muted/40 p-2 rounded-2xl border border-muted/60">
                       <Input 
                         type="color"
-                        value={formData.selectedColor}
+                        value={formData.selectedColor || ""}
                         onChange={(e) => setFormData({...formData, selectedColor: e.target.value})}
                         className="w-10 h-10 p-0 border-none rounded-lg cursor-pointer"
                       />
@@ -318,7 +308,7 @@ export default function AdminHeroPage() {
                  <div className="space-y-2 animate-in slide-in-from-top-2 duration-300">
                     <Label className="text-[10px] font-black uppercase tracking-widest opacity-50">Link To Car Listing</Label>
                     <Select 
-                      value={formData.featuredCarId} 
+                      value={formData.featuredCarId || ""} 
                       onValueChange={(val) => setFormData({...formData, featuredCarId: val})}
                     >
                       <SelectTrigger className="h-11 rounded-2xl border-primary/30">

@@ -63,7 +63,8 @@ export async function POST(req: NextRequest) {
           type: "DEALER_VERIFIED",
           title: "Account Verified",
           message: "Congratulations! Your dealer account has been verified. You can now publish car listings.",
-          link: "/dashboard"
+          link: "/dashboard",
+          targetRole: "DEALER"
         }
       })
 
@@ -80,10 +81,11 @@ export async function POST(req: NextRequest) {
       // Notification for rejection
       await prisma.notification.create({
         data: {
-          type: "NEW_DEALER",
+          type: "DEALER_VERIFIED",
           title: "Verification Update",
           message: "There was an issue with your dealer verification. Please check your business details and try again.",
-          link: "/dashboard"
+          link: "/dashboard",
+          targetRole: "DEALER"
         }
       })
 
