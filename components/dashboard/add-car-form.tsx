@@ -1,3 +1,9 @@
+/**
+ * components/dashboard/add-car-form.tsx
+ * Multi-step form for dealers to add new car listings.
+ * Includes validation, image upload, and progress tracking.
+ */
+
 "use client"
 
 import { useState } from "react"
@@ -8,20 +14,28 @@ import { carSchema, type CarFormValues } from "@/lib/validations/car"
 import { FormInput } from "@/components/auth/form-input"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { CheckCircle2 } from "lucide-react"
+import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react"
 import { ImageUpload } from "@/components/dashboard/image-upload"
 import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
 
-const steps = [
+interface Step {
+    id: number
+    name: string
+    fields: (keyof CarFormValues)[]
+}
+
+const steps: Step[] = [
     { id: 0, name: "Details", fields: ["make", "model", "year", "price", "mileage", "condition"] },
     { id: 1, name: "Specs", fields: ["bodyType", "transmission", "fuelType", "color", "engineCapacity", "description"] },
     { id: 2, name: "Media", fields: ["images", "negotiable"] },
-] as const
+]
 
 export function AddCarForm() {
     const router = useRouter()
     const [currentStep, setCurrentStep] = useState(0)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
     const form = useForm<CarFormValues>({
         resolver: zodResolver(carSchema),
@@ -49,11 +63,11 @@ export function AddCarForm() {
     const { register, trigger, handleSubmit, formState: { errors } } = form
 
     const nextStep = async () => {
-        //safe access to fields
-        const currentFields = steps[currentStep].fields as readonly (keyof CarFormValues)[]
-        const isValid = await trigger(currentFields as (keyof CarFormValues)[])
+        const currentFields = steps[currentStep].fields
+        const isValid = await trigger(currentFields)
         if (isValid) {
             setCurrentStep((prev) => prev + 1)
+            setError(null)
         }
     }
 
@@ -70,6 +84,7 @@ export function AddCarForm() {
         }
 
         setIsSubmitting(true)
+        setError(null)
         try {
             const response = await fetch("/api/cars", {
                 method: "POST",
@@ -85,10 +100,10 @@ export function AddCarForm() {
             // Success
             router.refresh()
             router.push("/dashboard/inventory")
-        } catch (error) {
-            const err = error as Error
-            console.error(err)
-            alert(err.message || "Something went wrong. Please try again.")
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "Something went wrong. Please try again."
+            console.error("[ADD_CAR_ERROR]", message)
+            setError(message)
         } finally {
             setIsSubmitting(false)
         }
@@ -362,6 +377,16 @@ export function AddCarForm() {
                     </div>
                 )}
 
+                {/* Error Banner */}
+                {error && (
+                    <div className="animate-in fade-in slide-in-from-top-1 duration-300">
+                        <Badge variant="destructive" className="w-full py-3 px-4 rounded-xl flex items-center gap-3">
+                            <AlertCircle className="h-5 w-5" />
+                            <span className="font-bold">{error}</span>
+                        </Badge>
+                    </div>
+                )}
+
                 {/* Actions */}
                 <div className="flex items-center justify-between pt-4">
                     <Button
@@ -369,17 +394,23 @@ export function AddCarForm() {
                         variant="outline"
                         onClick={prevStep}
                         disabled={currentStep === 0 || isSubmitting}
+                        className="rounded-4xl px-8"
                     >
                         Back
                     </Button>
 
                     {currentStep < steps.length - 1 ? (
-                        <Button type="button" key="next-button" onClick={nextStep}>
-                            Next
+                        <Button type="button" key="next-button" onClick={nextStep} className="rounded-4xl px-8">
+                            Next Step
                         </Button>
                     ) : (
-                        <Button type="submit" key="submit-button" disabled={isSubmitting}>
-                            {isSubmitting ? "Creating..." : "Create Listing"}
+                        <Button type="submit" key="submit-button" disabled={isSubmitting} className="rounded-4xl px-8 min-w-[140px]">
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Creating...
+                                </>
+                            ) : "Publish Listing"}
                         </Button>
                     )}
                 </div>

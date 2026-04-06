@@ -1,10 +1,16 @@
+/**
+ * app/api/cars/[slug]/route.ts
+ * API route for individual car listing management (Update status, Delete).
+ * Identified by unique slug.
+ */
+
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
 export async function DELETE(
-    req: Request,
-    { params }: { params: Promise<{ id: string }> } // In Next.js 15+, params is a Promise
+    _req: Request,
+    { params }: { params: Promise<{ slug: string }> }
 ) {
     try {
         const session = await auth()
@@ -12,11 +18,11 @@ export async function DELETE(
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const { id } = await params
+        const { slug } = await params
 
         // Verify ownership
         const car = await prisma.car.findUnique({
-            where: { id },
+            where: { slug },
             include: { dealer: true },
         })
 
@@ -28,18 +34,18 @@ export async function DELETE(
             return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
         }
 
-        await prisma.car.delete({ where: { id } })
+        await prisma.car.delete({ where: { slug } })
 
         return NextResponse.json({ success: true })
-    } catch (error) {
-        console.error("Delete car error:", error)
+    } catch (error: unknown) {
+        console.error("[CAR_DELETE_ERROR]", error instanceof Error ? error.message : "Unknown error")
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
     }
 }
 
 export async function PATCH(
     req: Request,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ slug: string }> }
 ) {
     try {
         const session = await auth()
@@ -47,12 +53,12 @@ export async function PATCH(
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const { id } = await params
+        const { slug } = await params
         const body = await req.json()
 
         // Verify ownership
         const car = await prisma.car.findUnique({
-            where: { id },
+            where: { slug },
             include: { dealer: true },
         })
 
@@ -67,14 +73,14 @@ export async function PATCH(
         // Update (only allow specific fields for now, e.g. status)
         if (body.status) {
             await prisma.car.update({
-                where: { id },
+                where: { slug },
                 data: { status: body.status },
             })
         }
 
         return NextResponse.json({ success: true })
-    } catch (error) {
-        console.error("Update car error:", error)
+    } catch (error: unknown) {
+        console.error("[CAR_PATCH_ERROR]", error instanceof Error ? error.message : "Unknown error")
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
     }
 }

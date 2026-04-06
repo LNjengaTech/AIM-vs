@@ -1,15 +1,18 @@
-//lib/utils.ts
-//Utility functions for class name merging and other helpers used in the project
+/**
+ * lib/utils.ts
+ * Utility functions for class name merging and other helpers used in the project
+ */
 
 import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 
 /**
- * merging class names using clsx
+ * merging class names using clsx and tailwind-merge
  * param: inputs - Class names to merge
  * returns: Merged class string
  */
 export function cn(...inputs: ClassValue[]) {
-    return clsx(inputs)
+    return twMerge(clsx(inputs))
 }
 
 /**

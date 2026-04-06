@@ -64,7 +64,7 @@ export const {
         },
         async session({ session, token }) {
             if (session.user) {
-                session.user.role = token.role as string
+                session.user.role = token.role as "BUYER" | "DEALER" | "ADMIN"
                 session.user.id = token.id as string
             }
             return session

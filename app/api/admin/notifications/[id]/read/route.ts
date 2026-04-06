@@ -1,10 +1,15 @@
+/**
+ * app/api/admin/notifications/[id]/read/route.ts
+ * API route to mark an admin notification as read.
+ */
+
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
 export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: string } }
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -20,8 +25,8 @@ export async function POST(
     })
 
     return NextResponse.json(notification)
-  } catch (error) {
-    console.error("[ADMIN_NOTIFICATION_READ]", error)
+  } catch (error: unknown) {
+    console.error("[ADMIN_NOTIFICATION_READ]", error instanceof Error ? error.message : "Unknown error")
     return new NextResponse("Internal Error", { status: 500 })
   }
 }

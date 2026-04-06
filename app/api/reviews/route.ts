@@ -1,3 +1,9 @@
+/**
+ * app/api/reviews/route.ts
+ * API route for buyer review submissions.
+ * Submissions are flagged for admin moderation before being published.
+ */
+
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
@@ -42,8 +48,8 @@ export async function POST(req: NextRequest) {
         })
 
         return NextResponse.json(review)
-    } catch (error) {
-        console.error("[REVIEW_POST]", error)
+    } catch (error: unknown) {
+        console.error("[REVIEW_POST]", error instanceof Error ? error.message : "Unknown error")
         return new NextResponse("Internal Error", { status: 500 })
     }
 }

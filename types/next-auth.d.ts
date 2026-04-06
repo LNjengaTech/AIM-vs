@@ -24,3 +24,9 @@ declare module "@auth/core/jwt" {
         id: string
     }
 }
+
+declare module "@auth/core/adapters" {
+    interface AdapterUser {
+        role: UserRole
+    }
+}

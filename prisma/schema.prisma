@@ -1,8 +1,5 @@
-// prisma/schema.prisma
-// Database schema for AIM-Mombasa - Automotive Inventory Management & Matchmaking System
-
 generator client {
-  provider   = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -10,25 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ============================================
-// AUTHENTICATION & USER MODELS
-// ============================================
-
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -45,20 +37,19 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String         @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  role          UserRole  @default(BUYER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
+  role          UserRole       @default(BUYER)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   accounts      Account[]
-  sessions      Session[]
-  dealerProfile DealerProfile?
   buyerProfile  BuyerProfile?
+  dealerProfile DealerProfile?
+  sessions      Session[]
 
   @@index([email])
 }
@@ -71,35 +62,24 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-enum UserRole {
-  BUYER
-  DEALER
-  ADMIN
-}
-
-// ============================================
-// DEALER PROFILE
-// ============================================
-
 model DealerProfile {
-  id               String    @id @default(cuid())
-  userId           String    @unique
+  id               String           @id @default(cuid())
+  userId           String           @unique
   businessName     String
   businessPhone    String
   businessAddress  String
-  location         String // e.g., Ganjoni, Nyali, Shimanzi
+  location         String
   permitNumber     String?
-  permitImageUrl   String? // Cloudinary URL for verification document
-  isVerified       Boolean   @default(false)
-  isPioneer        Boolean   @default(false) // First 10 dealers
+  permitImageUrl   String?
+  isVerified       Boolean          @default(false)
+  isPioneer        Boolean          @default(false)
   verifiedAt       DateTime?
   pioneerBadgeDate DateTime?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  cars      Car[]
-  analytics DealerAnalytics?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  cars             Car[]
+  analytics        DealerAnalytics?
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([isVerified])
@@ -107,96 +87,66 @@ model DealerProfile {
 }
 
 model DealerAnalytics {
-  id          String   @id @default(cuid())
-  dealerId    String   @unique
-  totalViews  Int      @default(0)
-  totalLeads  Int      @default(0)
-  totalSales  Int      @default(0)
-  lastUpdated DateTime @default(now())
-
-  dealer DealerProfile @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  id          String        @id @default(cuid())
+  dealerId    String        @unique
+  totalViews  Int           @default(0)
+  totalLeads  Int           @default(0)
+  totalSales  Int           @default(0)
+  lastUpdated DateTime      @default(now())
+  dealer      DealerProfile @relation(fields: [dealerId], references: [id], onDelete: Cascade)
 
   @@index([dealerId])
 }
 
-// ============================================
-// BUYER PROFILE
-// ============================================
-
 model BuyerProfile {
-  id        String   @id @default(cuid())
-  userId    String   @unique
-  phone     String?
-  location  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  favorites    Favorite[]
+  id           String        @id @default(cuid())
+  userId       String        @unique
+  phone        String?
+  location     String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   boloRequests BOLORequest[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   engagements  Engagement[]
+  favorites    Favorite[]
   reviews      Review[]
 
   @@index([userId])
 }
 
-// ============================================
-// CAR/VEHICLE MODELS
-// ============================================
-
 model Car {
-  id       String @id @default(cuid())
-  dealerId String
-
-  // Basic Information
-  make           String
-  model          String
-  year           Int
-  color          String
-  bodyType       String // Sedan, SUV, Hatchback, etc.
-  transmission   String // Manual, Automatic
-  fuelType       String // Petrol, Diesel, Hybrid, Electric
-  mileage        Int
-  engineCapacity String? // e.g., "1500cc"
-
-  // Pricing
-  price      Decimal @db.Decimal(10, 2)
-  negotiable Boolean @default(true)
-
-  // Description & Details
-  description String?  @db.Text
-  features    String[] // Array of features: e.g., ["Sunroof", "Leather Seats"]
-  condition   String // Excellent, Good, Fair, etc.
-
-  // Status & Availability
-  status     CarStatus @default(AVAILABLE)
-  isFeatured Boolean   @default(false)
-
-  // Images (Cloudinary URLs)
-  images     String[] // Array of image URLs
-  has360View Boolean  @default(false)
-
-  // Completeness Score (0-100)
-  completenessScore Int @default(0)
-
-  // SEO
-  slug String @unique
-
-  // Metadata
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  soldAt    DateTime?
-
-  // AI Verification
-  aiVerified         Boolean @default(false)
-  isVerified         Boolean @default(false)
-  aiVerificationData Json? // Store AI analysis results
-
-  dealer      DealerProfile @relation(fields: [dealerId], references: [id], onDelete: Cascade)
-  favorites   Favorite[]
-  engagements Engagement[]
-
-  boloMatches BOLOMatch[]
+  id                 String        @id @default(cuid())
+  dealerId           String
+  make               String
+  model              String
+  year               Int
+  color              String
+  bodyType           String
+  transmission       String
+  fuelType           String
+  mileage            Int
+  engineCapacity     String?
+  price              Decimal       @db.Decimal(10, 2)
+  negotiable         Boolean       @default(true)
+  description        String?
+  features           String[]
+  condition          String
+  status             CarStatus     @default(AVAILABLE)
+  isFeatured         Boolean       @default(false)
+  images             String[]
+  has360View         Boolean       @default(false)
+  completenessScore  Int           @default(0)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  soldAt             DateTime?
+  aiVerified         Boolean       @default(false)
+  aiVerificationData Json?
+  slug               String        @unique
+  isVerified         Boolean       @default(false)
+  boloMatches        BOLOMatch[]
+  dealer             DealerProfile @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  engagements        Engagement[]
+  favorites          Favorite[]
 
   @@index([dealerId])
   @@index([make])
@@ -209,45 +159,27 @@ model Car {
   @@index([slug])
 }
 
-enum CarStatus {
-  AVAILABLE
-  SOLD
-  RESERVED
-}
-
-// ============================================
-// BOLO (Be On Look Out) REQUEST SYSTEM
-// ============================================
-
 model BOLORequest {
-  id      String @id @default(cuid())
-  buyerId String
-
-  // Desired Car Details
-  make         String?
-  model        String?
-  yearMin      Int?
-  yearMax      Int?
-  priceMin     Decimal? @db.Decimal(10, 2)
-  priceMax     Decimal? @db.Decimal(10, 2)
-  color        String?
-  bodyType     String?
-  transmission String?
-  fuelType     String?
-
-  // Additional preferences
-  description String? @db.Text
-  maxMileage  Int?
-
-  // Status
-  isActive         Boolean @default(true)
-  notificationSent Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  buyer   BuyerProfile @relation(fields: [buyerId], references: [id], onDelete: Cascade)
-  matches BOLOMatch[]
+  id               String       @id @default(cuid())
+  buyerId          String
+  make             String?
+  model            String?
+  yearMin          Int?
+  yearMax          Int?
+  priceMin         Decimal?     @db.Decimal(10, 2)
+  priceMax         Decimal?     @db.Decimal(10, 2)
+  color            String?
+  bodyType         String?
+  transmission     String?
+  fuelType         String?
+  description      String?
+  maxMileage       Int?
+  isActive         Boolean      @default(true)
+  notificationSent Boolean      @default(false)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  matches          BOLOMatch[]
+  buyer            BuyerProfile @relation(fields: [buyerId], references: [id], onDelete: Cascade)
 
   @@index([buyerId])
   @@index([isActive])
@@ -256,34 +188,27 @@ model BOLORequest {
 }
 
 model BOLOMatch {
-  id            String   @id @default(cuid())
+  id            String      @id @default(cuid())
   boloRequestId String
   carId         String
-  matchScore    Int // 0-100 match percentage
-  notified      Boolean  @default(false)
-  createdAt     DateTime @default(now())
-
-  boloRequest BOLORequest @relation(fields: [boloRequestId], references: [id], onDelete: Cascade)
-
-  car         Car         @relation(fields: [carId], references: [id], onDelete: Cascade)
+  matchScore    Int
+  notified      Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  boloRequest   BOLORequest @relation(fields: [boloRequestId], references: [id], onDelete: Cascade)
+  car           Car         @relation(fields: [carId], references: [id], onDelete: Cascade)
 
   @@unique([boloRequestId, carId])
   @@index([boloRequestId])
   @@index([carId])
 }
 
-// ============================================
-// FAVORITES & ENGAGEMENT
-// ============================================
-
 model Favorite {
-  id        String   @id @default(cuid())
+  id        String       @id @default(cuid())
   buyerId   String
   carId     String
-  createdAt DateTime @default(now())
-
-  buyer BuyerProfile @relation(fields: [buyerId], references: [id], onDelete: Cascade)
-  car   Car          @relation(fields: [carId], references: [id], onDelete: Cascade)
+  createdAt DateTime     @default(now())
+  buyer     BuyerProfile @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  car       Car          @relation(fields: [carId], references: [id], onDelete: Cascade)
 
   @@unique([buyerId, carId])
   @@index([buyerId])
@@ -295,16 +220,77 @@ model Engagement {
   buyerId   String
   carId     String
   type      EngagementType
-  metadata  Json? // Store additional data like spin count, time spent, etc.
+  metadata  Json?
   createdAt DateTime       @default(now())
-
-  buyer BuyerProfile @relation(fields: [buyerId], references: [id], onDelete: Cascade)
-  car   Car          @relation(fields: [carId], references: [id], onDelete: Cascade)
+  buyer     BuyerProfile   @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  car       Car            @relation(fields: [carId], references: [id], onDelete: Cascade)
 
   @@index([buyerId])
   @@index([carId])
   @@index([type])
   @@index([createdAt])
+}
+
+model HeroSection {
+  id                   String   @id @default(cuid())
+  isActive             Boolean  @default(true)
+  headline             String?  @default("Find Your Perfect Car – Verified, Available, and Matched Just for You!")
+  subheadline          String?  @default("No more wasted trips. Browse live inventory, set alerts, and connect with trusted dealers.")
+  hasFeaturedCar       Boolean  @default(false)
+  featuredCarId        String?
+  backgroundImageUrl   String?
+  selectedColor        String?
+  updatedAt            DateTime @updatedAt
+  foregroundImageScale Float?   @default(1)
+  foregroundImageUrl   String?
+  foregroundImageX     Float?   @default(0)
+  foregroundImageY     Float?   @default(0)
+  specs                Json?
+  tagline              String?
+
+  @@index([isActive])
+}
+
+model Review {
+  id          String       @id @default(cuid())
+  buyerId     String
+  content     String
+  rating      Int?
+  isPublished Boolean      @default(false)
+  isRemoved   Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  buyer       BuyerProfile @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+
+  @@index([buyerId])
+  @@index([isPublished])
+  @@index([createdAt])
+}
+
+model Notification {
+  id         String           @id @default(cuid())
+  type       NotificationType
+  title      String
+  message    String
+  link       String?
+  isRead     Boolean          @default(false)
+  createdAt  DateTime         @default(now())
+  targetRole UserRole?
+
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+enum UserRole {
+  BUYER
+  DEALER
+  ADMIN
+}
+
+enum CarStatus {
+  AVAILABLE
+  SOLD
+  RESERVED
 }
 
 enum EngagementType {
@@ -314,78 +300,6 @@ enum EngagementType {
   COLOR_CHANGE
   CONTACT_DEALER
   SHARE
-}
-
-// ============================================
-// HERO SECTION MANAGEMENT (ADMIN)
-// ============================================
-
-model HeroSection {
-  id          String  @id @default(cuid())
-  isActive    Boolean @default(true)
-  headline    String? @default("Find Your Perfect Car – Verified, Available, and Matched Just for You!")
-  subheadline String? @default("No more wasted trips. Browse live inventory, set alerts, and connect with trusted dealers.")
-  tagline     String?
-
-  // Featured Car or Background Image
-  hasFeaturedCar     Boolean @default(false)
-  featuredCarId      String?
-  backgroundImageUrl String? // Cloudinary URL for default background
-  foregroundImageUrl String? // Cloudinary URL for cutout car image
-  
-  // Specs for showcase, stored as json (e.g. [{label: "0-100", value: "3.5s"}, ...])
-  specs              Json?
-
-  // Color selector for background image
-  selectedColor      String? // Hex color code
-
-  // Positioning for foreground image (percentages/scale)
-  foregroundImageX     Float? @default(0)
-  foregroundImageY     Float? @default(0)
-  foregroundImageScale Float? @default(1)
-
-  updatedAt DateTime @updatedAt
-
-  @@index([isActive])
-}
-
-// ============================================
-// REVIEWS & SUGGESTIONS (USER FEEDBACK)
-// ============================================
-
-model Review {
-  id          String   @id @default(cuid())
-  buyerId     String
-  content     String   @db.Text
-  rating      Int? // Optional 1-5 star rating
-  isPublished Boolean  @default(false)
-  isRemoved   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  buyer BuyerProfile @relation(fields: [buyerId], references: [id], onDelete: Cascade)
-
-  @@index([buyerId])
-  @@index([isPublished])
-  @@index([createdAt])
-}
-
-// ============================================
-// ADMIN NOTIFICATIONS
-// ============================================
-
-model Notification {
-  id        String           @id @default(cuid())
-  type      NotificationType
-  title     String
-  message   String
-  link      String?
-  isRead    Boolean          @default(false)
-  createdAt DateTime         @default(now())
-  targetRole UserRole?
-
-  @@index([isRead])
-  @@index([createdAt])
 }
 
 enum NotificationType {

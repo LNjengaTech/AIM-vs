@@ -1,3 +1,9 @@
+/**
+ * app/admin/hero/page.tsx
+ * Admin management page for the landing page hero section.
+ * Supports visual configuration of headlines, background/foreground images, and spatial calibration.
+ */
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -13,7 +19,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Loader2, Save, Eye, Image as ImageIcon, Sparkles } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Loader2, Save, Eye, Image as ImageIcon, Sparkles, CheckCircle2, AlertCircle } from "lucide-react"
 import { HeroSection } from "@/components/home/hero-section"
 import { 
   Select,
@@ -22,7 +29,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { HeroSectionData, HeroSpec } from "@/lib/types/hero"
+import { HeroSectionData } from "@/lib/types/hero"
+
+type SaveStatus = "idle" | "saving" | "success" | "error"
 
 export default function AdminHeroPage() {
   const [formData, setFormData] = useState<Omit<HeroSectionData, 'id' | 'updatedAt'>>({
@@ -48,7 +57,7 @@ export default function AdminHeroPage() {
   
   const [availableCars, setAvailableCars] = useState<{id: string, make: string, model: string, year: number, slug: string}[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isSaving, setIsSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle")
   const [showPreview, setShowPreview] = useState(false)
 
   useEffect(() => {
@@ -99,7 +108,7 @@ export default function AdminHeroPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSaving(true)
+    setSaveStatus("saving")
     try {
       const response = await fetch("/api/admin/hero", {
         method: "PUT",
@@ -108,12 +117,12 @@ export default function AdminHeroPage() {
       })
 
       if (!response.ok) throw new Error("Failed to save")
-      alert("Hero section updated successfully!")
+      setSaveStatus("success")
+      setTimeout(() => setSaveStatus("idle"), 3000)
     } catch (error) {
       console.error("Error saving hero data:", error)
-      alert("Failed to save changes")
-    } finally {
-      setIsSaving(false)
+      setSaveStatus("error")
+      setTimeout(() => setSaveStatus("idle"), 5000)
     }
   }
 
@@ -159,7 +168,7 @@ export default function AdminHeroPage() {
              foregroundImageY={formData.foregroundImageY}
              foregroundImageScale={formData.foregroundImageScale}
              specs={(formData.specs || []).filter(s => s.label || s.value)}
-             className="min-h-[500px]"
+             className="min-h-125"
            />
         </div>
       )}
@@ -205,7 +214,7 @@ export default function AdminHeroPage() {
                     value={formData.subheadline || ""}
                     onChange={(e) => setFormData({...formData, subheadline: e.target.value})}
                     placeholder="Enter a compelling description..."
-                    className="min-h-[120px] rounded-2xl resize-none"
+                    className="min-h-30 rounded-2xl resize-none"
                   />
                </div>
                
@@ -374,9 +383,13 @@ export default function AdminHeroPage() {
                   </div>
                </div>
             </CardContent>
-            <CardFooter className="pt-2">
-               <Button type="submit" className="w-full h-14 rounded-3xl text-lg font-black italic uppercase italic tracking-wider shadow-lg hover:shadow-primary/20 transition-all" disabled={isSaving}>
-                  {isSaving ? (
+            <CardFooter className="flex flex-col gap-4 pt-2">
+               <Button 
+                 type="submit" 
+                 className="w-full h-14 rounded-3xl text-lg font-black italic uppercase tracking-wider shadow-lg hover:shadow-primary/20 transition-all" 
+                 disabled={saveStatus === "saving"}
+               >
+                  {saveStatus === "saving" ? (
                     <>
                       <Loader2 className="mr-3 h-6 w-6 animate-spin" />
                       Uploading config...
@@ -388,6 +401,24 @@ export default function AdminHeroPage() {
                     </>
                   )}
                </Button>
+
+               {saveStatus === "success" && (
+                 <div className="flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-1 duration-300">
+                   <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 py-2 px-4 rounded-xl flex items-center gap-2">
+                     <CheckCircle2 className="h-4 w-4" />
+                     <span className="font-bold">Hero section updated successfully!</span>
+                   </Badge>
+                 </div>
+               )}
+
+               {saveStatus === "error" && (
+                 <div className="flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-1 duration-300">
+                   <Badge variant="destructive" className="py-2 px-4 rounded-xl flex items-center gap-2">
+                     <AlertCircle className="h-4 w-4" />
+                     <span className="font-bold">Failed to save changes. Please try again.</span>
+                   </Badge>
+                 </div>
+               )}
             </CardFooter>
           </Card>
         </div>

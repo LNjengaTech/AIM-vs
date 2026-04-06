@@ -3,13 +3,11 @@
 import { useState, useEffect } from "react"
 import { 
   Bell, 
-  Check, 
   Clock, 
   ExternalLink, 
   MessageSquare, 
   Store, 
   UserCheck, 
-  Search,
   Car
 } from "lucide-react"
 import { 

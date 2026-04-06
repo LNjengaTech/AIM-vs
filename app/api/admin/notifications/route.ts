@@ -1,4 +1,9 @@
-import { NextRequest, NextResponse } from "next/server"
+/**
+ * app/api/admin/notifications/route.ts
+ * API route to fetch recent admin-targeted notifications.
+ */
+
+import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
@@ -21,8 +26,8 @@ export async function GET() {
     })
 
     return NextResponse.json(notifications)
-  } catch (error) {
-    console.error("[ADMIN_NOTIFICATIONS_GET]", error)
+  } catch (error: unknown) {
+    console.error("[ADMIN_NOTIFICATIONS_GET]", error instanceof Error ? error.message : "Unknown error")
     return new NextResponse("Internal Error", { status: 500 })
   }
 }

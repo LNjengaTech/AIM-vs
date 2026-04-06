@@ -54,7 +54,7 @@ export default async function ActivityPage() {
         </div>
       ) : (
         <div className="relative border-l border-muted ml-3 space-y-6 pb-6">
-            {engagements.map((item, index) => {
+            {engagements.map((item) => {
                 const getIcon = () => {
                    switch(item.type) {
                        case "VIEW": return <Eye className="h-4 w-4" />

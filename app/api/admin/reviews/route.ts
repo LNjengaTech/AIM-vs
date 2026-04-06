@@ -1,8 +1,14 @@
+/**
+ * app/api/admin/reviews/route.ts
+ * API route for admin-level review management.
+ * Supports fetching all reviews and updating their visibility status.
+ */
+
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user || session.user.role !== "ADMIN") {
@@ -29,8 +35,8 @@ export async function GET(req: NextRequest) {
     })
 
     return NextResponse.json(reviews)
-  } catch (error) {
-    console.error("[ADMIN_REVIEWS_GET]", error)
+  } catch (error: unknown) {
+    console.error("[ADMIN_REVIEWS_GET]", error instanceof Error ? error.message : "Unknown error")
     return new NextResponse("Internal Error", { status: 500 })
   }
 }
@@ -72,8 +78,8 @@ export async function PUT(req: NextRequest) {
     }
 
     return NextResponse.json(updatedReview)
-  } catch (error) {
-    console.error("[ADMIN_REVIEWS_PUT]", error)
+  } catch (error: unknown) {
+    console.error("[ADMIN_REVIEWS_PUT]", error instanceof Error ? error.message : "Unknown error")
     return new NextResponse("Internal Error", { status: 500 })
   }
 }

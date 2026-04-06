@@ -1,3 +1,8 @@
+/**
+ * app/admin/analytics/page.tsx
+ * Admin analytics dashboard providing platform-wide insights and trends.
+ */
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -5,8 +10,50 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend, PieChart, Pie, Cell} from "recharts"
 import { Users, Store, Car, Activity, Loader2, TrendingUp } from "lucide-react"
 
+interface PlatformStats {
+  totalUsers: number
+  totalDealers: number
+  verifiedDealers: number
+  totalReviews: number
+}
+
+interface InventoryItem {
+  status: string
+  _count: {
+    _all: number
+  }
+}
+
+interface TrafficDataPoint {
+  date: string
+  views: number
+  engagement: number
+}
+
+interface RecentActivity {
+  id: string
+  type: string
+  createdAt: string
+  buyer: {
+    user: {
+      name: string
+    }
+  }
+  car: {
+    make: string
+    model: string
+  }
+}
+
+interface AnalyticsData {
+  counts: PlatformStats
+  inventory: InventoryItem[]
+  trafficData: TrafficDataPoint[]
+  recentActivity: RecentActivity[]
+}
+
 export default function AdminAnalyticsPage() {
-  const [data, setData] = useState<any>(null)
+  const [data, setData] = useState<AnalyticsData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -19,8 +66,9 @@ export default function AdminAnalyticsPage() {
       if (!response.ok) throw new Error("Failed to fetch")
       const result = await response.json()
       setData(result)
-    } catch (error) {
-      console.error("Error fetching analytics:", error)
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Error fetching analytics"
+      console.error("[ANALYTICS_FETCH_ERROR]", message)
     } finally {
       setIsLoading(false)
     }
@@ -36,7 +84,7 @@ export default function AdminAnalyticsPage() {
 
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
 
-  const inventoryData = data?.inventory.map((item: any) => ({
+  const inventoryData = data?.inventory.map((item) => ({
     name: item.status,
     value: item._count._all
   })) || []
@@ -114,7 +162,7 @@ export default function AdminAnalyticsPage() {
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {inventoryData.map((entry: any, index: number) => (
+                  {inventoryData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -134,7 +182,7 @@ export default function AdminAnalyticsPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
-            {data?.recentActivity.map((activity: any) => (
+            {data?.recentActivity.map((activity) => (
               <div key={activity.id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
                 <div className="flex items-center gap-4">
                   <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center">

@@ -37,7 +37,6 @@ export function CarCard({
   price,
   image, isFavorited = false,
   mileage,
-  fuelType,
   transmission,
   condition,
   dealerName,

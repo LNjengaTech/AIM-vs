@@ -1,3 +1,9 @@
+/**
+ * app/api/bolo/route.ts
+ * API route for BOLO (Be On Look Out) request management.
+ * Allows buyers to submit and retrieve their matchmaking requests.
+ */
+
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
@@ -15,7 +21,7 @@ const boloSchema = z.object({
     description: z.string().optional(),
 })
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
     try {
         const session = await auth()
         if (!session?.user) return new NextResponse("Unauthorized", { status: 401 })
@@ -42,8 +48,8 @@ export async function GET(req: NextRequest) {
         })
 
         return NextResponse.json(bolos)
-    } catch (error) {
-        console.error("[BOLO_GET]", error)
+    } catch (error: unknown) {
+        console.error("[BOLO_GET]", error instanceof Error ? error.message : "Unknown error")
         return new NextResponse("Internal Error", { status: 500 })
     }
 }
@@ -78,8 +84,8 @@ export async function POST(req: NextRequest) {
         // For MVP, we might just store it. Matching logic is complex.
 
         return NextResponse.json(bolo)
-    } catch (error) {
-        console.error("[BOLO_POST]", error)
+    } catch (error: unknown) {
+        console.error("[BOLO_POST]", error instanceof Error ? error.message : "Unknown error")
         return new NextResponse("Internal Error", { status: 500 })
     }
 }

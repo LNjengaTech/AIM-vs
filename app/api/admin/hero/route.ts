@@ -80,8 +80,9 @@ export async function PUT(req: NextRequest) {
       if (specs) {
         parsedSpecs = typeof specs === 'string' ? JSON.parse(specs) : specs
       }
-    } catch (e) {
-      console.warn("[HERO_SPECS_PARSE_WARN]", "Failed to parse specs JSON, defaulting to null")
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Invalid JSON format"
+      console.warn("[HERO_SPECS_PARSE_WARN]", message)
     }
 
     // Find existing active hero section

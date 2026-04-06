@@ -1,41 +1,52 @@
+/**
+ * components/dashboard/analytics-dashboard.tsx
+ * Dealer analytics dashboard component providing insights into listing performance and buyer engagement.
+ */
+
 "use client"
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart3, Eye, Heart, Phone, ShoppingCart, TrendingUp } from "lucide-react"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
-interface AnalyticsData {
-  analytics: {
-    totalViews: number
-    totalFavorites: number
-    totalLeads: number
-    totalInventory: number
-    totalSales: number
-    availableCars: number
-  }
-  topPerformingCars: Array<{
-    car: {
-      id: string
-      make: string
-      model: string
-      year: number
-      images: string[]
-    }
-    views: number
-  }>
-  recentActivity: Array<{
+interface CarPerformance {
+  car: {
     id: string
-    type: string
-    buyerName: string
-    buyerEmail: string
-    carName: string
-    timestamp: string
-  }>
+    make: string
+    model: string
+    year: number
+    images: string[]
+  }
+  views: number
+}
+
+interface EngagementBreakdown {
+  totalViews: number
+  totalFavorites: number
+  totalLeads: number
+  totalInventory: number
+  totalSales: number
+  availableCars: number
+}
+
+interface RecentActivity {
+  id: string
+  type: string
+  buyerName: string
+  buyerEmail: string
+  carName: string
+  timestamp: string
+}
+
+interface DealerAnalyticsData {
+  analytics: EngagementBreakdown
+  topPerformingCars: CarPerformance[]
+  recentActivity: RecentActivity[]
 }
 
 export function AnalyticsDashboard() {
-  const [data, setData] = useState<AnalyticsData | null>(null)
+  const [data, setData] = useState<DealerAnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

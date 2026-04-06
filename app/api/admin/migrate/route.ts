@@ -1,17 +1,18 @@
-// app/api/admin/migrate/route.ts
+/**
+ * app/api/admin/migrate/route.ts
+ * Admin-only migration route to generate missing car slugs.
+ */
+
 import { NextResponse } from 'next/server';
-import {prisma} from '@/lib/prisma'; // Make sure this path points to your Prisma client
+import { prisma } from '@/lib/prisma';
 import { generateUniqueCarSlug } from '@/lib/utils/slug';
 
 export async function GET() {
     try {
-        // 1. Fetch all cars that are missing a slug
+        // 1. Fetch all cars that are missing a slug (empty string)
         const carsToUpdate = await prisma.car.findMany({
             where: {
-                OR: [
-                    { slug: null },
-                    { slug: "" }
-                ]
+                slug: ""
             }
         });
 
@@ -44,11 +45,12 @@ export async function GET() {
             updated: updatedCars
         }, { status: 200 });
 
-    } catch (error: any) {
-        console.error("Migration failed:", error);
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Migration failed"
+        console.error("[MIGRATION_ERROR]", message);
         return NextResponse.json({ 
             success: false, 
-            error: error.message 
+            error: message
         }, { status: 500 });
     }
 }

@@ -28,8 +28,8 @@ export async function GET() {
     })
 
     return NextResponse.json(pendingDealers)
-  } catch (error) {
-    console.error("[DEALER_VERIFICATION_GET]", error)
+  } catch (error: unknown) {
+    console.error("[DEALER_VERIFICATION_GET]", error instanceof Error ? error.message : "Unknown error")
     return new NextResponse("Internal Error", { status: 500 })
   }
 }
@@ -93,8 +93,8 @@ export async function POST(req: NextRequest) {
     }
 
     return new NextResponse("Invalid action", { status: 400 })
-  } catch (error) {
-    console.error("[DEALER_VERIFICATION_POST]", error)
+  } catch (error: unknown) {
+    console.error("[DEALER_VERIFICATION_POST]", error instanceof Error ? error.message : "Unknown error")
     return new NextResponse("Internal Error", { status: 500 })
   }
 }

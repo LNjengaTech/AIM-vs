@@ -141,7 +141,7 @@ export function Navbar({ user, className }: NavbarProps) {
                         <Link
                             href="/cars"
                             className="flex items-center gap-2 font-bold text-lg"
-                            onClick={() => isMobileMenuOpen(false)}
+                            onClick={() => setIsMobileMenuOpen(false)}
                         >
                             <span>AIM Mombasa</span>
                         </Link>
