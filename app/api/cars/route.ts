@@ -6,7 +6,8 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { carSchema } from "@/lib/validations/car"
 import { generateUniqueCarSlug } from "@/lib/utils/slug"
-
+import { getRankedCars } from "@/lib/ranking"
+import { CarFilters, CarSortOption } from "@/types/cars"
 /**
  * POST handler to create a new car listing
  */
@@ -86,6 +87,42 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: true, car }, { status: 201 })
     } catch (error: unknown) {
         console.error("[CAR_POST_ERROR]", error instanceof Error ? error.message : "Unknown error")
+        return NextResponse.json(
+            { error: "Internal Server Error" },
+            { status: 500 }
+        )
+    }
+}
+
+/**
+ * GET handler to fetch car listings with filtering, sorting, and pagination
+ */
+export async function GET(req: Request) {
+    try {
+        const { searchParams } = new URL(req.url)
+
+        const filters: CarFilters = {
+            make: searchParams.get("make") || undefined,
+            model: searchParams.get("model") || undefined,
+            search: searchParams.get("search") || undefined,
+            yearMin: searchParams.get("minYear") ? Number(searchParams.get("minYear")) : undefined,
+            yearMax: searchParams.get("maxYear") ? Number(searchParams.get("maxYear")) : undefined,
+            priceMin: searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined,
+            priceMax: searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined,
+            transmission: searchParams.get("transmission") || undefined,
+            fuelType: searchParams.get("fuelType") || undefined,
+            bodyType: searchParams.get("bodyType") || undefined,
+            condition: searchParams.get("condition") || undefined,
+            sortBy: (searchParams.get("sort") as CarSortOption) || "ranked",
+            page: searchParams.get("page") ? Number(searchParams.get("page")) : 1,
+            limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : 12,
+        }
+
+        const result = await getRankedCars(filters)
+
+        return NextResponse.json(result)
+    } catch (error: unknown) {
+        console.error("[CAR_GET_ERROR]", error instanceof Error ? error.message : "Unknown error")
         return NextResponse.json(
             { error: "Internal Server Error" },
             { status: 500 }

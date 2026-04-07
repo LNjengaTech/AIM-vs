@@ -4,8 +4,11 @@ import { CarFilters } from "@/components/cars/car-filters"
 import { CarCard } from "@/components/cars/car-card"
 import { CarSort } from "@/components/cars/car-sort"
 import { Navbar } from "@/components/ui/navbar"
-import { Prisma } from "@prisma/client"
 import { Metadata } from "next"
+import { getRankedCars } from "@/lib/ranking"
+import { CarFilters as CarFiltersType, CarSortOption } from "@/types/cars"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 export const metadata: Metadata = {
   title: "Browse Cars - AIM Mombasa",
@@ -20,6 +23,9 @@ interface PageProps {
     minYear?: string
     maxYear?: string
     transmission?: string
+    fuelType?: string
+    bodyType?: string
+    condition?: string
     sort?: string
     page?: string
   }>
@@ -36,49 +42,31 @@ export default async function CarsPage(props: PageProps) {
   const minYear = searchParams.minYear ? Number(searchParams.minYear) : undefined
   const maxYear = searchParams.maxYear ? Number(searchParams.maxYear) : undefined
   const transmission = searchParams.transmission
-  const sort = searchParams.sort || "newest"
+  const fuelType = searchParams.fuelType
+  const bodyType = searchParams.bodyType
+  const condition = searchParams.condition
+  const sort = searchParams.sort || "ranked"
+  const page = searchParams.page ? Number(searchParams.page) : 1
+  const limit = 12
 
-  // Build Where Clause
-  const where: Prisma.CarWhereInput = {
-    status: "AVAILABLE",
-    OR: [
-      { isVerified: true }, // Manually verified car
-      { dealer: { isVerified: true } } // Car from a verified dealer
-    ]
+  // Build Filters
+  const filters: CarFiltersType = {
+    make,
+    priceMin: minPrice,
+    priceMax: maxPrice,
+    yearMin: minYear,
+    yearMax: maxYear,
+    transmission,
+    fuelType,
+    bodyType,
+    condition,
+    sortBy: sort as CarSortOption,
+    page,
+    limit
   }
 
-  if (make) {
-    where.OR = [
-      { make: { contains: make, mode: "insensitive" } },
-      { model: { contains: make, mode: "insensitive" } },
-    ]
-  }
-
-  if (minPrice || maxPrice) {
-    where.price = { gte: minPrice, lte: maxPrice }
-  }
-
-  if (minYear || maxYear) {
-    where.year = { gte: minYear, lte: maxYear }
-  }
-
-  if (transmission) {
-    where.transmission = { equals: transmission, mode: "insensitive" }
-  }
-
-  // Determine Order
-  let orderBy: Prisma.CarOrderByWithRelationInput = { createdAt: "desc" }
-  if (sort === "price_asc") orderBy = { price: "asc" }
-  else if (sort === "price_desc") orderBy = { price: "desc" }
-  else if (sort === "mileage_asc") orderBy = { mileage: "asc" }
-
-  // Fetch Cars
-  const cars = await prisma.car.findMany({
-    where,
-    orderBy,
-    include: { dealer: true },
-    take: 20,
-  })
+  // Fetch Ranked Cars
+  const { cars, total, totalPages } = await getRankedCars(filters)
 
   // Get favorite status for logged-in buyers
   let favoritedCarIds: string[] = []
@@ -106,7 +94,7 @@ export default async function CarsPage(props: PageProps) {
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                    <h1 className="text-3xl font-bold tracking-tight">Browse Inventory</h1>
-                   <p className="text-muted-foreground">{cars.length} vehicles found</p>
+                   <p className="text-muted-foreground">{total} vehicles found</p>
                 </div>
                 <CarSort /> 
             </div>
@@ -138,6 +126,28 @@ export default async function CarsPage(props: PageProps) {
                             isFavorited={favoritedCarIds.includes(car.id)}
                         />
                     ))}
+                </div>
+            )}
+            
+            {totalPages > 1 && (
+                <div className="mt-8 flex items-center justify-center gap-4">
+                  <Button variant="outline" disabled={page <= 1} asChild={page > 1}>
+                    {page > 1 ? (
+                      <Link href={`/cars?${new URLSearchParams({ ...searchParams, page: String(page - 1) }).toString()}`}>Previous</Link>
+                    ) : (
+                      <span>Previous</span>
+                    )}
+                  </Button>
+                  <span className="text-sm text-muted-foreground">
+                    Page {page} of {totalPages}
+                  </span>
+                  <Button variant="outline" disabled={page >= totalPages} asChild={page < totalPages}>
+                    {page < totalPages ? (
+                      <Link href={`/cars?${new URLSearchParams({ ...searchParams, page: String(page + 1) }).toString()}`}>Next</Link>
+                    ) : (
+                      <span>Next</span>
+                    )}
+                  </Button>
                 </div>
             )}
         </main>

@@ -4,10 +4,12 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { FilterIcon } from "lucide-react"
 
 export function CarFilters({ className }: { className?: string }) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const [isOpen, setIsOpen] = useState(false)
 
   //state maps to URL params
   const [filters, setFilters] = useState({
@@ -17,6 +19,9 @@ export function CarFilters({ className }: { className?: string }) {
     minYear: searchParams.get("minYear") || "",
     maxYear: searchParams.get("maxYear") || "",
     transmission: searchParams.get("transmission") || "",
+    fuelType: searchParams.get("fuelType") || "",
+    bodyType: searchParams.get("bodyType") || "",
+    condition: searchParams.get("condition") || "",
   })
 
   //fixed
@@ -58,21 +63,38 @@ export function CarFilters({ className }: { className?: string }) {
       minYear: "",
       maxYear: "",
       transmission: "",
+      fuelType: "",
+      bodyType: "",
+      condition: "",
     })
     //we push strictly to /cars to clear query
     router.push("/cars")
   }
 
   return (
-    <div className={cn("space-y-6 rounded-4xl bg-card p-4 shadow-2xl", className)}>
-      <div className="flex items-center justify-between">
-        <h3 className="font-semibold">Filters</h3>
-        <Button variant="ghost" size="sm" onClick={clearFilters} className="h-auto px-2 text-xs">
-          Reset
-        </Button>
-      </div>
+    <>
+      <Button 
+        variant="outline" 
+        className="mb-4 w-full md:hidden" 
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <FilterIcon className="mr-2 h-4 w-4" />
+        {isOpen ? "Hide Filters" : "Show Filters"}
+      </Button>
 
-      <div className="space-y-4">
+      <div className={cn(
+        "space-y-6 rounded-4xl bg-card p-4 shadow-2xl transition-all",
+        isOpen ? "block" : "hidden md:block",
+        className
+      )}>
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold">Filters</h3>
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="h-auto px-2 text-xs">
+            Reset
+          </Button>
+        </div>
+
+        <div className="space-y-4">
         {/*search */}
         <div className="space-y-2">
           <label className="text-sm font-medium">Make/Model</label>
@@ -143,7 +165,57 @@ export function CarFilters({ className }: { className?: string }) {
             <option value="cvt">CVT</option>
           </select>
         </div>
+
+        {/*Fuel Type */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Fuel Type</label>
+          <select
+            className="flex h-9 w-full rounded-3xl border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            value={filters.fuelType}
+            onChange={(e) => handleChange("fuelType", e.target.value)}
+          >
+            <option value="">Any</option>
+            <option value="petrol">Petrol</option>
+            <option value="diesel">Diesel</option>
+            <option value="hybrid">Hybrid</option>
+            <option value="electric">Electric</option>
+          </select>
+        </div>
+
+        {/*Body Type */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Body Type</label>
+          <select
+            className="flex h-9 w-full rounded-3xl border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            value={filters.bodyType}
+            onChange={(e) => handleChange("bodyType", e.target.value)}
+          >
+            <option value="">Any</option>
+            <option value="sedan">Sedan</option>
+            <option value="suv">SUV</option>
+            <option value="hatchback">Hatchback</option>
+            <option value="station_wagon">Station Wagon</option>
+            <option value="pickup">Pickup</option>
+            <option value="van">Van</option>
+          </select>
+        </div>
+
+        {/*Condition */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Condition</label>
+          <select
+            className="flex h-9 w-full rounded-3xl border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            value={filters.condition}
+            onChange={(e) => handleChange("condition", e.target.value)}
+          >
+            <option value="">Any</option>
+            <option value="foreign_used">Foreign Used</option>
+            <option value="local_used">Local Used</option>
+            <option value="new">New</option>
+          </select>
+        </div>
       </div>
     </div>
+    </>
   )
 }
