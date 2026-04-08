@@ -38,7 +38,7 @@ export function AddCarForm() {
     const [error, setError] = useState<string | null>(null)
 
     const form = useForm<CarFormValues>({
-        resolver: zodResolver(carSchema),
+        resolver: zodResolver(carSchema) as any,
         defaultValues: {
             make: "",
             model: "",
@@ -160,7 +160,7 @@ export function AddCarForm() {
                             placeholder="YYYY"
                             error={errors.year?.message}
                             required
-                            {...register("year")}
+                            {...register("year", { valueAsNumber: true })}
                         />
                         <FormInput
                             label="Price (KES)"
@@ -168,7 +168,7 @@ export function AddCarForm() {
                             placeholder="0"
                             error={errors.price?.message}
                             required
-                            {...register("price")}
+                            {...register("price", { valueAsNumber: true })}
                         />
                         <FormInput
                             label="Mileage (km)"
@@ -176,7 +176,7 @@ export function AddCarForm() {
                             placeholder="0"
                             error={errors.mileage?.message}
                             required
-                            {...register("mileage")}
+                            {...register("mileage", { valueAsNumber: true })}
                         />
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Condition</label>
@@ -404,7 +404,7 @@ export function AddCarForm() {
                             Next Step
                         </Button>
                     ) : (
-                        <Button type="submit" key="submit-button" disabled={isSubmitting} className="rounded-4xl px-8 min-w-[140px]">
+                        <Button type="submit" key="submit-button" disabled={isSubmitting} className="rounded-4xl px-8 min-w-35">
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

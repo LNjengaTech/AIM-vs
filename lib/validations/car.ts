@@ -4,9 +4,9 @@ export const carSchema = z.object({
     // Step 1: Basic Info
     make: z.string().min(1, "Make is required"),
     model: z.string().min(1, "Model is required"),
-    year: z.number().min(1900).max(new Date().getFullYear() + 1),
-    price: z.number().min(1, "Price is required"),
-    mileage: z.number().min(0, "Mileage must be non-negative"),
+    year: z.preprocess((val) => (val === "" || val === null ? undefined : Number(val)), z.number().min(1900).max(new Date().getFullYear() + 1)),
+    price: z.preprocess((val) => (val === "" || val === null ? undefined : Number(val)), z.number().min(1, "Price is required")),
+    mileage: z.preprocess((val) => (val === "" || val === null ? undefined : Number(val)), z.number().min(0, "Mileage must be non-negative")),
     condition: z.string().min(1, "Condition is required"),
     description: z.string().optional(),
 
