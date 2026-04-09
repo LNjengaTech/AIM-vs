@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma"
 import { carSchema } from "@/lib/validations/car"
 import { generateUniqueCarSlug } from "@/lib/utils/slug"
 import { getRankedCars } from "@/lib/ranking"
+import { matchCarAgainstBOLOs } from "@/lib/bolo-matcher"
 import { CarFilters, CarSortOption } from "@/types/cars"
 /**
  * POST handler to create a new car listing
@@ -83,6 +84,11 @@ export async function POST(req: Request) {
                 aiVerified: false,
             },
         })
+
+        // Fire-and-forget BOLO matching (non-blocking)
+        matchCarAgainstBOLOs(car.id).catch((error) => {
+            console.error("[CAR_CREATION_BOLO_MATCH_ERROR]", error instanceof Error ? error.message : "Unknown error");
+        });
 
         return NextResponse.json({ success: true, car }, { status: 201 })
     } catch (error: unknown) {
