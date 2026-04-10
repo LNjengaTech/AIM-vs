@@ -95,15 +95,14 @@ export async function matchCarAgainstBOLOs(carId: string): Promise<MatchResult[]
           })
 
           // Create Notification
-          // Since the Notification schema does not have a user relation, 
-          // we just create a general notification with no role.
-          // Note: In a complete system, we'd relate it to the buyer via metadata or a direct relation.
+          // Link it directly to the specific buyer
           await prisma.notification.create({
             data: {
               type: "BOLO_MATCH",
               title: "BOLO Match Found!",
               message: `A ${car.year} ${car.make} ${car.model} matching your alert is now available.`,
-              link: `/cars/${car.slug}`
+              link: `/cars/${car.slug}`,
+              buyerId: bolo.buyer.id
             }
           })
 

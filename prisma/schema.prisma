@@ -110,6 +110,7 @@ model BuyerProfile {
   engagements  Engagement[]
   favorites    Favorite[]
   reviews      Review[]
+  notifications Notification[]
 
   @@index([userId])
 }
@@ -276,9 +277,12 @@ model Notification {
   isRead     Boolean          @default(false)
   createdAt  DateTime         @default(now())
   targetRole UserRole?
+  buyerId    String?
+  buyer      BuyerProfile?    @relation(fields: [buyerId], references: [id], onDelete: Cascade)
 
   @@index([isRead])
   @@index([createdAt])
+  @@index([buyerId])
 }
 
 enum UserRole {

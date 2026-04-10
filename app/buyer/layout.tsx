@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { signOutAction } from "@/app/actions/auth"
 import { MobileNav } from "@/components/buyer/mobile-nav"
+import { BuyerNotifications } from "@/components/buyer/buyer-notifications"
 
 export default async function BuyerLayout({
   children,
@@ -55,6 +56,7 @@ export default async function BuyerLayout({
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <BuyerNotifications />
             <span className="text-sm text-foreground hidden sm:inline-block">{user.name}</span>
             <form action={signOutAction}>
               <button className="rounded-4xl border border-border px-4 py-2 text-sm transition-colors hover:bg-accent/50 hover:text-red-600">
