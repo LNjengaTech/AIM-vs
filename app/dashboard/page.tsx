@@ -9,6 +9,7 @@ import { redirect } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 import { VerifiedBadge } from "@/components/ui/verified-badge"
 import Link from "next/link"
+import ChatWidget from "@/components/aim-assistant/chat-widget-wrapper"
 
 export default async function DashboardPage() {
   const session = await auth()
@@ -142,7 +143,7 @@ export default async function DashboardPage() {
           </div>
         </div>
       </div>
-
+      <ChatWidget page="dashboard" userRole="DEALER" />
     </div>
   )
 }

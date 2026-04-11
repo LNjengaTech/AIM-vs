@@ -9,6 +9,7 @@ import { getRankedCars } from "@/lib/ranking"
 import { CarFilters as CarFiltersType, CarSortOption } from "@/types/cars"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import ChatWidget from "@/components/aim-assistant/chat-widget-wrapper"
 
 export const metadata: Metadata = {
   title: "Browse Cars - AIM Mombasa",
@@ -152,7 +153,21 @@ export default async function CarsPage(props: PageProps) {
             )}
         </main>
       </div>
-    </div>
+      </div>
+      <ChatWidget 
+        page="marketplace" 
+        userRole={session?.user?.role} 
+        marketplaceContext={{
+          listings: cars.slice(0, 15).map(car => ({
+            make: car.make,
+            model: car.model,
+            year: car.year,
+            price: Number(car.price),
+            condition: car.condition,
+            mileage: car.mileage
+          }))
+        }}
+      />
     </div>
   )
 }

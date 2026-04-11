@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { Navbar } from "@/components/ui/navbar"
 import { HeroSection } from "@/components/home/hero-section"
 import Link from "next/link"
+import ChatWidget from "@/components/aim-assistant/chat-widget-wrapper"
 
 export default async function Home() {
   const session = await auth()
@@ -130,6 +131,7 @@ export default async function Home() {
           </div>
         </div>
       </footer>
+      <ChatWidget page="home" userRole={session?.user?.role || "guest"} />
     </div>
   )
 }

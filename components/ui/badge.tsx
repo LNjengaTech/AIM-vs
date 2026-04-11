@@ -3,13 +3,12 @@
 
 import { cn } from "@/lib/utils"
 
-interface BadgeProps {
+interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   children: React.ReactNode
   variant?: "default" | "success" | "warning" | "destructive" | "secondary" | "outline"
-  className?: string
 }
 
-export function Badge({ children, variant = "default", className }: BadgeProps) {
+export function Badge({ children, variant = "default", className, ...props }: BadgeProps) {
   const variants = {
     default: "bg-primary/10 text-primary hover:bg-primary/20",
     success: "bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500/20",
@@ -26,6 +25,7 @@ export function Badge({ children, variant = "default", className }: BadgeProps) 
         variants[variant],
         className
       )}
+      {...props}
     >
       {children}
     </span>

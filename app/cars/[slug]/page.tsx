@@ -8,6 +8,7 @@ import { Navbar } from "@/components/ui/navbar"
 import { FavoriteButton } from "@/components/cars/favorite-button"
 import { VerifiedBadge } from "@/components/ui/verified-badge"
 import Link from "next/link"
+import ChatWidget from "@/components/aim-assistant/chat-widget-wrapper"
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -187,6 +188,23 @@ export default async function CarPage({ params }: { params: Promise<{ slug: stri
           </div>
         </div>
       </div>
+      <ChatWidget 
+        page="car-detail" 
+        userRole={session?.user?.role} 
+        carContext={{
+          make: car.make,
+          model: car.model,
+          year: car.year,
+          price: Number(car.price),
+          mileage: car.mileage,
+          condition: car.condition,
+          fuelType: car.fuelType,
+          transmission: car.transmission,
+          features: car.features,
+          dealerName: car.dealer.businessName,
+          isVerified: car.dealer.isVerified,
+        }} 
+      />
     </div>
   )
 }

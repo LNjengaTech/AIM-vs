@@ -49,8 +49,8 @@ export function BuyerNotifications() {
       const data = await response.json()
       setNotifications(data.notifications)
       setUnreadCount(data.unreadCount)
-    } catch (error) {
-      console.error("Error fetching notifications:", error)
+    } catch (error: unknown) {
+      console.error("Error fetching notifications:", error instanceof Error ? error.message : "Unknown error")
     }
   }
 
@@ -100,10 +100,10 @@ export function BuyerNotifications() {
           )}
         </div>
         
-        <div className="max-h-100 overflow-y-auto">
+        <div className="max-h-[400px] overflow-y-auto">
           {notifications.length === 0 ? (
             <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-              You&apos;re all caught up!
+              You're all caught up!
             </div>
           ) : (
             notifications.map((n) => (
@@ -141,7 +141,7 @@ export function BuyerNotifications() {
                       <Link 
                         href={n.link} 
                         className="text-[10px] font-bold text-primary flex items-center gap-1 hover:underline"
-                        onClick={(e) => {
+                        onClick={() => {
                           // Allow standard navigation, mark as read is already handled.
                           // Wait, if it navigates, the page might reload, but markAsRead triggers background fetch.
                           markAsRead(n.id)

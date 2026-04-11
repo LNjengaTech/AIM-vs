@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent } from "@/components/ui/card"
 import { deleteBolo } from "@/app/actions/bolo"
+import ChatWidget from "@/components/aim-assistant/chat-widget-wrapper"
 
 export default async function BOLOPage() {
   const session = await auth()
@@ -222,6 +223,7 @@ export default async function BOLOPage() {
           )}
         </TabsContent>
       </Tabs>
+      <ChatWidget page="bolo" userRole="BUYER" />
     </div>
   )
 }
