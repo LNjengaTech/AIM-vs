@@ -28,6 +28,22 @@ function getGreeting(page: string, carContext?: CarContext, userRole?: string): 
   return "Hi! I'm the AIM Assistant. Ask me anything about cars, prices in Mombasa, or how the platform works.";
 }
 
+/**
+ * Generates a UUID with a fallback for insecure contexts (HTTP) 
+ * where crypto.randomUUID might be unavailable.
+ */
+function generateUUID(): string {
+  if (typeof window !== "undefined" && window.crypto && typeof window.crypto.randomUUID === "function") {
+    return window.crypto.randomUUID();
+  }
+  // Fallback implementation
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 export default function ChatWidget({ page, carContext, marketplaceContext, userRole }: ChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(() => [
@@ -40,7 +56,7 @@ export default function ChatWidget({ page, carContext, marketplaceContext, userR
   const sessionIdRef = useRef<string | null>(null);
   useEffect(() => {
     if (!sessionIdRef.current) {
-      sessionIdRef.current = crypto.randomUUID();
+      sessionIdRef.current = generateUUID();
     }
   }, []);
 
