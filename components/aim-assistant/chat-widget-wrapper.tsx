@@ -2,7 +2,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { CarContext } from "./types";
+import { CarContext, MarketplaceContext } from "./types";
 
 const ChatWidgetDynamic = dynamic(() => import("./chat-widget"), { ssr: false });
 

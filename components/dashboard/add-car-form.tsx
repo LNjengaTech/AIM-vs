@@ -18,6 +18,7 @@ import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react"
 import { ImageUpload } from "@/components/dashboard/image-upload"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import { AIDescriptionButton } from "@/components/dashboard/ai-description-button"
 
 interface Step {
     id: number
@@ -61,6 +62,37 @@ export function AddCarForm() {
     })
 
     const { register, trigger, handleSubmit, formState: { errors } } = form
+
+    // Watch fields needed for the AI description generator
+    const watchedMake = form.watch("make")
+    const watchedModel = form.watch("model")
+    const watchedYear = form.watch("year")
+    const watchedColor = form.watch("color")
+    const watchedMileage = form.watch("mileage")
+    const watchedCondition = form.watch("condition")
+    const watchedBodyType = form.watch("bodyType")
+    const watchedTransmission = form.watch("transmission")
+    const watchedFuelType = form.watch("fuelType")
+    const watchedEngineCapacity = form.watch("engineCapacity")
+    const watchedFeatures = form.watch("features")
+    const watchedPrice = form.watch("price")
+    const watchedNegotiable = form.watch("negotiable")
+
+    const aiCarData = {
+      make: watchedMake,
+      model: watchedModel,
+      year: watchedYear,
+      color: watchedColor,
+      mileage: watchedMileage,
+      condition: watchedCondition,
+      bodyType: watchedBodyType,
+      transmission: watchedTransmission,
+      fuelType: watchedFuelType,
+      engineCapacity: watchedEngineCapacity,
+      features: watchedFeatures,
+      price: watchedPrice,
+      negotiable: watchedNegotiable,
+    }
 
     const nextStep = async () => {
         const currentFields = steps[currentStep].fields
@@ -339,6 +371,12 @@ export function AddCarForm() {
                                 className="flex min-h-25 w-full rounded-4xl border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                 placeholder="Describe the car's condition, history, or key selling points..."
                             />
+                            <div className="mt-2">
+                                <AIDescriptionButton
+                                    carData={aiCarData}
+                                    onGenerated={(desc) => form.setValue("description", desc, { shouldValidate: true })}
+                                />
+                            </div>
                         </div>
                     </div>
                 )}
@@ -404,7 +442,7 @@ export function AddCarForm() {
                             Next Step
                         </Button>
                     ) : (
-                        <Button type="submit" key="submit-button" disabled={isSubmitting} className="rounded-4xl px-8 min-w-35">
+                        <Button type="submit" key="submit-button" disabled={isSubmitting} className="rounded-4xl px-8 min-w-[140px]">
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
