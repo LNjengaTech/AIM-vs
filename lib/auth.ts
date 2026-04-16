@@ -58,7 +58,7 @@ export const {
         async jwt({ token, user }) {
             if (user) {
                 token.role = user.role
-                token.id = user.id
+                token.id = user.id as string
             }
             return token
         },

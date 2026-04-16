@@ -7,6 +7,8 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { calculateCompletenessScore } from "@/lib/utils"
+import { generateUniqueCarSlug } from "@/lib/utils/slug"
 
 export async function DELETE(
     _req: Request,
@@ -70,15 +72,85 @@ export async function PATCH(
             return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
         }
 
-        // Update (only allow specific fields for now, e.g. status)
-        if (body.status) {
-            await prisma.car.update({
+        // If this is just a status update from the inventory list
+        if (Object.keys(body).length === 1 && body.status) {
+            const updatedCar = await prisma.car.update({
                 where: { slug },
                 data: { status: body.status },
             })
+            return NextResponse.json(updatedCar)
         }
 
-        return NextResponse.json({ success: true })
+        // Handle full update from the Edit Car form
+        const {
+            make,
+            model,
+            year,
+            price,
+            mileage,
+            condition,
+            description,
+            bodyType,
+            transmission,
+            fuelType,
+            color,
+            engineCapacity,
+            features,
+            images,
+            isFeatured,
+            negotiable,
+        } = body
+
+        // Calculate completeness score
+        const has360View = (images?.length || 0) >= 24
+        const completenessScore = calculateCompletenessScore({
+            images,
+            description,
+            has360View,
+            features,
+        })
+
+        // Check if slug-affecting fields changed
+        let newSlug = slug
+        if (
+            (make && make !== car.make) ||
+            (model && model !== car.model) ||
+            (year && year !== car.year)
+        ) {
+            newSlug = await generateUniqueCarSlug(
+                make || car.make,
+                model || car.model,
+                year || car.year,
+                prisma
+            )
+        }
+
+        const updatedCar = await prisma.car.update({
+            where: { slug },
+            data: {
+                make,
+                model,
+                year,
+                price,
+                mileage,
+                condition,
+                description,
+                bodyType,
+                transmission,
+                fuelType,
+                color,
+                engineCapacity,
+                features,
+                images,
+                isFeatured,
+                negotiable,
+                has360View,
+                completenessScore,
+                slug: newSlug,
+            },
+        })
+
+        return NextResponse.json(updatedCar)
     } catch (error: unknown) {
         console.error("[CAR_PATCH_ERROR]", error instanceof Error ? error.message : "Unknown error")
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })

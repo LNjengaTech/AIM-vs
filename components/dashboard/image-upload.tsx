@@ -4,6 +4,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ImagePlus, X, Loader2 } from "lucide-react"
+import { toast } from "sonner"
 import Image from "next/image"
 import { uploadToCloudinary } from "@/lib/cloudinary" // Import your helper!
 
@@ -32,9 +33,10 @@ export function ImageUpload({ value, onChange, onRemove }: ImageUploadProps) {
       // Update form state with new URLs added to existing ones
       onChange([...value, ...uploadedUrls])
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Upload error:", error)
-      alert(error.message || "Something went wrong with the upload.")
+      const message = error instanceof Error ? error.message : "Upload failed. Please try again."
+      toast.error(message)
     } finally {
       setIsUploading(false)
       // Reset input value so the same file can be selected again if needed

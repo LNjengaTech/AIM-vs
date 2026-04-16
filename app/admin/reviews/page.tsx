@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
+import { toast } from "sonner"
 
 interface Review {
   id: string
@@ -88,7 +89,7 @@ export default function AdminReviewsPage() {
       }))
     } catch (error) {
       console.error("Action error:", error)
-      alert("Failed to process review action")
+      toast.error("Failed to process review action")
     } finally {
       setIsProcessing(null)
     }
@@ -247,7 +248,7 @@ export default function AdminReviewsPage() {
                       className="flex-1 sm:w-full"
                       asChild
                     >
-                       <Link href={`#` /* Link to buyer profile in future */}>
+                       <Link href={`/admin/verifications` /* TODO: link to /admin/users/[id] when user management page is built */}>
                           <Eye className="h-4 w-4 mr-2" />
                           Profile
                        </Link>

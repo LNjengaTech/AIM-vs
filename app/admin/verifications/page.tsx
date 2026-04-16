@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
 import Link from "next/link"
+import { toast } from "sonner"
 
 interface DealerToVerify {
     id: string
@@ -35,6 +36,7 @@ interface DealerToVerify {
 
 interface CarToVerify {
     id: string
+    slug: string
     make: string
     model: string
     year: number
@@ -89,7 +91,7 @@ export default function AdminVerificationsPage() {
             setDealers(dealers.filter(d => d.id !== dealerId))
         } catch (error) {
             console.error("Verification error:", error)
-            alert("Failed to process verification")
+            toast.error("Failed to process verification")
         } finally {
             setIsProcessing(null)
         }
@@ -108,7 +110,7 @@ export default function AdminVerificationsPage() {
             setCars(cars.filter(c => c.id !== carId))
         } catch (error) {
             console.error("Verification error:", error)
-            alert("Failed to process verification")
+            toast.error("Failed to process verification")
         } finally {
             setIsProcessing(null)
         }
@@ -338,7 +340,7 @@ function CarVerifyCard({ car, onVerify, isProcessing }: {
                         <div className="space-y-1">
                             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Submitted</p>
                             <p className="text-sm font-semibold">{new Date(car.createdAt).toLocaleDateString()}</p>
-                            <Link href={`/cars/${car.id}`} target="_blank" className="text-xs text-primary font-bold hover:underline flex items-center gap-1 mt-1">
+                            <Link href={`/cars/${car.slug}`} target="_blank" className="text-xs text-primary font-bold hover:underline flex items-center gap-1 mt-1">
                                 Preview Listing <ExternalLink className="h-3 w-3" />
                             </Link>
                         </div>

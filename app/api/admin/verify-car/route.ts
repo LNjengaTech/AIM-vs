@@ -16,7 +16,15 @@ export async function GET() {
           isVerified: false
         }
       },
-      include: {
+      select: {
+        id: true,
+        slug: true,
+        make: true,
+        model: true,
+        year: true,
+        price: true,
+        images: true,
+        createdAt: true,
         dealer: {
           select: {
             businessName: true,

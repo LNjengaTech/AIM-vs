@@ -22,6 +22,7 @@ export const carSchema = z.object({
     // Internal
     isFeatured: z.boolean(),
     negotiable: z.boolean(),
+    has360View: z.boolean().default(false),
 })
 
 export type CarFormValues = z.infer<typeof carSchema>

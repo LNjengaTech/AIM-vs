@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Loader2, Trash, Eye, Edit, MoreVertical } from "lucide-react"
+import { toast } from "sonner"
 import Link from "next/link"
 import {
   DropdownMenu,
@@ -21,6 +22,7 @@ interface InventoryActionsProps {
 export function InventoryActions({ carId, carSlug, currentStatus }: InventoryActionsProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const toggleStatus = async () => {
     setIsLoading(true)
@@ -36,15 +38,13 @@ export function InventoryActions({ carId, carSlug, currentStatus }: InventoryAct
       router.refresh()
     } catch (error) {
       console.error(error)
-      alert("Error updating status")
+      toast.error("Error updating status. Please try again.")
     } finally {
       setIsLoading(false)
     }
   }
 
   const deleteCar = async () => {
-    if (!confirm("Are you sure you want to delete this listing? in Phase 1 we don't have soft delete yet, so it's permanent.")) return
-
     setIsLoading(true)
     try {
       const res = await fetch(`/api/cars/${carId}`, {
@@ -52,10 +52,12 @@ export function InventoryActions({ carId, carSlug, currentStatus }: InventoryAct
       })
 
       if (!res.ok) throw new Error("Failed to delete")
+      toast.success("Listing deleted successfully")
+      setShowDeleteConfirm(false)
       router.refresh()
     } catch (error) {
       console.error(error)
-      alert("Error deleting car")
+      toast.error("Error deleting car. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -99,7 +101,7 @@ export function InventoryActions({ carId, carSlug, currentStatus }: InventoryAct
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
-            <Button variant="ghost" onClick={deleteCar} disabled={isLoading} className="flex items-center cursor-pointer w-full bg-destructive/10 text-destructive" >
+            <Button variant="ghost" onClick={() => setShowDeleteConfirm(true)} disabled={isLoading} className="flex items-center cursor-pointer w-full bg-destructive/10 text-destructive" >
               <Trash className="mr-2 h-4 w-4" />
               Delete
             </Button>
@@ -107,6 +109,20 @@ export function InventoryActions({ carId, carSlug, currentStatus }: InventoryAct
           
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {showDeleteConfirm && (
+        <div className="absolute top-10 right-0 bg-background border shadow-lg rounded-xl p-3 z-50 w-64 animate-in fade-in zoom-in-95">
+          <p className="text-sm font-bold mb-2">Delete this listing permanently?</p>
+          <div className="flex gap-2">
+            <Button size="sm" variant="destructive" className="flex-1" onClick={deleteCar} disabled={isLoading}>
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Confirm"}
+            </Button>
+            <Button size="sm" variant="outline" className="flex-1" onClick={() => setShowDeleteConfirm(false)} disabled={isLoading}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

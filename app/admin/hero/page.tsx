@@ -21,6 +21,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Save, Eye, Image as ImageIcon, Sparkles, CheckCircle2, AlertCircle } from "lucide-react"
+import { toast } from "sonner"
 import { HeroSection } from "@/components/home/hero-section"
 import { 
   Select,
@@ -118,10 +119,12 @@ export default function AdminHeroPage() {
 
       if (!response.ok) throw new Error("Failed to save")
       setSaveStatus("success")
+      toast.success("Hero section updated successfully!")
       setTimeout(() => setSaveStatus("idle"), 3000)
     } catch (error) {
       console.error("Error saving hero data:", error)
       setSaveStatus("error")
+      toast.error("Failed to save changes. Please try again.")
       setTimeout(() => setSaveStatus("idle"), 5000)
     }
   }

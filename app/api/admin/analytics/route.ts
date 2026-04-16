@@ -44,20 +44,31 @@ export async function GET() {
       })
     ])
 
-    // Generate time-series data for the last 7 days (Mocked/Aggregated)
-    // In a real app, this would be a more complex aggregation query
+    // Generate time-series data for the last 7 days from real Engagement data
+    const sevenDaysAgo = new Date()
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6)
+
+    const engagements = await prisma.engagement.findMany({
+      where: { createdAt: { gte: sevenDaysAgo } },
+      select: { createdAt: true, type: true },
+    })
+
     const last7Days = Array.from({ length: 7 }, (_, i) => {
       const date = new Date()
       date.setDate(date.getDate() - (6 - i))
       return date.toISOString().split('T')[0]
     })
 
-    // Mocking traffic data for the chart since we don't have enough engagement history in DB yet
-    const trafficData = last7Days.map(date => ({
-      date,
-      views: Math.floor(Math.random() * 100) + 50,
-      engagement: Math.floor(Math.random() * 40) + 10,
-    }))
+    const trafficData = last7Days.map(date => {
+      const dayEngagements = engagements.filter(e =>
+        e.createdAt.toISOString().split('T')[0] === date
+      )
+      return {
+        date,
+        views: dayEngagements.filter(e => e.type === 'VIEW').length,
+        engagement: dayEngagements.filter(e => e.type !== 'VIEW').length,
+      }
+    })
 
     return NextResponse.json({
       counts: {

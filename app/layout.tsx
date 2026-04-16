@@ -39,6 +39,8 @@ export const viewport: Viewport = {
   themeColor: "#3b82f6",
 }
 
+import { Toaster } from "sonner"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -50,6 +52,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           
           {children}
+          <Toaster richColors position="bottom-right" />
           <PWAInstallPrompt />
         </ThemeProvider>
       </body>

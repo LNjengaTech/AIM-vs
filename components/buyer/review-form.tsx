@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
@@ -35,12 +36,12 @@ export function ReviewForm() {
 
       // Could show success message here or redirect
       // For now redirect back to dashboard or show success state
-      alert("Review submitted successfully! It will be visible after moderation.")
+      toast.success("Review submitted! It'll be visible after moderation.")
       router.push("/buyer") 
       router.refresh()
     } catch (error) {
       console.error(error)
-      alert("Something went wrong. Please try again.")
+      toast.error("Something went wrong. Please try again.")
     } finally {
       setIsLoading(false)
     }

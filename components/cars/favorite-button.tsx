@@ -3,6 +3,7 @@
 import { Heart } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 
 interface FavoriteButtonProps {
@@ -42,7 +43,7 @@ export function FavoriteButton({ carId, initialIsFavorited = false, requiresAuth
       setIsFavorited(data.isFavorited)
     } catch (error) {
       console.error("Error toggling favorite:", error)
-      alert("Failed to update favorite. Please try again.")
+      toast.error("Failed to update favorite. Please try again.")
     } finally {
       setIsLoading(false)
     }
