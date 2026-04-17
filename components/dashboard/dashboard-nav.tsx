@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { BarChart, Car, LayoutDashboard, PlusCircle, Settings } from "lucide-react"
+import { BarChart, Car, LayoutDashboard, PlusCircle, Settings, Upload } from "lucide-react"
 
 const navItems = [
   {
@@ -20,6 +20,11 @@ const navItems = [
     title: "Add Car",
     href: "/dashboard/add-car",
     icon: PlusCircle,
+  },
+  {
+    title: "Bulk Import",
+    href: "/dashboard/import",
+    icon: Upload,
   },
   {
     title: "Analytics",

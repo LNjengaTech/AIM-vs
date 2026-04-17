@@ -1,0 +1,3 @@
+make,model,year,color,bodyType,transmission,fuelType,mileage,engineCapacity,price,negotiable,condition,description,features
+Toyota,Axio,2019,Pearl White,Sedan,Automatic,Petrol,42000,1500,890000,true,foreign_used,"Well maintained, new tyres","Reversing camera,Tinted windows,Alloy wheels"
+Nissan,Note,2018,Silver,Hatchback,Automatic,Petrol,55000,1200,650000,false,foreign_used,"Clean interior","Bluetooth,USB port"
