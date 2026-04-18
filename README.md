@@ -72,6 +72,22 @@ A modern web platform designed to digitize and optimize the automotive market in
 6. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
+### Running with WebSocket Support
+
+For real-time messaging, the app uses a custom Node.js server. Run the custom server instead of `next dev`:
+
+```bash
+npm run dev
+```
+
+The app runs on port 3000 with Socket.io attached.
+
+### Deploying to Vercel
+
+Vercel's serverless runtime does not support persistent WebSocket connections. Socket.io will fall back to HTTP long-polling automatically (functional but slightly slower). 
+
+For true WebSocket support in production, deploy `server.ts` as a separate Node.js service on a platform like **Railway** or **Render** and set the `SOCKET_SERVER_URL` accordingly.
+
 ##  Project Structure
 
 ```

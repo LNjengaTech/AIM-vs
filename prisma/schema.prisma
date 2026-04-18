@@ -37,19 +37,23 @@ model Session {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  name          String?
-  email         String         @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          UserRole       @default(BUYER)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  accounts      Account[]
-  buyerProfile  BuyerProfile?
-  dealerProfile DealerProfile?
-  sessions      Session[]
+  id                  String         @id @default(cuid())
+  name                String?
+  email               String         @unique
+  emailVerified       DateTime?
+  image               String?
+  password            String?
+  role                UserRole       @default(BUYER)
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  accounts            Account[]
+  buyerProfile        BuyerProfile?
+  dealerProfile       DealerProfile?
+  sessions            Session[]
+  sentMessages        Message[]      @relation("SentMessages")
+  receivedMessages    Message[]      @relation("ReceivedMessages")
+  dealerConversations Conversation[] @relation("DealerConversations")
+  adminConversations  Conversation[] @relation("AdminConversations")
 
   @@index([email])
 }
@@ -284,6 +288,36 @@ model Notification {
   @@index([createdAt])
   @@index([buyerId])
 }
+
+model Message {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  content    String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([createdAt])
+  @@index([isRead])
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  dealerId  String   @unique
+  adminId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  dealer    User     @relation("DealerConversations", fields: [dealerId], references: [id], onDelete: Cascade)
+  admin     User     @relation("AdminConversations", fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([dealerId])
+  @@index([adminId])
+}
+
 
 enum UserRole {
   BUYER

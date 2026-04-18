@@ -5,7 +5,7 @@ import Link from "next/link"
 import { LogOut } from "lucide-react"
 import { signOutAction } from "@/app/actions/auth"
 import { MobileSidebarToggle } from "@/components/dashboard/mobile-sidebar-toggle"
-
+import DynamicMessageIcon from "@/components/messaging/dynamic-message-icon"
 export default async function DashboardLayout({
   children,
 }: {
@@ -21,10 +21,11 @@ export default async function DashboardLayout({
     <div className="flex min-h-screen flex-col md:flex-row bg-background">
       {/* Desktop Sidebar - hidden on mobile */}
       <aside className="hidden w-64 flex-col border-r bg-card md:flex">
-        <div className="flex h-16 items-center border-b px-6">
+        <div className="flex h-16 items-center border-b px-6 justify-between">
           <Link href="/" className="flex items-center gap-2 font-bold text-lg">
             <span>AIM-Mombasa</span>
           </Link>
+          <DynamicMessageIcon userId={session.user.id} role="DEALER" />
         </div>
         
         <div className="flex-1 overflow-y-auto">
@@ -57,7 +58,10 @@ export default async function DashboardLayout({
         {/* Mobile Header */}
         <header className="flex h-16 items-center justify-between border-b bg-card px-4 md:hidden">
           <Link href="/" className="font-bold">AIM-Mombasa</Link>
-          <span className="text-sm font-medium">Dashboard</span>
+          <div className="flex items-center gap-4">
+            <DynamicMessageIcon userId={session.user.id} role="DEALER" />
+            <span className="text-sm font-medium">Dashboard</span>
+          </div>
         </header>
 
         <main className="flex-1 overflow-y-auto p-4 md:p-8">

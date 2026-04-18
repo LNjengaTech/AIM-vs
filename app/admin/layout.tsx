@@ -6,7 +6,7 @@ import { LogOut, LayoutDashboard, Search } from "lucide-react"
 import { signOutAction } from "@/app/actions/auth"
 import { MobileAdminSidebarToggle } from "@/components/admin/mobile-admin-sidebar-toggle"
 import { AdminNotifications } from "@/components/admin/admin-notifications"
-
+import DynamicMessageIcon from "@/components/messaging/dynamic-message-icon"
 export default async function AdminLayout({
   children,
 }: {
@@ -77,6 +77,7 @@ export default async function AdminLayout({
                 />
              </div>
 
+             <DynamicMessageIcon userId={session.user.id} role="ADMIN" />
              <AdminNotifications />
              <div className="h-10 w-10"></div>
           </div>
