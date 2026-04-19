@@ -1,5 +1,5 @@
 // app-src/app/api/ai/assistant/route.ts
-// AIM Assistant API — context-aware streaming chat using Gemini 2.0 Flash.
+// AIM Assistant API — context-aware streaming chat using a 3-tier fallback strategy.
 // No auth required (guests can ask questions too).
 // Rate-limited per sessionId: 20 messages per server session.
 
@@ -10,6 +10,9 @@ import Groq from "groq-sdk";
 // In-memory rate limiter
 const sessionMessageCounts = new Map<string, number>();
 
+
+// The Context Engine for Context-aware AI responses
+// This function creates a detailed prompt for the AI, using information about the user's session:
 function buildSystemInstruction(context: AssistantContext): string {
   const roleContext =
     context.userRole === "DEALER"
@@ -127,7 +130,7 @@ export async function POST(req: Request) {
 
     const lastMessageContent = body.messages[body.messages.length - 1].content;
 
-    // Helper to create the response stream from Gemini
+    // Helper to create the response stream from Gemini to provide real-time responses to the browser
     const createGeminiStream = (streamResult: any) => {
       return new ReadableStream({
         async start(controller) {
@@ -147,10 +150,12 @@ export async function POST(req: Request) {
       });
     };
 
-    // 1. TIER 1: GEMINI 1.5 FLASH (Google SDK) - primary
+    // The 3-Tier Fallback System (Reliability)
+
+    //Tier 1: GEMINI 2.5 FLASH - primary
     try {
       const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.5-flash",
         systemInstruction,
       });
       const chat = model.startChat({ history: geminiHistory });
@@ -164,9 +169,10 @@ export async function POST(req: Request) {
         },
       });
     } catch (err15f: unknown) {
-      console.warn("[AIM_ASSISTANT] Gemini 1.5 Flash failed, trying Tier 2 (Groq Llama)...");
+      //console.error("[GEMINI ERROR]:", err15f.message || err15f);
+      console.warn("[AIM_ASSISTANT] Gemini 2.5 Flash failed, trying Tier 2 (Groq Llama)...");
       
-      // 2. TIER 2: GROQ LLAMA 3.3 70B (Groq SDK) - first fallback
+      // Tier 2: GROQ LLAMA 3.3 70B - first fallback
       if (groqApiKey) {
         try {
           const groq = new Groq({ apiKey: groqApiKey });
@@ -210,14 +216,14 @@ export async function POST(req: Request) {
             },
           });
         } catch (groqErr: unknown) {
-          console.warn("[AIM_ASSISTANT] Groq Llama failed, trying Tier 3 (Gemini 1.5 Pro)...");
+          console.warn("[AIM_ASSISTANT] Groq Llama failed, trying Tier 3 (Gemini 2.5 Pro)...");
         }
       }
 
-      // 3. TIER 3: GEMINI 1.5 PRO (Google SDK) - second fallback
+      //Tier 3: GEMINI 2.5 PRO - second fallback
       try {
         const model = genAI.getGenerativeModel({
-          model: "gemini-1.5-pro",
+          model: "gemini-2.5-pro",
           systemInstruction,
         });
         const chat = model.startChat({ history: geminiHistory });
