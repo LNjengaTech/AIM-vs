@@ -46,9 +46,9 @@ export function AdminNotifications() {
     try {
       const response = await fetch("/api/admin/notifications")
       if (!response.ok) throw new Error("Failed to fetch")
-      const data = await response.json()
-      setNotifications(data)
-      setUnreadCount(data.filter((n: Notification) => !n.isRead).length)
+      const { notifications: fetchedNotifications, unreadCount: fetchedUnreadCount } = await response.json()
+      setNotifications(fetchedNotifications || [])
+      setUnreadCount(fetchedUnreadCount || 0)
     } catch (error) {
       console.error("Error fetching notifications:", error)
     }
