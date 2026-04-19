@@ -28,7 +28,7 @@ export function InventoryActions({ carId, carSlug, currentStatus }: InventoryAct
     setIsLoading(true)
     const newStatus = currentStatus === "AVAILABLE" ? "SOLD" : "AVAILABLE"
     try {
-      const res = await fetch(`/api/cars/${carId}`, {
+      const res = await fetch(`/api/cars/${carSlug}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
@@ -36,8 +36,8 @@ export function InventoryActions({ carId, carSlug, currentStatus }: InventoryAct
 
       if (!res.ok) throw new Error("Failed to update status")
       router.refresh()
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      console.error("[TOGGLE_STATUS]", error instanceof Error ? error.message : "Unknown error")
       toast.error("Error updating status. Please try again.")
     } finally {
       setIsLoading(false)
@@ -47,7 +47,7 @@ export function InventoryActions({ carId, carSlug, currentStatus }: InventoryAct
   const deleteCar = async () => {
     setIsLoading(true)
     try {
-      const res = await fetch(`/api/cars/${carId}`, {
+      const res = await fetch(`/api/cars/${carSlug}`, {
         method: "DELETE",
       })
 
@@ -55,8 +55,8 @@ export function InventoryActions({ carId, carSlug, currentStatus }: InventoryAct
       toast.success("Listing deleted successfully")
       setShowDeleteConfirm(false)
       router.refresh()
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      console.error("[DELETE_CAR]", error instanceof Error ? error.message : "Unknown error")
       toast.error("Error deleting car. Please try again.")
     } finally {
       setIsLoading(false)

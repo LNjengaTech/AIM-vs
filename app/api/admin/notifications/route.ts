@@ -1,6 +1,8 @@
 /**
  * app/api/admin/notifications/route.ts
  * API route to fetch recent admin-targeted notifications.
+ * Only returns platform-wide notifications (buyerId IS NULL).
+ * Excludes personal buyer BOLO match notifications.
  */
 
 import { NextResponse } from "next/server"
@@ -14,8 +16,11 @@ export async function GET() {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
+    // Only fetch platform-wide notifications (no buyerId = not a personal buyer notification).
+    // Buyer BOLO match notifications have buyerId set — those must NOT appear in the admin panel.
     const notifications = await prisma.notification.findMany({
       where: {
+        buyerId: null,
         OR: [
           { targetRole: "ADMIN" },
           { targetRole: null }
@@ -25,7 +30,18 @@ export async function GET() {
       take: 20
     })
 
-    return NextResponse.json(notifications)
+    const unreadCount = await prisma.notification.count({
+      where: {
+        buyerId: null,
+        isRead: false,
+        OR: [
+          { targetRole: "ADMIN" },
+          { targetRole: null }
+        ]
+      }
+    })
+
+    return NextResponse.json({ notifications, unreadCount })
   } catch (error: unknown) {
     console.error("[ADMIN_NOTIFICATIONS_GET]", error instanceof Error ? error.message : "Unknown error")
     return new NextResponse("Internal Error", { status: 500 })

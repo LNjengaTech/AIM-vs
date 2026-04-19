@@ -1,14 +1,18 @@
 /**
  * components/dashboard/analytics-dashboard.tsx
  * Dealer analytics dashboard component providing insights into listing performance and buyer engagement.
+ * Data is fetched live from the Engagement and Car tables via /api/dealer/analytics.
  */
 
 "use client"
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart3, Eye, Heart, Phone, ShoppingCart, TrendingUp } from "lucide-react"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import { BarChart3, Eye, Heart, ShoppingCart, TrendingUp } from "lucide-react"
+import {
+  BarChart, Bar, LineChart, Line,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+} from "recharts"
 
 interface CarPerformance {
   car: {
@@ -30,19 +34,15 @@ interface EngagementBreakdown {
   availableCars: number
 }
 
-interface RecentActivity {
-  id: string
-  type: string
-  buyerName: string
-  buyerEmail: string
-  carName: string
-  timestamp: string
+interface TrendPoint {
+  date: string
+  views: number
 }
 
 interface DealerAnalyticsData {
   analytics: EngagementBreakdown
   topPerformingCars: CarPerformance[]
-  recentActivity: RecentActivity[]
+  trendData: TrendPoint[]
 }
 
 export function AnalyticsDashboard() {
@@ -51,16 +51,22 @@ export function AnalyticsDashboard() {
 
   useEffect(() => {
     fetch("/api/dealer/analytics")
-      .then(res => res.json())
-      .then(setData)
+      .then((res) => res.json())
+      .then((json: DealerAnalyticsData) => setData(json))
       .catch(console.error)
       .finally(() => setLoading(false))
   }, [])
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-muted-foreground">Loading analytics...</div>
+      <div className="space-y-6 animate-pulse">
+        <div className="h-8 w-40 rounded bg-muted" />
+        <div className="grid gap-4 grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="h-24 rounded-2xl bg-muted" />
+          ))}
+        </div>
+        <div className="h-72 rounded-2xl bg-muted" />
       </div>
     )
   }
@@ -73,19 +79,25 @@ export function AnalyticsDashboard() {
     )
   }
 
-  const { analytics, topPerformingCars, recentActivity } = data
+  const { analytics, topPerformingCars, trendData } = data
 
-  // Prepare chart data
-  const performanceData = topPerformingCars.map(item => ({
+  // Prepare chart data for top performing cars bar chart
+  const performanceData = topPerformingCars.map((item) => ({
     name: `${item.car.make} ${item.car.model}`,
     views: item.views
+  }))
+
+  // Short date labels for trend chart (e.g. "Mon")
+  const trendChartData = trendData.map((point) => ({
+    day: new Date(point.date).toLocaleDateString("en-GB", { weekday: "short" }),
+    views: point.views
   }))
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
-        <p className="text-muted-foreground">Track your dealerships performance</p>
+        <p className="text-muted-foreground">Track your dealership&apos;s performance</p>
       </div>
 
       {/* Stats Cards */}
@@ -108,18 +120,18 @@ export function AnalyticsDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.totalFavorites.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Cars favorited by buyers</p>
+            <p className="text-xs text-muted-foreground">Cars favourited by buyers</p>
           </CardContent>
         </Card>
 
         <Card className="border-0 shadow-xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Leads</CardTitle>
-            <Phone className="h-4 w-4 text-muted-foreground" />
+            <Heart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.totalLeads.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Contact inquiries</p>
+            <p className="text-xs text-muted-foreground">Favourites (lead proxy)</p>
           </CardContent>
         </Card>
 
@@ -130,7 +142,7 @@ export function AnalyticsDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.totalSales.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Cars sold</p>
+            <p className="text-xs text-muted-foreground">Cars marked sold</p>
           </CardContent>
         </Card>
 
@@ -157,67 +169,58 @@ export function AnalyticsDashboard() {
         </Card>
       </div>
 
+      {/* 7-Day Views Trend */}
+      <Card className="border-0 shadow-xl">
+        <CardHeader>
+          <CardTitle>7-Day View Trend</CardTitle>
+          <p className="text-sm text-muted-foreground">Daily listing views over the last week</p>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={240}>
+            <LineChart data={trendChartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" fontSize={12} />
+              <YAxis allowDecimals={false} fontSize={12} />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="views"
+                stroke="hsl(var(--primary))"
+                strokeWidth={2}
+                dot={{ r: 4, fill: "hsl(var(--primary))" }}
+                activeDot={{ r: 6 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
       {/* Top Performing Cars */}
       {performanceData.length > 0 && (
         <Card className="border-0 shadow-xl">
           <CardHeader>
             <CardTitle>Top Performing Cars</CardTitle>
-            <p className="text-sm text-muted-foreground">Cars with the most views</p>
+            <p className="text-sm text-muted-foreground">Cars with the most total engagements</p>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={280}>
               <BarChart data={performanceData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis 
-                  dataKey="name" 
-                  angle={-45}
+                <XAxis
+                  dataKey="name"
+                  angle={-30}
                   textAnchor="end"
-                  height={100}
+                  height={80}
                   fontSize={12}
                 />
-                <YAxis />
+                <YAxis allowDecimals={false} />
                 <Tooltip />
-                <Bar dataKey="views" fill="hsl(var(--primary))" />
+                <Bar dataKey="views" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
       )}
-
-      {/* Recent Activity */}
-      <Card className="border-0 shadow-xl">
-        <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <p className="text-sm text-muted-foreground">Latest buyer interactions</p>
-        </CardHeader>
-        <CardContent>
-          {recentActivity.length === 0 ? (
-            <p className="text-center text-muted-foreground py-8">No recent activity</p>
-          ) : (
-            <div className="space-y-4">
-              {recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-start justify-between border-b pb-4 last:border-0">
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium">
-                      {activity.type === "VIEW" && "👁️ Viewed"}
-                      {activity.type === "FAVORITE" && "❤️ Favorited"}
-                      {activity.type === "CONTACT" && "📞 Contact Request"}
-                      {activity.type === "CALL" && "📱 Called"}
-                    </p>
-                    <p className="text-sm text-muted-foreground">{activity.carName}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {activity.buyerName || activity.buyerEmail}
-                    </p>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(activity.timestamp).toLocaleDateString()}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
     </div>
   )
 }

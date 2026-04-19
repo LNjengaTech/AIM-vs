@@ -26,6 +26,7 @@ import { toast } from "sonner"
 
 interface Review {
   id: string
+  buyerId: string
   content: string
   rating: number | null
   isPublished: boolean
@@ -58,8 +59,8 @@ export default function AdminReviewsPage() {
       if (!response.ok) throw new Error("Failed to fetch")
       const data = await response.json()
       setReviews(data)
-    } catch (error) {
-      console.error("Error fetching reviews:", error)
+    } catch (error: unknown) {
+      console.error("Error fetching reviews:", error instanceof Error ? error.message : "Unknown error")
     } finally {
       setIsLoading(false)
     }
@@ -87,8 +88,8 @@ export default function AdminReviewsPage() {
         }
         return r
       }))
-    } catch (error) {
-      console.error("Action error:", error)
+    } catch (error: unknown) {
+      console.error("Action error:", error instanceof Error ? error.message : "Unknown error")
       toast.error("Failed to process review action")
     } finally {
       setIsProcessing(null)
@@ -248,7 +249,7 @@ export default function AdminReviewsPage() {
                       className="flex-1 sm:w-full"
                       asChild
                     >
-                       <Link href={`/admin/verifications` /* TODO: link to /admin/users/[id] when user management page is built */}>
+                       <Link href={`/admin/users/${review.buyerId}`}>
                           <Eye className="h-4 w-4 mr-2" />
                           Profile
                        </Link>

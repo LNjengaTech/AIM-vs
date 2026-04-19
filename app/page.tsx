@@ -1,7 +1,9 @@
+import { Suspense } from "react"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { Navbar } from "@/components/ui/navbar"
 import { HeroSection } from "@/components/home/hero-section"
+import { ReviewsSection } from "@/components/reviews/reviews-section"
 import Link from "next/link"
 import ChatWidget from "@/components/aim-assistant/chat-widget-wrapper"
 
@@ -118,6 +120,11 @@ export default async function Home() {
             </div>
           </div>
         </div>
+
+        {/* User Reviews Section */}
+        <Suspense fallback={null}>
+          <ReviewsSection />
+        </Suspense>
       </main>
 
       <footer className="border-t py-12 bg-muted/30">

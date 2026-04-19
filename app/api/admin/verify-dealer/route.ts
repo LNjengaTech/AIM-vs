@@ -57,7 +57,11 @@ export async function POST(req: NextRequest) {
         }
       })
 
-      // Create notification for dealer
+      // Create notification for dealer approval.
+      // TODO: This broadcasts to ALL dealers (targetRole: "DEALER") because the Notification
+      // model has no dealerId field. A future improvement would be to add a dealerUserId
+      // field to target only the specific approved dealer. For now this is acceptable
+      // as an approval broadcast — dealers understand the context.
       await prisma.notification.create({
         data: {
           type: "DEALER_VERIFIED",
