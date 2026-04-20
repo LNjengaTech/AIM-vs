@@ -40,6 +40,15 @@ export default async function EditCarPage({
     redirect("/dashboard/inventory")
   }
 
+  // Serialize car object to plain values for Client Component
+  const serializedCar = {
+    ...car,
+    price: Number(car.price),
+    createdAt: car.createdAt.toISOString(),
+    updatedAt: car.updatedAt.toISOString(),
+    soldAt: car.soldAt?.toISOString() || null,
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -52,7 +61,7 @@ export default async function EditCarPage({
       </div>
 
       <div className="mx-auto max-w-4xl bg-card rounded-4xl p-6 border shadow-sm">
-        <EditCarForm car={car} />
+        <EditCarForm car={serializedCar} />
       </div>
     </div>
   )

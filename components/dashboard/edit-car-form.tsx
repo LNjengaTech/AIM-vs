@@ -37,7 +37,12 @@ import { ImageUpload } from "@/components/dashboard/image-upload"
 import { carSchema, type CarFormValues } from "@/lib/validations/car"
 
 interface EditCarFormProps {
-  car: Car
+  car: Omit<Car, "price" | "createdAt" | "updatedAt" | "soldAt"> & {
+    price: number
+    createdAt: string
+    updatedAt: string
+    soldAt: string | null
+  }
 }
 
 export function EditCarForm({ car }: EditCarFormProps) {
