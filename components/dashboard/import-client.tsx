@@ -76,9 +76,16 @@ export function ImportClient() {
       skipEmptyLines: true,
       dynamicTyping: true,
       complete: (results) => {
-        // Massage data: split features string into array
         const massagedData = results.data.map((row: any) => ({
           ...row,
+          make: row.make != null ? String(row.make) : undefined,
+          model: row.model != null ? String(row.model) : undefined,
+          color: row.color != null ? String(row.color) : undefined,
+          bodyType: row.bodyType != null ? String(row.bodyType) : undefined,
+          transmission: row.transmission != null ? String(row.transmission) : undefined,
+          fuelType: row.fuelType != null ? String(row.fuelType) : undefined,
+          condition: row.condition != null ? String(row.condition) : undefined,
+          engineCapacity: row.engineCapacity != null ? String(row.engineCapacity) : undefined,
           features: typeof row.features === "string" 
             ? row.features.split(",").map((f: string) => f.trim()).filter(Boolean)
             : Array.isArray(row.features) ? row.features : []
