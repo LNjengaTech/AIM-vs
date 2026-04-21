@@ -1,46 +1,50 @@
-/**
- * app/admin/settings/page.tsx
- * Admin settings page for platform-wide configuration.
- * Currently a placeholder for future implementation.
- */
+// app/admin/settings/page.tsx
+// Admin settings — account profile, security, platform configuration.
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Settings } from "lucide-react"
+import { auth } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
+import { redirect } from "next/navigation"
+import { AdminSettingsClient } from "@/components/admin/admin-settings-client"
 
-export default function AdminSettingsPage() {
+export default async function AdminSettingsPage() {
+  const session = await auth()
+  if (!session?.user || session.user.role !== "ADMIN") redirect("/auth/login")
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { id: true, name: true, email: true, image: true }
+  })
+  
+  if (!user) redirect("/admin")
+
+  const [totalUsers, totalCars, totalDealers] = await Promise.all([
+    prisma.user.count(),
+    prisma.car.count(),
+    prisma.dealerProfile.count(),
+  ])
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Platform Settings</h1>
-        <p className="text-muted-foreground">Manage system-wide configurations and preferences</p>
+        <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
+        <p className="text-muted-foreground mt-1">
+          Manage your account, security, and platform configurations.
+        </p>
       </div>
-
-      <Card className="max-w-2xl">
-        <CardHeader>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="bg-primary/10 p-2 rounded-xl">
-              <Settings className="h-6 w-6 text-primary" />
-            </div>
-            <CardTitle>Coming Soon</CardTitle>
-          </div>
-          <CardDescription>
-            System configuration options will appear here in the next update.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Planned settings include:
-            </p>
-            <ul className="list-disc list-inside text-sm text-muted-foreground space-y-2">
-              <li>Notification templates and triggers</li>
-              <li>Marketplace commission rules</li>
-              <li>AI verification sensitivity levels</li>
-              <li>API third-party integrations (Cloudinary, WhatsApp)</li>
-            </ul>
-          </div>
-        </CardContent>
-      </Card>
+      <AdminSettingsClient 
+        user={{
+          id: user.id,
+          name: user.name ?? "",
+          email: user.email,
+          image: user.image ?? null
+        }} 
+        stats={{
+          totalUsers,
+          totalCars,
+          totalDealers,
+          platformVersion: "1.0.0 (Phase 3)"
+        }}
+      />
     </div>
   )
 }

@@ -75,6 +75,7 @@ model DealerProfile {
   location         String
   permitNumber     String?
   permitImageUrl   String?
+  description      String?
   isVerified       Boolean          @default(false)
   isPioneer        Boolean          @default(false)
   verifiedAt       DateTime?
