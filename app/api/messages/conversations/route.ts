@@ -1,3 +1,6 @@
+// app/api/messages/conversations/route.ts
+// API route for managing chat conversations. Handles fetching and creating conversations.
+
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
@@ -28,16 +31,16 @@ export async function GET() {
         where: {
           receiverId: userId,
           isRead: false,
-          senderId: { in: conversations.map((c: any) => c.dealerId) }
+          senderId: { in: conversations.map((c: { dealerId: string }) => c.dealerId) }
         },
         _count: {
           id: true,
         },
       })
 
-      const countsMap = new Map(unreadCounts.map((u: any) => [u.senderId, u._count.id]))
+      const countsMap = new Map(unreadCounts.map((u: { senderId: string, _count: { id: number } }) => [u.senderId, u._count.id]))
 
-      const result = conversations.map((c: any) => ({
+      const result = conversations.map((c: { dealerId: string; [key: string]: unknown }) => ({
         ...c,
         unreadCount: countsMap.get(c.dealerId) || 0
       }))
@@ -50,7 +53,7 @@ export async function GET() {
         include: { admin: { select: { id: true, name: true } } }
       })
       
-      return NextResponse.json(conversation ? [conversation] : [])
+      return NextResponse.json({ conversation: conversation ?? null })
     }
 
     return NextResponse.json({ error: "Invalid role" }, { status: 403 })
