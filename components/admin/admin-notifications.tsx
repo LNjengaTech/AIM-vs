@@ -8,7 +8,8 @@ import {
   MessageSquare, 
   Store, 
   UserCheck, 
-  Car
+  Car,
+  Mail
 } from "lucide-react"
 import { 
   DropdownMenu, 
@@ -70,6 +71,7 @@ export function AdminNotifications() {
       case "NEW_REVIEW": return <MessageSquare className="h-4 w-4 text-blue-500" />
       case "DEALER_VERIFIED": return <UserCheck className="h-4 w-4 text-green-500" />
       case "NEW_CAR_LISTING": return <Car className="h-4 w-4 text-orange-500" />
+      case "CONTACT_FORM": return <Mail className="h-4 w-4 text-indigo-500" />
       default: return <Bell className="h-4 w-4 text-muted-foreground" />
     }
   }

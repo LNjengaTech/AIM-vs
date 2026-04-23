@@ -347,4 +347,5 @@ enum NotificationType {
   DEALER_VERIFIED
   BOLO_MATCH
   NEW_CAR_LISTING
+  CONTACT_FORM
 }
