@@ -29,7 +29,11 @@ export function ThemeToggle() {
     //     </div>
     // </div>
 
-    <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="bg-gray-300 relative flex h-10 w-18 md:w-15 items-center rounded-full!  border-2 transition-colors! duration-300!"aria-label="Toggle theme">
+    <button 
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")} 
+      className="bg-gray-300 relative flex h-10 w-18 md:w-15 items-center rounded-full!  border-2 transition-colors! duration-300!"
+      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+    >
         <div className={`flex h-8 w-8 border transform! items-center justify-center rounded-full! transition-transform! duration-300! ease-in-out!  bg-black ${theme === 'light' ? 'translate-x-9 md:translate-x-6 bg-white!' : 'translate-x-0!' }`} >
         {theme === 'dark' ? <Sun className="h-4 w-4 text-white! " /> : <Moon className="h-4 w-4 rounded-full text-black" />}
         </div>

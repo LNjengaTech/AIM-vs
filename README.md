@@ -25,68 +25,51 @@ A modern web platform designed to digitize and optimize the automotive market in
 - **AI/ML**: TensorFlow.js (planned)
 - **Deployment**: Vercel
 
-##  Getting Started
+##  Development & Deployment
 
-### Prerequisites
+### Development
 
-- Node.js 18+ 
-- PostgreSQL database
-- Cloudinary account
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd aim-mombasa-ag/app-src
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Setup environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` and add your credentials:
-   - `DATABASE_URL` - Your PostgreSQL connection string
-   - `NEXTAUTH_SECRET` - Generate with: `openssl rand -base64 32` Or my [Web App](https://jwt-secret-key.vercel.app/)
-   - `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` - Your Cloudinary cloud name
-   - `CLOUDINARY_API_KEY` - Your Cloudinary API key
-   - `CLOUDINARY_API_SECRET` - Your Cloudinary API secret
-
-4. **Initialize the database**
-   ```bash
-   npx prisma migrate dev --name init
-   npx prisma generate
-   ```
-
-5. **Run the development server**
-   ```bash
-   npm run dev
-   ```
-
-6. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
-### Running with WebSocket Support
-
-For real-time messaging, the app uses a custom Node.js server. Run the custom server instead of `next dev`:
-
+**Running Locally:**
 ```bash
 npm run dev
 ```
+(runs: `npx tsx server.ts` — boots Next.js + Socket.io on port 3000)
 
-The app runs on port 3000 with Socket.io attached.
+**Next.js only (no real-time messaging):**
+```bash
+npm run dev:next
+```
 
-### Deploying to Vercel
+**Seeding:**
+```bash
+npm run seed
+```
+Creates: demo users (1 admin, 3 dealers, 2 buyers), 15 cars, BOLO requests, reviews, and a sample conversation. 
+Credentials can be found in `prisma/seed.ts`.
 
-Vercel's serverless runtime does not support persistent WebSocket connections. Socket.io will fall back to HTTP long-polling automatically (functional but slightly slower). 
+**Environment Variables:**
+Copy `.env.example` to `.env` and fill in the values. All services used have free tiers with no credit card required for development.
 
-For true WebSocket support in production, deploy `server.ts` as a separate Node.js service on a platform like **Railway** or **Render** and set the `SOCKET_SERVER_URL` accordingly.
+### Deployment
+
+**Vercel (Next.js app):**
+1. Push to GitHub.
+2. Connect your repository to Vercel.
+3. Add all environment variables from `.env.example` to Vercel project settings.
+4. Set `NEXTAUTH_URL` to your Vercel domain.
+5. Deploy.
+
+**Socket.io on Railway (for true WebSocket support):**
+Vercel serverless functions do not hold persistent WebSocket connections. The app automatically falls back to HTTP long-polling on Vercel (functional but slower). For true WebSocket support:
+1. Deploy `server.ts` as a separate Node.js service on [Railway](https://railway.app) (free tier available).
+2. Set `NEXT_PUBLIC_SOCKET_URL` to your Railway URL in both environments.
+3. The app in `hooks/use-socket.ts` will use this URL if present, otherwise falling back to the origin.
+
+**Database (Neon):**
+1. Create a free project at [neon.tech](https://neon.tech).
+2. Copy the connection string to `DATABASE_URL`.
+3. Run: `npx prisma migrate deploy`.
+4. Run: `npm run seed`.
 
 ##  Project Structure
 

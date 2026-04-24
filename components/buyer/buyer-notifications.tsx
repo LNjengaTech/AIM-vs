@@ -81,8 +81,12 @@ export function BuyerNotifications() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="relative rounded-full p-2 hover:bg-muted transition-colors">
-          <Bell className="h-5 w-5 text-muted-foreground" />
+        <button 
+          className="relative rounded-full p-2 hover:bg-muted transition-colors"
+          aria-label="Notifications"
+        >
+          <Bell className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
+          <span className="sr-only">Notifications</span>
           {unreadCount > 0 && (
             <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-background">
               {unreadCount > 9 ? "9+" : unreadCount}

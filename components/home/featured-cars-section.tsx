@@ -69,7 +69,7 @@ function carToCardProps(car: RankedCar) {
     fuelType: car.fuelType,
     transmission: car.transmission,
     condition: car.condition,
-    dealerName: car.dealer.businessName || car.dealer.name,
+    dealerName: car.dealer.businessName,
     isVerified: car.dealer.isVerified,
     isPioneer: car.dealer.isPioneer,
     isFavorited: false, // Homepage is public

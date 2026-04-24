@@ -247,8 +247,9 @@ export function MessageDrawer({ isOpen, onClose, userId, role }: MessageDrawerPr
           <button 
             onClick={onClose}
             className="rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            aria-label="Close messaging drawer"
           >
-            <X className="h-5 w-5 text-muted-foreground" />
+            <X className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
           </button>
         </div>
 
@@ -349,8 +350,9 @@ export function MessageDrawer({ isOpen, onClose, userId, role }: MessageDrawerPr
                       onClick={handleSend}
                       disabled={!inputValue.trim()}
                       className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
+                      aria-label="Send message"
                     >
-                      <Send className="h-4 w-4" />
+                      <Send className="h-4 w-4" aria-hidden="true" />
                     </button>
                   </div>
                 </div>

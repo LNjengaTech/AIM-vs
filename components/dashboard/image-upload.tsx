@@ -73,7 +73,17 @@ export function ImageUpload({ value, onChange, onRemove }: ImageUploadProps) {
       </div>
       
       <div className="flex items-center gap-4">
-        <label className="relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-4xl border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 text-center transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+        <label 
+          className="relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-4xl border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 text-center transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 focus-within:ring-2 focus-within:ring-primary focus-within:outline-none"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              const input = e.currentTarget.querySelector('input[type="file"]') as HTMLInputElement;
+              if (input) input.click();
+            }
+          }}
+        >
            <div className="text-gray-600 dark:text-gray-400">
              {isUploading ? (
                <Loader2 className="h-10 w-10 animate-spin" />
@@ -91,6 +101,7 @@ export function ImageUpload({ value, onChange, onRemove }: ImageUploadProps) {
              className="hidden" 
              onChange={onUpload}
              disabled={isUploading}
+             aria-label="Upload car images"
            />
         </label>
       </div>

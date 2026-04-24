@@ -94,7 +94,10 @@ export function Navbar({ user, className }: NavbarProps) {
                                 </Link>
                             )}
                             <form action={signOutAction}>
-                                <button className="rounded-4xl bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/20">
+                                <button 
+                                    className="rounded-4xl bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/20"
+                                    aria-label="Sign out of your account"
+                                >
                                     Sign Out
                                 </button>
                             </form>
@@ -121,7 +124,8 @@ export function Navbar({ user, className }: NavbarProps) {
                 <button
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     className="fixed top-6 right-4 z-50 rounded-4xl bg-card border p-2 md:hidden shadow-md"
-                    aria-label="Toggle menu"
+                    aria-label="Toggle navigation menu"
+                    aria-expanded={isMobileMenuOpen}
                 >
                     {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                 </button>
@@ -184,7 +188,10 @@ export function Navbar({ user, className }: NavbarProps) {
                                     </Link>
                                 )}
                                 <form action={signOutAction}>
-                                    <button className="flex w-full rounded-4xl bg-destructive/30 px-4 py-3 text-sm font-medium text-destructive transition-colors hover:bg-destructive/20">
+                                    <button 
+                                        className="flex w-full rounded-4xl bg-destructive/30 px-4 py-3 text-sm font-medium text-destructive transition-colors hover:bg-destructive/20"
+                                        aria-label="Sign out"
+                                    >
                                         Sign Out
                                     </button>
                                 </form>

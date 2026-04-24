@@ -72,14 +72,18 @@ export function CarCard({
   }
 
   return (
-    <Link href={`/cars/${slug}`} className="group relative flex flex-col overflow-hidden rounded-4xl bg-card  p-3 transition-all shadow-2xl">
+    <Link 
+      href={`/cars/${slug}`} 
+      className="group relative flex flex-col overflow-hidden rounded-4xl bg-card  p-3 transition-all shadow-2xl"
+      aria-label={`View ${year} ${make} ${model}`}
+    >
 
       {/* Image Section */}
       <div className="relative aspect-4/3 w-full overflow-hidden rounded-3xl">
         {image ? (
           <Image
             src={image}
-            alt={`${year} ${make} ${model}`}
+            alt={`${year} ${make} ${model} in ${year} ${make} ${model}`}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -104,8 +108,9 @@ export function CarCard({
               ? "bg-red-500/90 text-white hover:bg-red-600"
               : "bg-white/80 text-gray-700 hover:bg-white hover:text-red-500"
           )}
+          aria-label={isFav ? "Remove from favourites" : "Save to favourites"}
         >
-          <Heart className={cn("h-4 w-4", isFav && "fill-current")} />
+          <Heart className={cn("h-4 w-4", isFav && "fill-current")} aria-hidden="true" />
         </button>
       </div>
 
@@ -140,9 +145,9 @@ export function CarCard({
             <div className="flex flex-row">
               {/*Priority logic: Show Pioneer if true, else show Verified if true instead of showing two badges*/}
               {isPioneer ? (
-                <VerifiedBadge variant="pioneer" size={20} />
+                <VerifiedBadge variant="pioneer" size={20} aria-hidden="true" />
               ) : isVerified ? (
-                <VerifiedBadge variant="verified" size={20} />
+                <VerifiedBadge variant="verified" size={20} aria-hidden="true" />
               ) : null}
 
               

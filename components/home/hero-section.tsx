@@ -41,7 +41,7 @@ export function HeroSection({
         {backgroundImageUrl && backgroundImageUrl.startsWith('http') ? (
           <Image
             src={backgroundImageUrl}
-            alt="Hero Environment"
+            alt="AIM-Mombasa hero background"
             fill
             priority
             className="object-cover opacity-90 transition-opacity duration-1000"
@@ -52,7 +52,7 @@ export function HeroSection({
           <div className="absolute inset-0 bg-linear-to-br from-background via-muted/20 to-background">
              <Image
               src="/images/AI_showroom1.png"
-              alt="Hero Environment"
+              alt="AIM-Mombasa hero background"
               fill
               priority
               className="object-cover opacity-80"
@@ -113,7 +113,7 @@ export function HeroSection({
           >
             <Image
               src={foregroundImageUrl}
-              alt="Featured Car Focus"
+              alt="Featured car — AIM-Mombasa"
               fill
               priority
               className="object-contain"
