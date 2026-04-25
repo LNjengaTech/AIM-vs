@@ -10,8 +10,9 @@ import { EditCarForm } from "@/components/dashboard/edit-car-form"
 export default async function EditCarPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const session = await auth()
 
   if (!session?.user || session.user.role !== "DEALER") {
@@ -30,7 +31,7 @@ export default async function EditCarPage({
   // Fetch the car, ensuring it belongs to the current dealer
   const car = await prisma.car.findFirst({
     where: {
-      id: params.id,
+      id: id,
       dealerId: dealer.id,
     },
   })
