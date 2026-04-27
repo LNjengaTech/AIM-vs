@@ -7,11 +7,12 @@ let socketInstance: Socket | null = null
 function getSocket(): Socket {
   if (!socketInstance) {
 
-    //production
-    const url = process.env.NEXT_PUBLIC_SOCKET_SERVER_URL
+    const url =
+      process.env.NEXT_PUBLIC_SOCKET_URL ??
+      (process.env.NODE_ENV === "development"
+        ? "http://localhost:10000"
+        : window.location.origin)
 
-    //development
-    //const url = typeof window !== "undefined" ? window.location.origin : ""
     socketInstance = io(url, {
       transports: ["websocket", "polling"],
       autoConnect: true,
