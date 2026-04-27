@@ -76,7 +76,7 @@ export function HeroSection({
       <div className="relative z-10 w-full flex items-center justify-center pointer-events-none select-none">
         {tagline && (
           <span 
-            className="text-[clamp(4rem,20vw,24rem)] font-black tracking-tighter text-foreground/5 uppercase leading-none text-center px-4"
+            className="text-[clamp(4rem,20vw,14rem)] font-bold tracking-tighter text-foreground/5 uppercase leading-none text-center px-4"
             style={{ 
               WebkitTextStroke: '1px rgba(255,255,255,0.05)',
               textShadow: '0 0 40px rgba(0,0,0,0.1)' 

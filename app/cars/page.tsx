@@ -10,6 +10,7 @@ import { CarFilters as CarFiltersType, CarSortOption } from "@/types/cars"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import ChatWidget from "@/components/aim-assistant/chat-widget-wrapper"
+import { Footer } from "@/components/home/footer"
 
 export const metadata: Metadata = {
   title: "Browse Cars - AIM Mombasa",
@@ -153,6 +154,7 @@ export default async function CarsPage(props: PageProps) {
             )}
         </main>
       </div>
+      
       </div>
       <ChatWidget 
         page="marketplace" 
@@ -168,6 +170,7 @@ export default async function CarsPage(props: PageProps) {
           }))
         }}
       />
+      <Footer />
     </div>
   )
 }
