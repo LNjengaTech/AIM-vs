@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send } from "lucide-react";
+import { X, Send, Sparkles } from "lucide-react";
 import { CarContext, MarketplaceContext, ChatMessage } from "./types";
 
 interface ChatWidgetProps {
@@ -51,6 +51,8 @@ export default function ChatWidget({ page, carContext, marketplaceContext, userR
   ]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
+  const [showCallout, setShowCallout] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   
   // Use a ref for sessionId to persist across re-renders
   const sessionIdRef = useRef<string | null>(null);
@@ -165,18 +167,73 @@ export default function ChatWidget({ page, carContext, marketplaceContext, userR
       if (!pwaDismissed) {
         setBottomOffset("bottom-24");
       }
+      
+      // Show callout after 5 seconds if not dismissed and not interacted
+      const calloutDismissed = localStorage.getItem("assistant_callout_dismissed");
+      if (!calloutDismissed && !isOpen) {
+        const timer = setTimeout(() => {
+          setShowCallout(true);
+        }, 5000);
+        return () => clearTimeout(timer);
+      }
     }
-  }, []);
+    return undefined;
+  }, [isOpen]);
+
+  const dismissCallout = () => {
+    setShowCallout(false);
+    localStorage.setItem("assistant_callout_dismissed", "true");
+  };
+
+  const toggleChat = () => {
+    if (!isOpen) {
+      setShowCallout(false);
+      setHasInteracted(true);
+      localStorage.setItem("assistant_callout_dismissed", "true");
+    }
+    setIsOpen(prev => !prev);
+  };
+
+  const calloutMessage = page === "car-detail" 
+    ? "Want to know if this is a good deal? Ask me!"
+    : "Hi! I'm your AI car expert. Ask me anything!";
 
   return (
     <>
+      {/* Callout Bubble */}
+      {showCallout && !isOpen && (
+        <div className={`fixed ${bottomOffset === "bottom-24" ? "bottom-44" : "bottom-24"} right-6 z-50 animate-float-slow`}>
+          <div className="relative bg-primary text-primary-foreground px-4 py-3 rounded-2xl shadow-xl max-w-[220px] text-sm font-medium animate-in fade-in zoom-in duration-300">
+            {calloutMessage}
+            <button 
+              onClick={dismissCallout}
+              className="absolute -top-2 -right-2 bg-muted text-muted-foreground rounded-full p-0.5 shadow-md hover:bg-accent transition-colors"
+            >
+              <X className="h-3 w-3" />
+            </button>
+            {/* Arrow */}
+            <div className="absolute -bottom-2 right-6 w-4 h-4 bg-primary rotate-45" />
+          </div>
+        </div>
+      )}
+
       {/* Floating Button */}
       <button
-        onClick={() => setIsOpen(prev => !prev)}
-        className={`fixed ${bottomOffset} right-6 z-50 p-4 rounded-full bg-primary text-primary-foreground shadow-lg hover:opacity-90 transition-opacity`}
+        onClick={toggleChat}
+        className={`fixed ${bottomOffset} right-6 z-50 p-4 rounded-full bg-primary text-primary-foreground shadow-lg hover:scale-110 transition-all duration-300 ${!isOpen && "animate-bounce"}`}
         aria-label="Toggle AIM Assistant"
       >
-        {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+        {isOpen ? <X className="h-6 w-6" /> : (
+          <div className="relative">
+            <Sparkles className="h-6 w-6" />
+            {!hasInteracted && !showCallout && (
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+              </span>
+            )}
+          </div>
+        )}
       </button>
 
       {/* Chat Panel */}
@@ -185,7 +242,7 @@ export default function ChatWidget({ page, carContext, marketplaceContext, userR
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b">
             <div className="flex items-center gap-2">
-              <MessageCircle className="h-5 w-5 text-primary" />
+              <Sparkles className="h-5 w-5 text-primary" />
               <h3 className="font-semibold text-card-foreground">AIM Assistant</h3>
             </div>
             <button
