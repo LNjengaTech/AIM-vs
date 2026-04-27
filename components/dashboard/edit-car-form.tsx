@@ -35,6 +35,8 @@ import { Switch } from "@/components/ui/switch"
 import { ImageUpload } from "@/components/dashboard/image-upload"
 
 import { carSchema, type CarFormValues } from "@/lib/validations/car"
+import { AIDescriptionButton } from "@/components/dashboard/ai-description-button"
+
 
 interface EditCarFormProps {
   car: Omit<Car, "price" | "createdAt" | "updatedAt" | "soldAt"> & {
@@ -83,6 +85,37 @@ export function EditCarForm({ car }: EditCarFormProps) {
       form.setValue("has360View", currentHas360View, { shouldValidate: true })
     }
   }, [images, form])
+
+  // Watch fields needed for the AI description generator
+  const watchedMake = form.watch("make")
+  const watchedModel = form.watch("model")
+  const watchedYear = form.watch("year")
+  const watchedColor = form.watch("color")
+  const watchedMileage = form.watch("mileage")
+  const watchedCondition = form.watch("condition")
+  const watchedBodyType = form.watch("bodyType")
+  const watchedTransmission = form.watch("transmission")
+  const watchedFuelType = form.watch("fuelType")
+  const watchedEngineCapacity = form.watch("engineCapacity")
+  const watchedFeatures = form.watch("features")
+  const watchedPrice = form.watch("price")
+  const watchedNegotiable = form.watch("negotiable")
+
+  const aiCarData = {
+    make: watchedMake,
+    model: watchedModel,
+    year: watchedYear,
+    color: watchedColor,
+    mileage: watchedMileage,
+    condition: watchedCondition,
+    bodyType: watchedBodyType,
+    transmission: watchedTransmission,
+    fuelType: watchedFuelType,
+    engineCapacity: watchedEngineCapacity,
+    features: watchedFeatures,
+    price: watchedPrice,
+    negotiable: watchedNegotiable,
+  }
 
   async function onSubmit(data: CarFormValues) {
     setIsSubmitting(true)
@@ -380,6 +413,12 @@ export function EditCarForm({ car }: EditCarFormProps) {
                             {...field} 
                         />
                     </FormControl>
+                    <div className="mt-2">
+                        <AIDescriptionButton
+                            carData={aiCarData}
+                            onGenerated={(desc) => form.setValue("description", desc, { shouldValidate: true })}
+                        />
+                    </div>
                     <FormMessage />
                     </FormItem>
                 )}
