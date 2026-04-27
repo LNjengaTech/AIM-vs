@@ -5,12 +5,11 @@
 A modern web platform designed to digitize and optimize the automotive market in Mombasa, Kenya, by creating a "Live Digital Twin" of physical car showrooms.
 
 ##  Features
-
+- **AI Assistant** - AI powered chatbot for car recommendations and information, and car description generation (for dealers)
 - **Real-Time Inventory Management** - Dealers can manage inventory with live stock updates
 - **BOLO Matchmaking Engine** - Buyers submit demands and get notified when matches arrive
-- **AI-Driven Verification** - Client-side image analysis for vehicle verification
-- **360-Degree Virtual Tours** - Interactive vehicle walkarounds
 - **Advanced Search & Filtering** - Find exactly what you're looking for
+
 - **Mobile-First PWA** - Works offline, installable on any device
 - **Dark/Light Mode** - Full theme support for user preference
 
@@ -29,15 +28,16 @@ A modern web platform designed to digitize and optimize the automotive market in
 
 ### Development
 
-**Running Locally:**
+### Running Locally:
+
+**Start Next.js only (no real-time messaging - falls back to http long polling):**
 ```bash
 npm run dev
 ```
-(runs: `npx tsx server.ts` — boots Next.js + Socket.io on port 3000)
 
-**Next.js only (no real-time messaging):**
+**Start socket server (for websocket support - real-time messaging):**
 ```bash
-npm run dev:next
+npm run dev:socket
 ```
 
 **Seeding:**
@@ -59,10 +59,10 @@ Copy `.env.example` to `.env` and fill in the values. All services used have fre
 4. Set `NEXTAUTH_URL` to your Vercel domain.
 5. Deploy.
 
-**Socket.io on Railway (for true WebSocket support):**
+**Socket.io on Render (for true WebSocket support):**
 Vercel serverless functions do not hold persistent WebSocket connections. The app automatically falls back to HTTP long-polling on Vercel (functional but slower). For true WebSocket support:
-1. Deploy `server.ts` as a separate Node.js service on [Railway](https://railway.app) (free tier available).
-2. Set `NEXT_PUBLIC_SOCKET_URL` to your Railway URL in both environments.
+1. Deploy `server.socket.ts` as a separate Node.js service on [Render](https://render.com) (free tier available).
+2. Set `NEXT_PUBLIC_SOCKET_URL` to your Render URL in both environments.
 3. The app in `hooks/use-socket.ts` will use this URL if present, otherwise falling back to the origin.
 
 **Database (Neon):**

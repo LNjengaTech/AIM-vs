@@ -50,7 +50,7 @@ export function HeroSection({
           />
         ) : (
           <div className="absolute inset-0 bg-linear-to-br from-background via-muted/20 to-background">
-             <Image
+            <Image
               src="/images/AI_showroom1.png"
               alt="AIM-Mombasa hero background"
               fill
@@ -62,8 +62,8 @@ export function HeroSection({
 
         {/* Dynamic backdrop color overlay */}
         {selectedColor && (
-          <div 
-            className="absolute inset-0 mix-blend-multiply opacity-20" 
+          <div
+            className="absolute inset-0 mix-blend-multiply opacity-20"
             style={{ backgroundColor: selectedColor }}
           />
         )}
@@ -75,11 +75,11 @@ export function HeroSection({
       {/* Layer Z-10: Sandwiched tagline (Behind the car) */}
       <div className="relative z-10 w-full flex items-center justify-center pointer-events-none select-none">
         {tagline && (
-          <span 
-            className="text-[clamp(4rem,20vw,14rem)] font-bold tracking-tighter text-foreground/20 uppercase leading-none text-center px-4"
-            style={{ 
-              WebkitTextStroke: '1px rgba(170, 170, 170, 0.05)',
-              textShadow: '0 0 40px rgba(255, 255, 255, 0.1)' 
+          <span
+            className="text-[clamp(3rem,13vw,14rem)] font-bold tracking-tighter text-foreground/20 uppercase leading-[0.8] text-center px-4 break-words max-w-full"
+            style={{
+              WebkitTextStroke: '1px rgba(34, 30, 30, 0.05)',
+              textShadow: '0 0 40px rgba(255, 255, 255, 0.1)'
             }}
           >
             {tagline}
@@ -104,7 +104,7 @@ export function HeroSection({
       {/* Layer Z-20: Foreground cutout image */}
       <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
         {foregroundImageUrl && foregroundImageUrl.startsWith('http') && (
-          <div 
+          <div
             className="relative w-full max-w-350 aspect-21/9 animate-in fade-in zoom-in-95 duration-1000 delay-300"
             style={{
               transform: `translate(${foregroundImageX}%, ${foregroundImageY}%) scale(${foregroundImageScale})`,
@@ -125,11 +125,11 @@ export function HeroSection({
 
       {/* Layer Z-40: Interactivity and Specs (Always on top) */}
       <div className="relative z-40 mt-auto pb-12 w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
-        
+
         {/* Featured Car Indicator - Debugged and refined */}
         {hasFeaturedCar && featuredCarId && (
           <div className="mb-8 transform hover:scale-105 transition-transform duration-300">
-            <Link 
+            <Link
               href={`/cars/${featuredCarId}`}
               className="group inline-flex items-center gap-3 rounded-full border border-primary/30 bg-background/50 backdrop-blur-xl px-6 py-2.5 text-[clamp(10px,1.2vw,14px)] tracking-widest uppercase font-bold text-primary shadow-2xl hover:bg-primary hover:text-primary-foreground transition-all"
             >
@@ -162,21 +162,22 @@ export function HeroSection({
           </div>
         )}
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-5 px-6">
+        <div className="flex flex-row items-center justify-center gap-3 md:gap-5 px-4 w-full">
           <Link
             href="/cars"
-            className="group relative overflow-hidden rounded-full bg-primary px-12 py-5 text-[clamp(12px,1.5vw,14px)] tracking-widest uppercase font-black text-primary-foreground shadow-[0_20px_40px_-15px_rgba(var(--primary),0.5)] transition-all hover:scale-105 hover:shadow-primary/40 active:scale-95"
+            className="group relative overflow-hidden rounded-full bg-primary px-5 py-4 md:px-12 md:py-5 text-[clamp(10px,1.5vw,14px)] tracking-widest uppercase font-black text-primary-foreground shadow-[0_20px_40px_-15px_rgba(var(--primary),0.5)] transition-all hover:scale-105 active:scale-95 flex-1 max-w-[200px] text-center"
           >
-            <span className="relative z-10 flex items-center gap-2">
-              Explore Inventory
+            <span className="relative z-10">
+              Explore
             </span>
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
           </Link>
+
           <Link
             href="/auth/signup/dealer"
-            className="rounded-full border border-foreground/10 bg-background/10 backdrop-blur-xl px-12 py-5 text-[clamp(12px,1.5vw,14px)] tracking-widest uppercase font-black text-foreground transition-all hover:bg-foreground hover:text-background active:scale-95"
+            className="rounded-full border border-foreground/10 bg-background/10 backdrop-blur-xl px-5 py-4 md:px-12 md:py-5 text-[clamp(10px,1.5vw,14px)] tracking-widest uppercase font-black text-foreground transition-all hover:bg-foreground hover:text-background active:scale-95 flex-1 max-w-[200px] text-center"
           >
-            Sell With Us
+            Sell
           </Link>
         </div>
       </div>
