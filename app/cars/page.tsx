@@ -107,7 +107,7 @@ export default async function CarsPage(props: PageProps) {
                     <p className="text-muted-foreground">Try adjusting your filters</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-2 gap-2 md:gap-6 sm:grid-cols-2 md:grid-cols-3">
+                <div className="grid grid-cols-2 gap-2 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {cars.map((car) => (
                         <CarCard
                             key={car.id}

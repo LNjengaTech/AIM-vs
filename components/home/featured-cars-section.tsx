@@ -10,7 +10,7 @@ import { RankedCar } from "@/types/cars"
 export async function FeaturedCarsSection() {
   const { cars } = await getRankedCars({
     page: 1,
-    limit: 6,
+    limit: 4,
     sortBy: "ranked",
   })
 
@@ -37,7 +37,7 @@ export async function FeaturedCarsSection() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 md:gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {cars.map((car) => (
             <CarCard key={car.id} {...carToCardProps(car)} />
           ))}

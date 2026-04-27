@@ -55,7 +55,7 @@ export async function ReviewsSection() {
           return (
             <div
               key={review.id}
-              className="rounded-3xl border bg-card p-5 shadow-sm flex flex-col gap-3 transition-all hover:-translate-y-1 hover:shadow-md"
+              className="rounded-4xl bg-card p-5 shadow-xl flex flex-col gap-3 transition-all hover:-translate-y-1 hover:shadow-2xl"
             >
               {/* Header: avatar + name */}
               <div className="flex items-center gap-3">

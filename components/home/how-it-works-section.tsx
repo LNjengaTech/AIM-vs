@@ -56,7 +56,7 @@ export function HowItWorksSection() {
           Whether you are buying or selling, AIM-Mombasa makes it straightforward.
         </p>
 
-        <div className="inline-flex rounded-full border bg-background p-1 mb-10 shadow-sm">
+        <div className="inline-flex rounded-full bg-background p-1 mb-10 shadow-sm">
           <button
             onClick={() => setAudience("buyer")}
             className={cn(
@@ -83,7 +83,7 @@ export function HowItWorksSection() {
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {steps.map((step) => (
-            <div key={step.number} className="group relative rounded-3xl border bg-card p-8 text-left transition-all hover:shadow-xl hover:-translate-y-1">
+            <div key={step.number} className="group relative rounded-4xl bg-card p-8 text-left transition-all shadow-2xl hover:shadow-xl hover:-translate-y-1">
               <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground font-bold text-xl shadow-lg shadow-primary/20">
                 {step.number}
               </div>

@@ -76,10 +76,10 @@ export function HeroSection({
       <div className="relative z-10 w-full flex items-center justify-center pointer-events-none select-none">
         {tagline && (
           <span 
-            className="text-[clamp(4rem,20vw,14rem)] font-bold tracking-tighter text-foreground/5 uppercase leading-none text-center px-4"
+            className="text-[clamp(4rem,20vw,14rem)] font-bold tracking-tighter text-foreground/20 uppercase leading-none text-center px-4"
             style={{ 
-              WebkitTextStroke: '1px rgba(255,255,255,0.05)',
-              textShadow: '0 0 40px rgba(0,0,0,0.1)' 
+              WebkitTextStroke: '1px rgba(170, 170, 170, 0.05)',
+              textShadow: '0 0 40px rgba(255, 255, 255, 0.1)' 
             }}
           >
             {tagline}
@@ -146,14 +146,14 @@ export function HeroSection({
         )}
 
         {specs && specs.length > 0 && (
-          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-12 mb-12 px-6">
+          <div className="flex justify-center items-center gap-4 md:gap-12 mb-12 px-2">
             {specs.map((spec, idx) => (
               <div key={idx} className="flex items-center">
                 {idx !== 0 && (
                   <div className="hidden md:block h-10 w-px bg-foreground/10 mr-4 md:mr-12" />
                 )}
 
-                <div className="flex flex-col items-center backdrop-blur-xl bg-card/30 border border-white/5 shadow-2xl rounded-2xl p-4 md:px-8 md:py-5 group hover:bg-card/50 transition-all duration-300">
+                <div className="flex flex-col items-center backdrop-blur-xl bg-card/30 border border-white/5 shadow-2xl rounded-2xl p-2 md:px-4 md:py-2 group hover:bg-card/50 transition-all duration-300">
                   <span className="text-[clamp(1.1rem,2.5vw,2.2rem)] font-bold text-foreground uppercase tracking-tight group-hover:scale-110 transition-transform">{spec.value}</span>
                   <span className="text-[clamp(8px,1vw,11px)] tracking-[0.2em] uppercase text-muted-foreground mt-1.5 font-semibold">{spec.label}</span>
                 </div>
