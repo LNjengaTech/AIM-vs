@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npx tsx server.ts",
-    "dev:next": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "start:socket": "NODE_ENV=production npx tsx server.ts",
-    "lint": "next lint",
-    "seed": "npx prisma db seed"
-  },
+  "dev": "next dev",
+  "dev:socket": "npx tsx server.socket.ts",
+  "build": "next build",
+  "start": "next start",
+  "start:socket": "npx tsx server.socket.ts",
+  "lint": "next lint",
+  "seed": "npx prisma db seed"
+},
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
   },
