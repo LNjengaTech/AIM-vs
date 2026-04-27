@@ -6,9 +6,12 @@ let socketInstance: Socket | null = null
 
 function getSocket(): Socket {
   if (!socketInstance) {
-    // If you plan to deploy the socket server on a different host,
-    // you would use process.env.NEXT_PUBLIC_SOCKET_SERVER_URL here.
-    const url = typeof window !== "undefined" ? window.location.origin : ""
+
+    //production
+    const url = process.env.NEXT_PUBLIC_SOCKET_SERVER_URL
+
+    //development
+    //const url = typeof window !== "undefined" ? window.location.origin : ""
     socketInstance = io(url, {
       transports: ["websocket", "polling"],
       autoConnect: true,
